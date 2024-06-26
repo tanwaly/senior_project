@@ -1,0 +1,39 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "shirt",
+      "price": 220,
+      "amount": 5,
+      "image": "shirt.png"
+    },
+    {
+      "id": 2,
+      "name": "shoe",
+      "price": 600,
+      "amount": 3,
+      "image": "shoe.png"
+    },
+    {
+      "id": 3,
+      "name": "hat",
+      "price": 350,
+      "amount": 1,
+      "image": "hat.png"
+    },
+    {
+      "id": 4,
+      "name": "handbag",
+      "price": 890,
+      "amount": 2,
+      "image": "handbag.png"
+    },
+    {
+      "id": 5,
+      "name": "jeans",
+      "price": 700,
+      "amount": 6,
+      "image": "jeans.png"
+    }
+  ]
+}
