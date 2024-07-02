@@ -18,5 +18,8 @@
   "author": "",
   "license": "ISC",
   "keywords": [],
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@iconify/json": "^2.2.224"
+  }
 }
