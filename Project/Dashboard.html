@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <style>
+        #pie-chart {
+            background: radial-gradient(circle closest-side, transparent 100%, #fff 0),
+                conic-gradient(from 180deg, #7BB4B7 0, #7BB4B7 55%, #FF6B6B 0, #FF6B6B 64%, #FFEA7D 0, #FFEA7D 100%);
+            min-width: 230px;
+            min-height: 230px;
+        }
+    </style>
+</head>
+
+<body style="background-color: #8472AC;">
+    <h1 style="text-align: center; color: white;">Dashboard</h1>
+    <hr style="color: white;">
+    <div class="row">
+        <div>
+            <div style="background-color: #fffff7; height: 300px; width: 500px; border-radius: 15px;" class="m-5">
+                <h3 class="m-4" style="font-weight: bold;">รายได้สุทธิ</h3>
+            </div>
+            <select name="year" id="year" style="width: 500px; margin-left: 50px; background-color: #d9d9d9; font-weight: bold;"
+                class="form-control">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+            </select>
+            <button
+                style="border: none; background-color: #EFF7FF; width: 200px; height: 50px; text-align: center; margin-left: 50px; border-radius: 10px;"
+                class="mt-3" style="font-weight: bold; font-size: 30px;">สถานะสินค้า</button>
+        </div>
+        <div style="background-color: #D6D0E4; height: 500px; width: 600px; border-radius: 15px;" class="m-5">
+            <h3 class="m-4" style="text-align: end; font-weight: bold;">สรุปรายการการโอนเงิน</h3>
+            <h1 class="m-4" style="text-align: end; font-weight: bold; font-size: 70px;">190</h1>
+            <div id="chart-warp d-flex justify-content-around">
+                <div id="pie-chart"></div>
+                <div class="col">
+                    <li style="color: #7BB4B7;">รายการที่โอนเงินเสร็จสิ้น 104 รายการ</li>
+                    <li style="color: #FFEA7D;">รายการที่รอการโอนเงิน 69 รายการ</li>
+                    <li style="color: #FF6B6B;">รายการที่คืนเงิน 17 รายการ</li>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div style="background-color: #FFEAA1; height: 200px; width: 400px; border-radius: 15px;" class="m-5">
+            <h3 class="m-4" style="text-align: center; font-weight: bold;">รายการที่กำลังจัดส่งสินค้า</h3>
+            <h1 style="text-align: center; font-size: 70px;">50</h1>
+        </div>
+        <div style="background-color: #C8D5A2; height: 200px; width: 400px; border-radius: 15px;" class="m-5">
+            <h3 class="m-4" style="text-align: center; font-weight: bold;">จัดส่งสำเร็จ</h3>
+            <h1 style="text-align: center; font-size: 70px;">123</h1>
+        </div>
+        <div style="background-color: #EA9B9B; height: 200px; width: 400px; border-radius: 15px;" class="m-5">
+            <h3 class="m-4" style="text-align: center; font-weight: bold;">จัดส่งไม่สำเร็จ</h3>
+            <h1 style="text-align: center; font-size: 70px;">17</h1>
+        </div>
+    </div>
+</body>
+
+</html>
