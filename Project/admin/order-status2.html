@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- cdn -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/public/css/icon-cat.css">
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body style="background-color: #2C2C2C">
+
+    <div style="color: white; padding: 25px;">
+        <div class="d-flex align-items-center">
+            <h5 style="font-weight: bold; margin-right: 10px;">สถานะสินค้า</h5>
+            <div>
+                <select name="orderStatus" id="" style="border: none; border-radius: 15px; height: 40px;">
+                    <option value="st0">กำลังเตรียมสินค้า</option>
+                    <option value="st1">กำลังจัดส่ง</option>
+                    <option value="st2">ยกเลิกการสั่งซื้อ</option>
+                    <option value="st3">จัดส่งสำเร็จ</option>
+                    <option value="st4">จัดส่งไม่สำเร็จ</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-top: 10px;">
+            <input type="search" name="" id="" placeholder="search tracking number" class="form-control">
+            <div class="row" style="margin-top: 10px;">
+                <img src="/public/img/test.jpg" alt="" style="width: 120px;">
+                <div class="col">
+                    <span class="name-p">Name : <span class="name-p2">testttt</span></span>
+                    <span class="name-p">Store : <span class="name-p2">testttt</span></span>
+                    <span class="name-p">Price : <span class="name-p2">testttt</span></span>
+                    <span class="name-p">Tracking number : <span class="name-p2">testttt</span></span>
+                </div>
+                <div class="col center">
+                    <span style="font-weight: 600; word-wrap: break-word;">testttttttttttttttttttt</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    </script>
+</body>
+
+<style>
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* .search-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 25px;
+    }
+
+    .bi-search {
+        background-color: transparent;
+        font-size: 20px;
+        border: none;
+        margin-left: -50px;
+    } */
+
+    .name-p {
+        font-style: normal;
+        font-weight: 700;
+    }
+
+    .name-p2 {
+        font-style: normal;
+        font-weight: 400;
+        word-wrap: break-word;
+    }
+</style>
+
+</html>
