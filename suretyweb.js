@@ -86,8 +86,57 @@ app.get('/password/:pass', function (req, res) {
         }
     });
 });
+app.get('/product', function (req, res) {
+    const sql = "SELECT * FROM `products`";
+    con.query(sql, function (err, results) {
+        if (err) {
+            console.error(err);
+            res.status(500).send('DB error');
+        } else {
+            // Map the category to its corresponding icon
+            results.forEach(product => {
+                switch (product.product_cate) {
+                    case 1:
+                        product.category_icon = 'icon-shirt';
+                        break;
+                    case 2:
+                        product.category_icon = 'icon-coat';
+                        break;
+                    case 3:
+                        product.category_icon = 'icon-dress';
+                        break;
+                    case 4:
+                        product.category_icon = 'icon-pants';
+                        break;
+                    case 5:
+                        product.category_icon = 'icon-skirt';
+                        break;
+                    case 6:
+                        product.category_icon = 'icon-sock';
+                        break;
+                    case 7:
+                        product.category_icon = 'icon-shoe';
+                        break;
+                    case 8:
+                        product.category_icon = 'icon-hat';
+                        break;
+                    case 9:
+                        product.category_icon = 'icon-necklace';
+                        break;
+                    case 0:
+                        product.category_icon = 'icon-chair'; 
+                        break;
+                }
+            });
+            res.json(results); 
+        }
+    });
+});
 
+app.get('/productslist', function (_req, res) {
+    res.sendFile(path.join(__dirname, 'Project/customer/homepage.html'));
 
+})
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running at port ${PORT}`);
