@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+    <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register Seller</title>
+  </head>
+  <body style="background: #b084a9">
+    <div class="container">
+      <h1>Register</h1>
+      <center>
+       <div class="toggle-switch" >
+          <input type="radio" id="customer" name="role" checked>
+          <label for="customer" class="toggle-label">Customer</label>
+          <input type="radio" id="seller" name="role">
+          <label for="seller" class="toggle-label">Seller</label>
+          <div class="toggle-switch-button"></div>
+      </div> 
+
+      <div style="width: 500px; margin-top: 20px;">
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ชื่อ</p>
+        <input type="text"  id="name" class="form-control" style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+        
+
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">อายุ</p>
+        <input type="text"  id="name" class="form-control" style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;" >
+
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">วัน/เดือน/ปี เกิด</p>
+        <input type="text"  id="name" class="form-control" style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;" >
+
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">เบอร์โทร</p>
+        <input type="text"  id="name" class="form-control" style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;" >
+
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ธนาคาร</p>
+        <select
+        name="bank"
+        id="bank"
+        style="
+          width: 500px;
+          height: 50px;
+          background-color: #E9E9E9;
+          font-size: 15px;
+          border-radius: 8px;
+          border: none;
+          color: #515050;
+          margin-bottom: 15px;
+        "
+      >
+        <option value="1">ธนาคารกรุงเทพ</option>
+        <option value="2">ธนาคารกสิกรไทย</option>
+        <option value="3">ธนาคารกรุงไทย</option>
+        <option value="4">ธนาคารทหารไทย</option>
+        <option value="5">ธนาคารไทยพาณิชย์</option>
+        <option value="6">ธนาคารกรุงศรีอยุธยา</option>
+        <option value="7">ธนาคารเกียรตินาคิน</option>
+        <option value="8">ธนาคารซีไอเอ็มบีไทย</option>
+        <option value="9">ธนาคารทิสโก้</option>
+        <option value="10">ธนาคารธนชาต</option>
+        <option value="11">ธนาคารยูโอบี</option>
+        <option value="12">ธนาคารสแตนดาร์ดชาร์เตอร์ด (ไทย)</option>
+        <option value="13">ธนาคารไทยเครดิตเพื่อรายย่อย</option>
+        <option value="14">ธนาคารแลนด์ แอนด์ เฮาส์</option>
+        <option value="15">ธนาคารไอซีบีซี (ไทย)</option>
+        <option value="16">ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย</option>
+        <option value="17">ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</option>
+        <option value="18">ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย</option>
+        <option value="19">ธนาคารออมสิน</option>
+        <option value="20">ธนาคารอาคารสงเคราะห์</option>
+        <option value="21">ธนาคารอิสลามแห่งประเทศไทย</option>
+        <option value="22">ธนาคารแห่งประเทศจีน</option>
+        <option value="23">ธนาคารซูมิโตโม มิตซุย ทรัสต์ (ไทย)</option>
+        <option value="24">ธนาคารฮ่องกงและเซี้ยงไฮ้แบงกิ้งคอร์ปอเรชั่น จำกัด</option>
+      </select>
+
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">เลขบัญชีธนาคาร</p>
+        <input type="text"  id="name" class="form-control" style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;" >
+
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">Email</p>
+        <input type="text"  id="name" class="form-control" style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;" >
+
+        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">บัตรประชาชน</p>
+        <div class="file-upload-container">
+            <label for="file-upload" class="file-upload-label">
+                <div class="file-upload-box">
+                    <input id="file-upload" type="file" accept="image/*">
+                    <div class="plus-sign">+</div>
+                </div>
+            </label>
+        </div>
+          
+          <button class="btn mt-3" type="submit" style=" background-color: #8472AC; color: white; width: 500px; height: 50px; font-size: 18px; font-weight: bold; border-radius: 30px; ">Register</button>
+      </div>
+      <hr style="width: 600px;">
+      <p class="account" style="color: #AAAAAA; font-weight: bold;">Already have an account? <a href="" style="color: #4873E2;">Login</a></p>
+      </center>
+      
+  </div>
+
+  </body>
+
+  <style>
+   body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 160px;
+    height: 40px;
+    background-color: #ddd;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.toggle-label {
+    position: relative;
+    width: 50%;
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+    font-weight: bold;
+    color: #000000;
+    user-select: none;
+}
+
+.toggle-switch input[type="radio"] {
+    display: none;
+}
+
+.toggle-switch input[type="radio"]:checked + .toggle-label {
+    color: #000000;
+}
+
+.toggle-switch-button {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    background-color: #A1C9E2;
+    border-radius: 20px;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+#customer:checked ~ .toggle-switch-button {
+    transform: translateX(0);
+    background-color: #A1C9E2;
+}
+
+#seller:checked ~ .toggle-switch-button {
+    transform: translateX(100%);
+    background-color: #A1C9E2;
+}
+
+.photo {
+      background-color: #d9d9d9;
+      width: 320px;
+      height: 200px;
+      border-radius: 15px;
+      
+    }
+
+.file-upload-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.file-upload-label {
+    display: inline-block;
+    text-align: left;
+    cursor: pointer;
+}
+
+.file-upload-label span {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+.file-upload-box {
+    width: 300px;
+    height: 150px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.file-upload-box input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.plus-sign {
+    font-size: 32px;
+    color: #555;
+    
+}
+  </style>
+</html>
