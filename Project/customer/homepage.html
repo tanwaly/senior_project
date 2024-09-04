@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- CDN Links -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/public/css/icon-cat.css">
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body style="background-color:rgb(241, 241, 241);">
+    <!-- <div style="background: linear-gradient(90deg, #D091A8 62.1%, #acb0e7 100%);" class="d-flex"> -->
+    <!-- <div style="background: linear-gradient(90deg, #D091A8 62.1%, #acb0e7 100%);" class="d-flex"> -->
+    <div style="background-color:#f5eecc;" class="d-flex">
+        <div class="d-flex align-items-center"
+            style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
+            <div class="d-flex justify-content-between" style="margin-left: 65px;">
+                <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    <i class="bi bi-house-door"></i> Homepage
+                </a>
+                <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    <i class="bi bi-check2-square"></i> สถานะการจอง
+                </a>
+                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    <i class="bi bi-truck"></i> เลขพัสดุ
+                </a>
+                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    <i class="bi bi-person"></i> โปรไฟล์
+                </a>
+                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    <i class="bi bi-chat-dots"></i> Help
+                </a>
+            </div>
+        </div>
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
+            height: 46px; color: white;">
+                Log out
+                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 20px;">
+        <div class="search-box">
+            <input type="text" placeholder="Search..."
+                style="background: #EFF7FF; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 23px; width: 1384px; height: 67px; border-color: transparent; padding: 30px;">
+            <button
+                style="background-color: transparent; font-size: 20px; border-color: transparent; margin-left: -50px;">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+        <div class="category d-flex justify-content-around">
+            <button class="category-btn">
+                <span class="icon-shirt"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-coat"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-dress"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-pants"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-skirt"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-sock"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-shoe"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-hat"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-necklace"></span>
+            </button>
+            <button class="category-btn">
+                <span class="icon-chair"></span>
+            </button>
+        </div>
+    </div>
+    <div class="center" style="margin-top: 50px; display: flex; flex-wrap: wrap; justify-content: center;">
+
+        <!-- post2 -->
+        <!-- <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
+            <div
+                style="height: 130px;  background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px; display: flex; align-items: center; justify-content: center;">
+                <div style="display: flex; align-items: center;">
+                    <img src="/public/img/test.jpg" alt="Avatar" width="90px"
+                        style="border-radius: 50%; margin: 10px;">
+                    <div class="row">
+                        <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">shopnameee</span>
+                        <div class="row" style="padding: 15px;">
+                            <div class="category-sh">
+                                <span class="icon-pants"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 100%; display: flex; justify-content: end;">
+                        <div
+                            style="width: 150px; height: 40px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
+                            <span style="font-size: 20px; font-weight: 700;">เริ่ม 17.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
+                <div class="center">
+                    <button style="background-color: transparent; border: none;">
+                        <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
+                            style="height: 240px; width: 250px;">
+                    </button>
+                </div>
+                <div class="row" style="justify-content: end;">
+                    <button
+                        style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
+                        <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
+                    </button>
+                </div>
+                <span
+                    style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">แคปชั่นนนนนนนนนนนนนนนนนนน
+                    แคปชั่นนนนนนนนนนนนนนนนนนน แคปชั่นนนนนนนนนนนนนนนนนนน นนooooooooooo ooooo
+                    oooooooooooนน</span>
+            </div>
+        </div> -->
+
+        <div id="showProduct"></div>
+    </div>
+
+
+    </div>
+    </div>
+</body>
+<script>
+    async function getProduct() {
+        try {
+            const response = await fetch('/product');
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Fetched data:', data);
+                let texts = '';
+                data.forEach(function (product) {
+                    texts += ` <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
+                    <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
+                        <div style="display: flex; align-items: center;">
+                            <img src="/public/img/test.jpg" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;">
+                            <div class="row">
+                                <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">shopnameee</span>
+                                <div class="row" style="padding: 15px;">
+                                    <div class="category-sh">
+                                        <span class="${product.product_cate}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 100%; display: flex; justify-content: end;">
+                                <div style="width: 150px; height: 40px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
+                                    <span style="font-size: 20px; font-weight: 700;">เริ่ม ${product.product_time}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
+                        <div class="center">
+                            <button style="background-color: transparent; border: none;">
+                                <img src="/public/img/${product.product_img}" alt="" style="height: 240px; width: 250px;">
+                            </button>
+                        </div>
+                        <div class="row" style="justify-content: end;">
+                            <button style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
+                                <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
+                            </button>
+                        </div>
+                        <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
+                    </div>
+                </div>`;
+                });
+                document.getElementById('showProduct').innerHTML = 'text';
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+</script>
+<style>
+    .search-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 25px;
+    }
+
+    .category-btn {
+        background: #FFF4D2;
+        border-radius: 60px;
+        width: 120px;
+        height: 53px;
+        border-color: darkgray;
+        transition: 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
+    }
+
+    .category-sh {
+        background: #FFF4D2;
+        border-radius: 60px;
+        height: 53px;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 5px;
+        width: 100px;
+        margin-left: 10px;
+    }
+
+    .category-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+</html>
