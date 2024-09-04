@@ -12,10 +12,11 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #2b2b2b;
-            color:#FFF;
+            color: #FFF;
             margin: 0;
             padding: 0;
-            height: 100vh; /* Set height of the body to 100% of the viewport */
+            height: 100vh;
+            /* Set height of the body to 100% of the viewport */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,10 +27,14 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 100vw; /* Full width */
-            height: 100vh; /* Full height */
-            max-width: none; /* Override the max-width */
-            box-sizing: border-box; /* Include padding in width and height */
+            width: 100vw;
+            /* Full width */
+            height: 100vh;
+            /* Full height */
+            max-width: none;
+            /* Override the max-width */
+            box-sizing: border-box;
+            /* Include padding in width and height */
             display: flex;
             flex-direction: column;
         }
@@ -43,16 +48,17 @@
             margin-bottom: 20px;
             position: relative;
             display: flex;
-            justify-content: center;
+            justify-content: left;
         }
 
         .search-bar input {
-            width: 95%;
+            width: 80%;
             padding: 10px;
             border-radius: 30px;
-            border: 1px solid #ccc;
+            border: 1px solid #FFF;
             font-size: 16px;
-            box-sizing: border-box; /* Ensure input takes full width minus padding */
+            box-sizing: border-box;
+            /* Ensure input takes full width minus padding */
         }
 
         .search-bar i {
@@ -68,8 +74,10 @@
             width: 100%;
             border-collapse: collapse;
             background-color: #F3F3E3;
-            flex-grow: 1; /* Allow table to grow and fill available space */
-            overflow-y: auto; /* Scroll vertically if content exceeds table height */
+            flex-grow: 1;
+            /* Allow table to grow and fill available space */
+            overflow-y: auto;
+            /* Scroll vertically if content exceeds table height */
         }
 
         th,
@@ -103,6 +111,13 @@
         .btn-details:hover {
             background-color: #bbb;
         }
+
+        .select_role {
+            padding-right: 20px;
+            border-color: transparent;
+            width: 200px;
+            
+        }
     </style>
 </head>
 
@@ -110,18 +125,29 @@
 
     <div class="container">
         <h2>ผู้ขายที่ถูกรายงาน</h2>
-
-        <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
-            <i class="fa fa-search"></i>
+        <div >
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="select_role  d-flex align-items-center ms-auto">
+                <select name="user" id="user"
+                    style=" border-radius: 30px; margin-top: -90px; width: 200px; margin-left: 10px;  border: none; 
+                    color: #8D8D8D; font-size: 15px; text-align: center; height: 45px;">
+                    <option value="1">Customer</option>
+                    <option value="2">Seller</option>
+                </select>
+            </div>
         </div>
+
+
 
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>ชื่อ-นามสกุล</th>
-                    <th>เหตุผล</th>
+                    <th>Role</th>
                     <th></th>
                 </tr>
             </thead>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>manegseller1(list)</title>
+    <title>verify(list)</title>
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -50,7 +50,7 @@
             width: 95%;
             padding: 10px;
             border-radius: 30px;
-            border: 1px solid #ccc;
+            border: 1px solid #FFF;
             font-size: 16px;
             box-sizing: border-box; /* Ensure input takes full width minus padding */
         }
@@ -103,6 +103,23 @@
         .btn-details:hover {
             background-color: #bbb;
         }
+
+        .approve {
+            border-radius: 8px; 
+            border: none; 
+            background-color: #BDE3A7; 
+            height: 50px; 
+            width: 150px;
+        }
+
+        .disapprove {
+            border-radius: 8px; 
+            border: none; 
+            background-color: #FFA4A4; 
+            height: 50px; 
+            width: 150px; 
+            margin-left: 30px;
+        }
     </style>
 </head>
 
@@ -121,28 +138,40 @@
                 <tr>
                     <th>ID</th>
                     <th>ชื่อ-นามสกุล</th>
-                    <th>เหตุผล</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="margin-top: 30px; margin-bottom: 100px; border-radius: 8px; border: none; height: 20px;">
                 <tr>
                     <td>...........</td>
                     <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
                     <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                    <td>
+                        <button class="approve">อนุมัติ</button>
+                        <button class="disapprove">ไม่อนุมัติ</button>
+                    </td>
+                        
                 </tr>
                 <tr>
                     <td>...........</td>
                     <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
                     <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                    <td>
+                        <button class="approve">อนุมัติ</button>
+                        <button class="disapprove">ไม่อนุมัติ</button>
+                    </td>
+                        
                 </tr>
                 <tr>
                     <td>...........</td>
                     <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
                     <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                    <td>
+                        <button class="approve">อนุมัติ</button>
+                        <button class="disapprove">ไม่อนุมัติ</button>
+                    </td>
+                        
                 </tr>
             </tbody>
         </table>
