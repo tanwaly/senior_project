@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 //--------- login ---------
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    const sql = "SELECT user_id, password, role FROM user WHERE email = ?";
+    const sql = "SELECT users_id, password, role FROM users WHERE email = ?";
     con.query(sql, [email], (err, results) => {
         if (err) {
             console.error(err);
@@ -37,55 +37,67 @@ app.post('/login', (req, res) => {
 });
 
 //--------- register ---------
-app.post('/register', (req, res) => {
-    const sql = 'SELECT users_id FROM users WHERE users_id = ?';
-    const params = [req.body.iduser];
-    con.query(sql, [params], async (err, result) => {
+app.get('/register', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/register.html'));
+});
+app.post('/register', async (req, res) => {
+    const sqlCheck = 'SELECT users_id FROM users WHERE users_id = ?';
+    const checkParams = [req.body.iduser];
+
+    con.query(sqlCheck, checkParams, async (err, result) => {
         if (err) {
-            console.log(err);
+            console.error(err);
             return res.status(500).send("DB error");
         }
         if (result.length > 0) {
             return res.status(401).send("มี iduser นี้แล้ว");
         }
-        const sql = 'INSERT INTO users (user_id,first_name,last_name,email,password,phonenum,role,id_img,bank_ac_name,bank_ac_num,user_status) VALUES ?';
-        const bcryptPass = await bcrypt.hash(req.body.pass, 10);
-        const params = [
-            [
-                req.body.iduser,
-                req.body.email,
-                req.body.first_name,
-                req.body.last_name,
-                bcryptPass,
-                req.body.phonenum,
-                req.body.role,
-                req.body.id_img,
-                req.body.bank_ac_name,
-                req.body.bank_ac_num,
-                1 // config ทีหลังที่ให้เลือกrole ใน register
-            ]
+
+        // Hash the password
+        const bcryptPass = await bcrypt.hash(req.body.password, 10);
+
+        // Prepare the INSERT query
+        const sqlInsert = 'INSERT INTO users (user_id, first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const insertParams = [
+            req.body.iduser,
+            req.body.first_name,
+            req.body.last_name,
+            req.body.email,
+            bcryptPass,
+            req.body.phonenum,
+            req.body.role, 
+            req.body.id_img || null, 
+            req.body.bank_ac_name || null, 
+            req.body.bank_ac_num || null, 
+            1 // Default user status
         ];
-        con.query(sql, [params], (err, result) => {
+
+        con.query(sqlInsert, insertParams, (err, result) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return res.status(500).send("DB error");
             }
             res.send('Registration complete');
         });
     });
 });
-//--------- convert password ---------
-app.get('/password/:pass', function (req, res) {
-    const raw = req.params.pass;
-    bcrypt.hash(raw, 10, function (err, hash) {
-        if (err) {
-            res.status(500).send('Hash error');
-        }
-        else {
-            res.send(hash);
-        }
-    });
+
+app.get('/login', function (_req, res) {
+    res.sendFile(path.join(__dirname, 'Project/login.html'));
 });
+
+//--------- convert password ---------
+// app.get('/password/:pass', function (req, res) {
+//     const raw = req.params.pass;
+//     bcrypt.hash(raw, 10, function (err, hash) {
+//         if (err) {
+//             res.status(500).send('Hash error');
+//         }
+//         else {
+//             res.send(hash);
+//         }
+//     });
+// });
 app.get('/product', function (req, res) {
     const sql = "SELECT * FROM `products`";
     con.query(sql, function (err, results) {
@@ -124,11 +136,11 @@ app.get('/product', function (req, res) {
                         product.category_icon = 'icon-necklace';
                         break;
                     case 0:
-                        product.category_icon = 'icon-chair'; 
+                        product.category_icon = 'icon-chair';
                         break;
                 }
             });
-            res.json(results); 
+            res.json(results);
         }
     });
 });
