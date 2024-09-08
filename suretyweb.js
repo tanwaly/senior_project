@@ -2,12 +2,34 @@ const express = require('express');
 const con = require("./config/db");
 const bcrypt = require('bcrypt');
 const path = require('path');
+const multer = require('multer')
 
 const app = express();
-
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './public/img/');
+    },
+    filename: function (req, file, cb) {
+        //cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        cb(null, Date.now() + "_" + file.originalname);
+    }
+});
+const Idupload = multer({ storage: storage }).single('id_img');
+
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './public/img/');
+//     },
+//     filename: function (req, file, cb) {
+//         //cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+//         cb(null, Date.now() + "_" + file.originalname);
+//     }
+// });
+// const Idupload = multer({ storage: storage }).single('');
 
 // app.get("/", (req, res) => {
 //     res.sendFile(path.join(__dirname, 'Project/customer/c-homepage.html'));
@@ -40,7 +62,9 @@ app.post('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/register.html'));
 });
-app.post('/register', async (req, res) => {
+
+app.post('/register', Idupload, async (req, res) => {
+
     const sqlCheck = 'SELECT users_id FROM users WHERE users_id = ?';
     const checkParams = [req.body.iduser];
 
@@ -57,18 +81,17 @@ app.post('/register', async (req, res) => {
         const bcryptPass = await bcrypt.hash(req.body.password, 10);
 
         // Prepare the INSERT query
-        const sqlInsert = 'INSERT INTO users (user_id, first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const insertParams = [
-            req.body.iduser,
             req.body.first_name,
             req.body.last_name,
             req.body.email,
             bcryptPass,
             req.body.phonenum,
-            req.body.role, 
-            req.body.id_img || null, 
-            req.body.bank_ac_name || null, 
-            req.body.bank_ac_num || null, 
+            req.body.role,
+            req.file ? req.file.filename : null,
+            req.body.bank_ac_name || null,
+            req.body.bank_ac_num || null,
             1 // Default user status
         ];
 
@@ -79,6 +102,7 @@ app.post('/register', async (req, res) => {
             }
             res.send('Registration complete');
         });
+
     });
 });
 

@@ -1,7 +1,7 @@
 {
   "scripts": {
     "server": "npx json-server --watch product.json --port 9000 -H 127.0.0.1",
-     "start": "nodemon suretyweb.js"
+    "start": "nodemon suretyweb.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

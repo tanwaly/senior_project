@@ -10,7 +10,8 @@
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register Customer</title>
+    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
+    <title>Register</title>
 </head>
 
 <body style="background: #b084a9">
@@ -28,36 +29,36 @@
                 <!-- <input type="hidden" id="selectedRole" name="role" value="1"> -->
                 <!-- Customer Form -->
                 <div id="customerForm" style="display: block; width: 500px; margin-top: 20px;">
-                    <form id="customerRegisterForm">
-                        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ชื่อ</p>
-                        <input type="text" class="form-control" name="first_name"
-                            style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                        <!--  -->
-                        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">นามสกุล</p>
-                        <input type="text" class="form-control" name="last_name"
-                            style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                        <!--  -->
-                        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">เบอร์โทร</p>
-                        <input type="tel" class="form-control" name="phonenum"
-                            style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                        <!--  -->
-                        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">Email</p>
-                        <input type="text" class="form-control" name="email"
-                            style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">password</p>
-                        <input type="password" class="form-control" name="password"
-                            style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                        <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">confirm password</p>
-                        <input type="password" class="form-control" name="confirm-pass"
-                            style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                    </form>
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ชื่อ</p>
+                    <input type="text" class="form-control" name="first_name"
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                    <!--  -->
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">นามสกุล</p>
+                    <input type="text" class="form-control" name="last_name"
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                    <!--  -->
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">เบอร์โทร</p>
+                    <input type="tel" class="form-control" name="phonenum"
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                    <!--  -->
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">Email</p>
+                    <input type="text" class="form-control" name="email"
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">password</p>
+                    <input type="password" class="form-control" name="password"
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">confirm password</p>
+                    <input type="password" class="form-control" name="confirm-pass"
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+
                 </div>
 
                 <!-- Seller Form -->
                 <div id="sellerForm" style="display: none; width: 500px; margin-top: 20px;">
                     <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ธนาคาร</p>
                     <select id="bank" name="bank_ac_name"
-                        style="width: 500px; height: 50px; background-color: #E9E9E9; font-size: 15px; border-radius: 8px; border: none; color: #515050; margin-bottom: 15px;">
+                        style="padding-left: 10px; width: 500px; height: 50px; background-color: #E9E9E9; font-size: 15px; border-radius: 8px; border: none; color: #515050; margin-bottom: 15px;">
+                        <option option value="" disabled selected>กรุณาเลือกธนาคาร</option>
                         <option value="1">กรุงเทพ</option>
                         <option value="2">กสิกรไทย</option>
                         <option value="3">กรุงไทย</option>
@@ -70,7 +71,7 @@
                         <option value="10">ไทยเครดิตเพื่อรายย่อย</option>
                         <option value="11">ธนชาต</option>
                         <option value="12">ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย</option>
-                        <option val ue="13">ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</option>
+                        <option value="13">ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</option>
                         <option value="14">ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย</option>
                         <option value="15">ธนาคารออมสิน</option>
                         <option value="16">ธนาคารอาคารสงเคราะห์</option>
@@ -91,94 +92,108 @@
                         style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
                     <!--  -->
                     <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">บัตรประชาชน</p>
-                    <div id="file-upload-container" class="file-upload-container">
+                    <!--  -->
+                    <div class="file-upload-container">
                         <label for="file-upload" class="file-upload-label">
-                            <div class="file-upload-box">
-                                <input id="file-upload" type="file" accept="image/*" onchange="previewImage(event)"
-                                    name="id_img">
-                                <div class="plus-sign">+</div>
-                            </div>
-                        </label>
+                            <!-- <div class="file-upload-box"> -->
+                            <input id="file-upload" type="file" name="id_img" accept="image/*">
+
+                            <!-- <div class="plus-sign">+</div> -->
                     </div>
-                    <!-- Image preview element -->
-                    <img id="image-preview" src="#" alt="Image Preview"
-                        style="display: none; width: 300px; height: auto; border-radius: 8px; margin-top: 15px;" />
+                    </label>
                 </div>
+
                 <button class="btn mt-3" type="submit"
                     style="background-color: #8472AC; color: white; width: 500px; height: 50px; font-size: 18px; font-weight: bold; border-radius: 30px;">Register</button>
-                <hr style="width: 600px;">
-                <p class="account" style="color: #AAAAAA; font-weight: bold;">Already have an account? <a href=""
-                        style="color: #4873E2;">Login</a></p>
+            </form>
+            <hr style="width: 600px;">
+            <p class="account" style="color: #AAAAAA; font-weight: bold;">Already have an account? <a href="/login"
+                    style="color: #4873E2;">Login</a></p>
         </center>
 
     </div>
 
 </body>
 <script>
-    document.querySelector('form').onsubmit = async (e) => {
+    let selectedRole;
+    function toggleForm() {
+        const customerForm = document.getElementById('customerForm');
+        const sellerForm = document.getElementById('sellerForm');
+        const customer = document.getElementById('customer');
+        const seller = document.getElementById('seller');
+
+        if (seller.checked) {
+            sellerForm.style.display = 'block';
+            return selectedRole = 2;
+
+        } else {
+            sellerForm.style.display = 'none';
+            return selectedRole = 1;
+        }
+    }
+
+    document.querySelector('#registerForm').onsubmit = async (e) => {
         e.preventDefault(); // Prevent the form from submitting the traditional way
 
-        const form = e.target; // Get the form element
+        const form = e.target;
         const firstName = form['first_name'].value;
         const lastName = form['last_name'].value;
         const phonenum = form['phonenum'].value;
         const email = form['email'].value;
-        const pass = form['pass'].value;
+        const pass = form['password'].value;
         const confirmPass = form['confirm-pass'].value;
-        const bankAcName = form['bank_ac_name'].value;
-        const bankAcNum = form['bank_ac_num'].value;
-        const idImg = form['image-preview'].files[0];
+        const bankAcName = form['bank_ac_name'] ? form['bank_ac_name'].value : null;
+        const bankAcNum = form['bank_ac_num'] ? form['bank_ac_num'].value : null;
+        const idImg = form['id_img']?.files[0];
 
-        const customerForm = document.getElementById('customerForm');
-        const sellerForm = document.getElementById('sellerForm');
         let selectedRole;
 
-        if (document.getElementById('customer').checked) {
-            customerForm.style.display = 'block';
-            sellerForm.style.display = 'none';
-            selectedRole = 1;
-            if (firstName === '' || lastName === '' || phonenum === '' || email === '' || pass === '') {
-                alert('โปรดใส่ข้อมูลทุกช่องให้ครบ');
-                return;
-            }
-            if (pass !== confirmPass) {
-                alert('รหัสไม่ตรงกัน');
-                return;
-            }
-        } else if (document.getElementById('seller').checked) {
-            customerForm.style.display = 'block';
-            sellerForm.style.display = 'block';
+        if (document.getElementById('seller').checked) {
             selectedRole = 2;
-            if (firstName === '' || lastName === '' || phonenum === '' || email === '' || pass === '' || bankAcName === '' || bankAcNum === '' || !idImg) {
-                alert('โปรดใส่ข้อมูลทุกช่องให้ครบ');
+
+            if (firstName === '' || lastName === '' || phonenum === '' || email === '' || pass === '' || confirmPass === '' || bankAcName === '' || bankAcNum === '' || !idImg) {
+
+                alert('Please fill out all required fields for seller.');
                 return;
             }
             if (pass !== confirmPass) {
-                alert('รหัสไม่ตรงกัน');
+                alert('Passwords do not match.');
+                return;
+            }
+        } else {
+            selectedRole = 1;
+            if (firstName == '' || lastName == '' || phonenum == '' || email == '' || pass == '' || confirmPass == '') {
+                alert('Please fill out all required fields for customer.');
+                return;
+            }
+            if (pass !== confirmPass) {
+                alert('Passwords do not match.');
                 return;
             }
         }
 
-        try {
-            const formData = new FormData();
-            formData.append('first_name', firstName);
-            formData.append('last_name', lastName);
-            formData.append('email', email);
-            formData.append('password', pass);
-            formData.append('phonenum', phonenum);
-            formData.append('role', selectedRole);
-            formData.append('id_img', idImg);
-            formData.append('bank_ac_name', bankAcName);
-            formData.append('bank_ac_num', bankAcNum);
+        // Form is valid, create FormData to submit
+        const formData = new FormData();
+        formData.append('first_name', firstName);
+        formData.append('last_name', lastName);
+        formData.append('email', email);
+        formData.append('password', pass);
+        formData.append('phonenum', phonenum);
+        formData.append('role', selectedRole);
+        formData.append('bank_ac_name', bankAcName);
+        formData.append('bank_ac_num', bankAcNum);
+        formData.append('id_img', idImg);
 
-            const options = {
+
+        try {
+            const res = await fetch('/register', {
                 method: 'POST',
-                body: formData
-            };
-            const res = await fetch('/register', options);
+                body: formData,
+            });
+
             if (res.ok) {
                 const data = await res.text();
-                location.replace(data);
+                location.replace('/login');
             } else if (res.status === 401) {
                 const data = await res.text();
                 throw Error(data);
@@ -187,84 +202,26 @@
             alert(err.message || 'An error occurred');
         }
     };
+    // function previewImage(event) {
+    //     const reader = new FileReader();
+    //     const fileUploadContainer = document.getElementById('file-upload-container');
 
-
-
-    function previewImage(event) {
-        const reader = new FileReader();
-        const fileUploadContainer = document.getElementById('file-upload-container');
-
-        reader.onload = function () {
-            if (reader.readyState === 2) {
-                fileUploadContainer.innerHTML = `
-                        <img src="${reader.result}" alt="Image Preview" style="width: 300px; height: auto; border-radius: 8px;" />
-                        <button type="button" class="btn btn-secondary mt-2" onclick="changeImage()">Change Image</button>
-                    `;
-            }
-        }
-
-        reader.readAsDataURL(event.target.files[0]);
-    }
-
-    function changeImage() {
-        const fileUploadContainer = document.getElementById('file-upload-container');
-        fileUploadContainer.innerHTML = `
-                <label for="file-upload" class="file-upload-label">
-                    <div class="file-upload-box">
-                        <input id="file-upload" type="file" accept="image/*" onchange="previewImage(event)">
-                        <div class="plus-sign">+</div>
-                    </div>
-                </label>
-            `;
-    }
-
-    // document.getElementById('registerForm').onsubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     const form = e.target;
-    //     const formData = new FormData(form);
-
-    //     if (document.getElementById('customer').checked) {
-    //         const requiredFields = ['first_name', 'last_name', 'phonenum', 'email', 'password'];
-
-    //         for (const field of requiredFields) {
-    //             if (!form[field].value) {
-    //                 alert('โปรดใส่ข้อมูลทุกช่องให้ครบ');
-    //                 return;
-    //             }
-    //         }
-
-    //         if (form['password'].value !== form['confirm-pass'].value) {
-    //             alert('รหัสผ่านไม่ตรงกัน');
-    //             return;
-    //         }
-    //     } else {
-    //         const requiredFields = ['bank_ac_name', 'bank_ac_num', 'id_img'];
-
-    //         for (const field of requiredFields) {
-    //             if (!form[field].value) {
-    //                 alert('โปรดใส่ข้อมูลทุกช่องให้ครบ');
-    //                 return;
-    //             }
+    //     reader.onload = function () {
+    //         if (reader.readyState === 2) {
+    //             fileUploadContainer.innerHTML = `
+    //                     <img src="${reader.result}" alt="Image Preview" style="width: 300px; height: auto; border-radius: 8px;" />
+    //                     <button type="button" class="btn btn-secondary mt-2" onclick="changeImage()">Change Image</button>
+    //                 `;
     //         }
     //     }
 
-    //     try {
-    //         const response = await fetch('/register', {
-    //             method: 'POST',
-    //             body: formData
-    //         });
+    //     reader.readAsDataURL(event.target.files[0]);
+    // }
 
-    //         if (response.ok) {
-    //             alert('Registration successful');
-    //             form.reset();
-    //         } else {
-    //             alert('Error during registration');
-    //         }
-    //     } catch (error) {
-    //         alert('Network error');
-    //     }
-    // };
+    // function changeImage() {
+    //     const fileUploadContainer = document.getElementById('file-upload-container');
+    //     fileUploadContainer.clear();
+    // }
 
 </script>
 <style>
