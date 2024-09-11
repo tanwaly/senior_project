@@ -8,131 +8,169 @@
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2b2b2b;
+            color: #FFF;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            /* Set height of the body to 100% of the viewport */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #2C2C2C;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            width: 100vw;
+            /* Full width */
+            height: 100vh;
+            /* Full height */
+            max-width: none;
+            /* Override the max-width */
+            box-sizing: border-box;
+            /* Include padding in width and height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            justify-content: left;
+        }
+
+        .search-bar input {
+            width: 80%;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid #FFF;
+            font-size: 16px;
+            box-sizing: border-box;
+            /* Ensure input takes full width minus padding */
+        }
+
+        .search-bar i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+            font-size: 20px;
+        }
+
         table {
             width: 100%;
-            height: 400px;
             border-collapse: collapse;
+            background-color: #F3F3E3;
+            flex-grow: 1;
+            /* Allow table to grow and fill available space */
+            overflow-y: auto;
+            /* Scroll vertically if content exceeds table height */
         }
 
+        th,
         td {
-            padding-left: 30px;
-            /* เพิ่ม padding ที่นี่ */
-            text-align: left;
-            /* จัดข้อความไปทางซ้าย */
-            padding: 30px;
-            /* เพิ่ม padding ให้ทุกด้าน */
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            color: #000;
         }
 
-        .odd {
-            background-color: #ECE7FF;
+        th {
+            background-color: #F3F3E3;
+            font-weight: bold;
+            text-align: center;
         }
 
-        .even {
-            background-color: #303030;
-            color: #FFFFF7;
+        .btn-details {
+            background-color: #B2B2B2;
+            color: #FFFFFF;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 10px;
+            border: 1px solid #999;
+            cursor: pointer;
+            font-weight: bold;
+            width: 60%;
+        }
+
+        .btn-details:hover {
+            background-color: #bbb;
+        }
+
+        .select_role {
+            padding-right: 20px;
+            border-color: transparent;
+            width: 200px;
+            
         }
     </style>
 </head>
 
-<body style="background-color: #303030;">
-    <h1 style="text-align: center; color: white;" class="m-3">ฐานข้อมูลผู้ใช้</h1>
-    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;  border-color: transparent; width: 200px; ">
-        <select name="user" id="user" style=" border-radius: 5px; margin-top: -60px;width: 150px; margin-left: 10px;  border-radius: 5px; border: none; color: #8D8D8D; font-size: 15px; text-align: center; height: 20px;">
-            <option value="1">Customer</option>
-            <option value="2">Seller</option>
-        </select>
+<body>
 
-    </div>
-    <hr style="color: white;">
+    <div class="container">
+        <h2>ผู้ขายที่ถูกรายงาน</h2>
+        <div >
+            <div class="search-bar">
+                <input type="text" placeholder="ค้นหา...">
+                <i class="fa fa-search"></i>
+            </div>
+            <div class="select_role  d-flex align-items-center ms-auto">
+                <select name="user" id="user"
+                    style=" border-radius: 30px; margin-top: -90px; width: 200px; margin-left: 10px;  border: none; 
+                    color: #8D8D8D; font-size: 15px; text-align: center; height: 45px;">
+                    <option value="1">Customer</option>
+                    <option value="2">Seller</option>
+                </select>
+            </div>
+        </div>
 
-    <div>
+
+
         <table>
-            <tr class="odd">
-                <td>
-                    ชื่อ: นาย ก <br>
-                    ID: 1111
-                </td>
-            </tr>
-            <tr class="even">
-                <td>
-                    ชื่อ: นาย ข <br>
-                    ID: 2222
-                </td>
-            </tr>
-            <tr class="odd">
-                <td>
-                    ชื่อ: นาย ค <br>
-                    ID: 3333
-                </td>
-            </tr>
-            <tr class="even">
-                <td>
-                    ชื่อ: นาย ง <br>
-                    ID: 4444
-                </td>
-            </tr>
-            <tr class="odd">
-                <td>
-                    ชื่อ: นาย ค <br>
-                    ID: 3333
-                </td>
-            </tr>
-            <tr class="even">
-                <td>
-                    ชื่อ: นาย ง <br>
-                    ID: 4444
-                </td>
-            </tr>
-            <tr class="odd">
-                <td>
-                    ชื่อ: นาย ค <br>
-                    ID: 3333
-                </td>
-            </tr>
-            <tr class="even">
-                <td>
-                    ชื่อ: นาย ง <br>
-                    ID: 4444
-                </td>
-            </tr>
-            <tr class="odd">
-                <td>
-                    ชื่อ: นาย ค <br>
-                    ID: 3333
-                </td>
-            </tr>
-            <tr class="even">
-                <td>
-                    ชื่อ: นาย ง <br>
-                    ID: 4444
-                </td>
-            </tr>
-            <tr class="odd">
-                <td>
-                    ชื่อ: นาย ค <br>
-                    ID: 3333
-                </td>
-            </tr>
-            <tr class="even">
-                <td>
-                    ชื่อ: นาย ง <br>
-                    ID: 4444
-                </td>
-            </tr>
-            <tr class="odd">
-                <td>
-                    ชื่อ: นาย ค <br>
-                    ID: 3333
-                </td>
-            </tr>
-            <tr class="even">
-                <td>
-                    ชื่อ: นาย ง <br>
-                    ID: 4444
-                </td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>...........</td>
+                    <td>ชื่อ: น.ส. ...........</td>
+                    <td></td>
+                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                </tr>
+                <tr>
+                    <td>...........</td>
+                    <td>ชื่อ: น.ส. ...........</td>
+                    <td></td>
+                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                </tr>
+                <tr>
+                    <td>...........</td>
+                    <td>ชื่อ: น.ส. ...........</td>
+                    <td></td>
+                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </body>
