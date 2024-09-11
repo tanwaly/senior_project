@@ -8,8 +8,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
   <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
   <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
-    <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
 </head>
@@ -36,14 +36,12 @@
                 <input type="password" class="form-control " id="password"
                   style="margin-right: 100px; width: 700px; height: 50px; background-color: #E9E9E9; border-radius: 15px; border: none;"
                   required>
-
+                <button class="btn mt-3" type="submit"
+                  style=" background-color: #8472AC; color: white; width: 100px; height: 50px; font-size: 18px; font-weight: bold; border-radius: 15px; ">Login</button>
               </form>
-              <button class="btn mt-3" type="submit"
-                style=" background-color: #8472AC; color: white; width: 100px; height: 50px; font-size: 18px; font-weight: bold; border-radius: 15px; ">Login</button>
               <hr style="width: 700px; margin-right: 100px;">
               <p class="account">Don’t have an account? <a href="/register" style="color: #C66828;">Register</a></p>
             </center>
-
           </div>
         </div>
       </div>
@@ -52,38 +50,42 @@
   </div>
 </body>
 <script>
-  const formlogin = document.querySelector('#process_login')
-  formlogin.onsubmit = async (e) => {
-    e.preventDefault();
-    const email = formlogin['email'].value;
-    const pass = formlogin['pass'].value;
-    if (email == '' || pass == '') {
-      alert('โปรดใส่ข้อมูลทุกช่องให้ครบ')
-      return
+  document.querySelector('button[type="submit"]').addEventListener('click', async (e) => {
+    e.preventDefault(); // prevent default form submission
+
+    const email = document.querySelector('#email').value;
+    const pass = document.querySelector('#password').value;
+
+    if (email === '' || pass === '') {
+      alert('Please fill out all required fields.');
+      return;
     }
+
     try {
       const options = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          'email': email,
-          'pass': pass,
+          email: email,
+          password: pass,
         })
-      }
+      };
       const res = await fetch('/login', options);
+
       if (res.ok) {
         const data = await res.text();
-        location.replace(data);
-      }
-      if (res.status == 401) {
-        const data = await res.text();
-        throw Error(data)
+        location.replace(data); // Redirect to the page you want
+      } else if (res.status === 400) {
+        const error = await res.text();
+        throw Error(error); // Show error message from server
       }
     } catch (err) {
-      alert(err);
+      alert(err.message);
     }
-  }
+  });
+
 </script>
+
 <style>
   body {
     display: flex;

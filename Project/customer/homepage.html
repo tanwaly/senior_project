@@ -13,7 +13,7 @@
     <title>Document</title>
 </head>
 
-<body style="background-color:rgb(241, 241, 241);">
+<body style="background-color:#f1f1f1;">
     <!-- <div style="background: linear-gradient(90deg, #D091A8 62.1%, #acb0e7 100%);" class="d-flex"> -->
     <!-- <div style="background: linear-gradient(90deg, #D091A8 62.1%, #acb0e7 100%);" class="d-flex"> -->
     <div style="background-color:#f5eecc;" class="d-flex">
@@ -90,50 +90,6 @@
         </div>
     </div>
     <div class="center" style="margin-top: 50px; display: flex; flex-wrap: wrap; justify-content: center;">
-
-        <!-- post2 -->
-        <!-- <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
-            <div
-                style="height: 130px;  background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px; display: flex; align-items: center; justify-content: center;">
-                <div style="display: flex; align-items: center;">
-                    <img src="/public/img/test.jpg" alt="Avatar" width="90px"
-                        style="border-radius: 50%; margin: 10px;">
-                    <div class="row">
-                        <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">shopnameee</span>
-                        <div class="row" style="padding: 15px;">
-                            <div class="category-sh">
-                                <span class="icon-pants"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="width: 100%; display: flex; justify-content: end;">
-                        <div
-                            style="width: 150px; height: 40px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
-                            <span style="font-size: 20px; font-weight: 700;">เริ่ม 17.00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
-                <div class="center">
-                    <button style="background-color: transparent; border: none;">
-                        <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
-                            style="height: 240px; width: 250px;">
-                    </button>
-                </div>
-                <div class="row" style="justify-content: end;">
-                    <button
-                        style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
-                        <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
-                    </button>
-                </div>
-                <span
-                    style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">แคปชั่นนนนนนนนนนนนนนนนนนน
-                    แคปชั่นนนนนนนนนนนนนนนนนนน แคปชั่นนนนนนนนนนนนนนนนนนน นนooooooooooo ooooo
-                    oooooooooooนน</span>
-            </div>
-        </div> -->
-
         <div id="showProduct"></div>
     </div>
 
@@ -142,55 +98,103 @@
     </div>
 </body>
 <script>
-    async function getProduct() {
-        try {
-            const response = await fetch('/product');
-            if (response.ok) {
-                const data = await response.json();
-                console.log('Fetched data:', data);
-                let texts = '';
-                data.forEach(function (product) {
-                    texts += ` <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
-                    <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
-                        <div style="display: flex; align-items: center;">
-                            <img src="/public/img/test.jpg" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;">
-                            <div class="row">
-                                <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">shopnameee</span>
-                                <div class="row" style="padding: 15px;">
-                                    <div class="category-sh">
-                                        <span class="${product.product_cate}"></span>
+    function changeIcon(cata) {
+        const icons = {
+            1: 'icon-shirt',
+            2: 'icon-coat',
+            3: 'icon-dress',
+            4: 'icon-pants',
+            5: 'icon-skirt',
+            6: 'icon-sock',
+            7: 'icon-shoe',
+            8: 'icon-hat',
+            9: 'icon-necklace',
+            10: 'icon-chair'
+        };
+        return icons[cata] || null;
+    }
+    function cfproduct(productId) {
+        fetch(`/product/${productId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                window.location.href = `/product/${productId}`;
+            })
+            .catch(error => {
+                console.error('Fetch error:', error);
+            });
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const showProduct = document.getElementById('showProduct');
+
+        async function getProduct() {
+            try {
+                const response = await fetch('/product');
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Fetched data:', data);
+
+                    let texts = ''; // Declare texts for the HTML content
+                    data.forEach(function (product) {
+                        texts += `
+                    <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
+                        <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
+                            <div style="display: flex; align-items: center;">
+                                <button style="background-color: transparent; border: none;"><img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                                </button>
+                                    <div class="row">
+                                    <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
+                                    <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
+                                    <div class="row" style="padding: 15px;">
+                                        <div class="category-sh">
+                                            <span class="${changeIcon(product.product_cate)}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; display: flex; justify-content: end;">
+                                    <div style="width: 150px; height: 40px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
+                                        <span style="font-size: 20px; font-weight: 700;">เริ่ม ${product.product_time}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div style="width: 100%; display: flex; justify-content: end;">
-                                <div style="width: 150px; height: 40px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
-                                    <span style="font-size: 20px; font-weight: 700;">เริ่ม ${product.product_time}</span>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                    <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
-                        <div class="center">
-                            <button style="background-color: transparent; border: none;">
-                                <img src="/public/img/${product.product_img}" alt="" style="height: 240px; width: 250px;">
-                            </button>
-                        </div>
-                        <div class="row" style="justify-content: end;">
-                            <button style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
-                                <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
-                            </button>
-                        </div>
-                        <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
-                    </div>
-                </div>`;
-                });
-                document.getElementById('showProduct').innerHTML = 'text';
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
+                        <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
+                            <div class="center">
+                               <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
+                                <img src="/public/img/${product.product_img}" alt="Product Image" style="height: 240px; width: 250px;">
+                                </button>
 
+                            </div>
+                            <div class="row" style="justify-content: end;">
+                                <button style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
+                                    <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
+                                </button>
+                            </div>
+                            <div class = 'col'>
+                            <span style="width: 300px; font-size: 20px; font-weight: 700; margin-left: 20px; word-wrap: break-word;">
+                                ${product.product_name}
+                            </span>
+                            <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">
+                                ${product.product_caption}
+                            </span>
+                        </div>
+                        </div>
+                    </div>`;
+                    });
+                    showProduct.innerHTML = texts; // Set innerHTML with texts
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+
+        getProduct();
+    });
 
 </script>
 <style>
@@ -206,12 +210,13 @@
         border-radius: 60px;
         width: 120px;
         height: 53px;
-        border-color: darkgray;
+        /* border-color: darkgray; */
+        border: transparent;
         transition: 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
-        /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 
     .category-sh {
