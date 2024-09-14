@@ -106,12 +106,12 @@ app.post('/login', (req, res) => {
                 return res.status(500).send("Authentication server error");
             }
             if (same) {
-                // if (result[0].role == 1) {
+                if (result[0].role == 1) {
                 res.send('productslist')
-                // }
-                // if (result[0].role == 2) {
-                //     res.send('productslist')
-                // }
+                }
+                if (result[0].role == 2) {
+                    res.send('productslist')
+                }
             } else {
                 res.status(400).send("Wrong password");
             }
@@ -162,12 +162,27 @@ app.get('/product', (req, res) => {
         }
     });
 });
+// app.get('/product/:productId', (req, res) => {
+    // res.sendFile(path.join(__dirname, 'Project/customer/cf_page.html'))
+// });
 app.get('/product/:productId', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/cf_page.html'))
+    const { productId } = req.params;
+    const sql = 'SELECT products.*, users.first_name, users.last_name, users.profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE products.product_id = productId';
+
+    db.query(sql, [productId], (error, results) => {
+        if (error) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Return product details as JSON
+        res.json(results[0]);
+    });
 });
-app.post('/product/:productId', (req, res) => {
-    const sql = 'SELECT products.*, users.first_name,last_name,profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE users.role = 2;';
-});
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running at port ${PORT}`);
