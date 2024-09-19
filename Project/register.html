@@ -115,7 +115,6 @@
 
 </body>
 <script>
-    let selectedRole;
     function toggleForm() {
         const customerForm = document.getElementById('customerForm');
         const sellerForm = document.getElementById('sellerForm');
@@ -147,10 +146,11 @@
         const idImg = form['id_img']?.files[0];
 
         let selectedRole;
+        let status;
 
         if (document.getElementById('seller').checked) {
             selectedRole = 2;
-
+            status = 2;
             if (firstName === '' || lastName === '' || phonenum === '' || email === '' || pass === '' || confirmPass === '' || bankAcName === '' || bankAcNum === '' || !idImg) {
 
                 alert('Please fill out all required fields for seller.');
@@ -162,6 +162,7 @@
             }
         } else {
             selectedRole = 1;
+            status = 1;
             if (firstName == '' || lastName == '' || phonenum == '' || email == '' || pass == '' || confirmPass == '') {
                 alert('Please fill out all required fields for customer.');
                 return;
@@ -182,6 +183,7 @@
         formData.append('role', selectedRole);
         formData.append('bank_ac_name', bankAcName);
         formData.append('bank_ac_num', bankAcNum);
+        formData.append('user_status', status);
         formData.append('id_img', idImg);
 
 

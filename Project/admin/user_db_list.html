@@ -16,7 +16,6 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            /* Set height of the body to 100% of the viewport */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,13 +27,9 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             width: 100vw;
-            /* Full width */
             height: 100vh;
-            /* Full height */
             max-width: none;
-            /* Override the max-width */
             box-sizing: border-box;
-            /* Include padding in width and height */
             display: flex;
             flex-direction: column;
         }
@@ -44,21 +39,25 @@
             margin-bottom: 20px;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
-            position: relative;
+        .controls {
             display: flex;
-            justify-content: left;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            flex: 1;
+            margin-right: 10px;
+            position: relative;
         }
 
         .search-bar input {
-            width: 80%;
+            width: 100%;
             padding: 10px;
             border-radius: 30px;
             border: 1px solid #FFF;
             font-size: 16px;
             box-sizing: border-box;
-            /* Ensure input takes full width minus padding */
         }
 
         .search-bar i {
@@ -70,14 +69,26 @@
             font-size: 20px;
         }
 
+        .select_role {
+            flex: 0 0 auto;
+        }
+
+        .select_role select {
+            border-radius: 30px;
+            border: none;
+            color: #8D8D8D;
+            font-size: 15px;
+            text-align: center;
+            height: 45px;
+            width: 200px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: #F3F3E3;
             flex-grow: 1;
-            /* Allow table to grow and fill available space */
             overflow-y: auto;
-            /* Scroll vertically if content exceeds table height */
         }
 
         th,
@@ -91,7 +102,6 @@
         th {
             background-color: #F3F3E3;
             font-weight: bold;
-            text-align: center;
         }
 
         .btn-details {
@@ -111,13 +121,6 @@
         .btn-details:hover {
             background-color: #bbb;
         }
-
-        .select_role {
-            padding-right: 20px;
-            border-color: transparent;
-            width: 200px;
-            
-        }
     </style>
 </head>
 
@@ -125,54 +128,146 @@
 
     <div class="container">
         <h2>ผู้ขายที่ถูกรายงาน</h2>
-        <div >
+        <div class="controls">
             <div class="search-bar">
-                <input type="text" placeholder="ค้นหา...">
+                <input type="text" id="search-input" placeholder="ค้นหา...">
                 <i class="fa fa-search"></i>
             </div>
-            <div class="select_role  d-flex align-items-center ms-auto">
-                <select name="user" id="user"
-                    style=" border-radius: 30px; margin-top: -90px; width: 200px; margin-left: 10px;  border: none; 
-                    color: #8D8D8D; font-size: 15px; text-align: center; height: 45px;">
+            <div class="select_role">
+                <select name="user" id="user-role-select">
+                    <option value="0">All</option>
                     <option value="1">Customer</option>
                     <option value="2">Seller</option>
+                    <option value="3">Admin</option>
                 </select>
             </div>
         </div>
 
+        <div id="showUsersList">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ชื่อ-นามสกุล</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Dynamic rows will be inserted here -->
+                </tbody>
+            </table>
 
+            <!-- user detail popup -->
+            <div class="modal fade" id="dataDetail" tabindex="-1" role="dialog" aria-labelledby="dataDetailTitle"
+                aria-hidden="true">
+                <div class="modal-dialog center" role="document">
+                    <div class="modal-content"
+                        style="background-color:  #F3F3E3; min-width: 800px; min-height: 400px; height: auto;">
+                        <div class="modal-header" style="background-color:  #8472AC;">
+                            <h5 class="modal-title" id="dataDetailTitle" style="color: white; font-size: 22px;">
+                                Detail</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div style="font-size: 25px; margin-left: 50px; margin-top: 50px;">
+                                <p><span>ชื่อ: นาย ก</span></p>
+                                <p><span>เบอร์โทร: 093-245-xxxx</span></p>
+                                <p><span>Email: xxxxxx@gmail.com</span></p>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>ชื่อ-นามสกุล</th>
-                    <th>Role</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>...........</td>
-                    <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
-                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
-                </tr>
-                <tr>
-                    <td>...........</td>
-                    <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
-                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
-                </tr>
-                <tr>
-                    <td>...........</td>
-                    <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
-                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
-                </tr>
-            </tbody>
-        </table>
+                                <p><span>ธนาคาร: กรุงไทย</span></p>
+                                <p><span>เลขบัญชีธนคาร: 1212312121</span></p>
+                                <p><span style="text-decoration: underline;">บัตรประจำตัวประชาชน</span></p>
+                                <div class="center">
+                                    <img style=" height: 250px;" src="/public/img/idcard.png" alt="บัตรประชาชน">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <!-- <button type="button" class="btn btn-danger">ระงับบัญชีผู้ใช้</button> -->
+                            <div>
+                                <button
+                                    style="border-radius: 8px; border: none; background-color: #FFA4A4; height: 50px; width: 200px; font-size: 20px;">ระงับบัญชีผู้ใช้</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+        function changeRole(role) {
+            const icons = {
+                1: 'Customer',
+                2: 'Seller',
+                3: 'Admin'
+            };
+            return icons[role] || null;
+        }
+
+        function formatUserId(userId) {
+            return userId.toString().padStart(11, '0');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userTableBody = document.getElementById('userTableBody');
+            const roleSelect = document.getElementById('user-role-select');
+            const searchInput = document.getElementById('search-input');
+
+            let allUsers = [];
+
+            async function allList() {
+                try {
+                    const response = await fetch('/alluser');
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Fetched data:', data);
+
+                        allUsers = data; // Store fetched data
+                        filterUsers(); // Initial display
+                    } else {
+                        console.error('Failed to fetch data:', response.status, response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+            }
+
+            function filterUsers() {
+                const selectedRole = parseInt(roleSelect.value, 10);
+                const searchQuery = searchInput.value.toLowerCase();
+
+                const filteredUsers = allUsers.filter(user => {
+                    const matchesRole = selectedRole === 0 || user.role === selectedRole;
+                    const matchesSearch =
+                        user.users_id.toString().includes(searchQuery) ||
+                        `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchQuery);
+                    return matchesRole && matchesSearch;
+                });
+
+                let rows = '';
+                filteredUsers.forEach(user => {
+                    rows += `
+                    <tr>
+                        <td>${formatUserId(user.users_id)}</td>
+                        <td>ชื่อ:${user.first_name} ${user.last_name}</td>
+                        <td>${changeRole(user.role)}</td>
+                        <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                    </tr>`;
+                });
+                userTableBody.innerHTML = rows;
+            }
+
+            roleSelect.addEventListener('change', filterUsers);
+            searchInput.addEventListener('input', filterUsers);
+
+            allList();
+        });
+    </script>
+
 </body>
 
 </html>

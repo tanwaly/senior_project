@@ -12,10 +12,10 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #2b2b2b;
-            color:#FFF;
+            color: #FFF;
             margin: 0;
             padding: 0;
-            height: 100vh; /* Set height of the body to 100% of the viewport */
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,10 +26,10 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 100vw; /* Full width */
-            height: 100vh; /* Full height */
-            max-width: none; /* Override the max-width */
-            box-sizing: border-box; /* Include padding in width and height */
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            box-sizing: border-box;
             display: flex;
             flex-direction: column;
         }
@@ -39,20 +39,25 @@
             margin-bottom: 20px;
         }
 
-        .search-bar {
-            margin-bottom: 20px;
-            position: relative;
+        .controls {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            flex: 1;
+            margin-right: 10px;
+            position: relative;
         }
 
         .search-bar input {
-            width: 95%;
+            width: 100%;
             padding: 10px;
             border-radius: 30px;
-            border: 1px solid #ccc;
+            border: 1px solid #FFF;
             font-size: 16px;
-            box-sizing: border-box; /* Ensure input takes full width minus padding */
+            box-sizing: border-box;
         }
 
         .search-bar i {
@@ -64,12 +69,13 @@
             font-size: 20px;
         }
 
+        
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: #F3F3E3;
-            flex-grow: 1; /* Allow table to grow and fill available space */
-            overflow-y: auto; /* Scroll vertically if content exceeds table height */
+            flex-grow: 1;
+            overflow-y: auto;
         }
 
         th,
@@ -83,7 +89,6 @@
         th {
             background-color: #F3F3E3;
             font-weight: bold;
-            text-align: center;
         }
 
         .btn-details {
@@ -110,43 +115,95 @@
 
     <div class="container">
         <h2>ผู้ขายที่ถูกรายงาน</h2>
-
-        <div class="search-bar">
-            <input type="text" placeholder="ค้นหา...">
-            <i class="fa fa-search"></i>
+        <div class="controls">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="ค้นหา...">
+                <i class="fa fa-search"></i>
+            </div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>ชื่อ-นามสกุล</th>
-                    <th>เหตุผล</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>...........</td>
-                    <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
-                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
-                </tr>
-                <tr>
-                    <td>...........</td>
-                    <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
-                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
-                </tr>
-                <tr>
-                    <td>...........</td>
-                    <td>ชื่อ: น.ส. ...........</td>
-                    <td></td>
-                    <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
-                </tr>
-            </tbody>
-        </table>
+        <div id="showUsersList">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ชื่อ-นามสกุล</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- Dynamic rows will be inserted here -->
+                </tbody>
+            </table>
+        </div>
     </div>
+    <script>
+        function changeRole(role) {
+            const icons = {
+                1: 'Customer',
+                2: 'Seller',
+                3: 'Admin'
+            };
+            return icons[role] || null;
+        }
+
+        function formatUserId(userId) {
+            return userId.toString().padStart(11, '0');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const userTableBody = document.getElementById('userTableBody');
+            const searchInput = document.getElementById('search-input');
+
+            let allUsers = [];
+
+            async function allList() {
+                try {
+                    const response = await fetch('/sellerreport');
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Fetched data:', data);
+
+                        allUsers = data; // Store fetched data
+                        filterUsers(); // Initial display
+                    } else {
+                        console.error('Failed to fetch data:', response.status, response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+            }
+
+            function filterUsers() {
+                const searchQuery = searchInput.value.toLowerCase();
+
+                const filteredUsers = allUsers.filter(user => {
+                    const matchesSearch =
+                        user.users_id.toString().includes(searchQuery) ||
+                        `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchQuery);
+                    return matchesSearch;
+                });
+
+                let rows = '';
+                filteredUsers.forEach(user => {
+                    rows += `
+                    <tr>
+                        <td>${formatUserId(user.users_id)}</td>
+                        <td>ชื่อ:${user.first_name} ${user.last_name}</td>
+                        <td>${changeRole(user.role)}</td>
+                        <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                    </tr>`;
+                });
+                userTableBody.innerHTML = rows;
+            }
+
+            searchInput.addEventListener('input', filterUsers);
+
+            allList();
+        });
+    </script>
+
 </body>
 
 </html>

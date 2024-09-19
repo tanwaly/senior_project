@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Database List</title>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
+
+</head>
+
+<body style="background-color: #8472AC; padding: 50px;">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dataDetail">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="dataDetail" tabindex="-1" role="dialog" aria-labelledby="dataDetailTitle"
+        aria-hidden="true">
+        <div class="modal-dialog center" role="document">
+            <div class="modal-content"
+                style="background-color:  #F3F3E3; min-width: 800px; min-height: 400px; height: auto;">
+                <div class="modal-header" style="background-color:  #8472AC;">
+                    <h5 class="modal-title" id="dataDetailTitle" style="color: white; font-size: 22px;">
+                        Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div style="font-size: 25px; margin-left: 50px; margin-top: 50px;">
+                        <p><span>ชื่อ: นาย ก</span></p>
+                        <p><span>เบอร์โทร: 093-245-xxxx</span></p>
+                        <p><span>Email: xxxxxx@gmail.com</span></p>
+
+                        <p><span>ธนาคาร: กรุงไทย</span></p>
+                        <p><span>เลขบัญชีธนคาร: 1212312121</span></p>
+                        <p><span style="text-decoration: underline;">บัตรประจำตัวประชาชน</span></p>
+                        <div class="center">
+                            <img style=" height: 250px;"
+                                src="/public/img/idcard.png"
+                                alt="บัตรประชาชน">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-danger">ระงับบัญชีผู้ใช้</button> -->
+                   <div>
+                            <button
+                                style="border-radius: 8px; border: none; background-color: #FFA4A4; height: 50px; width: 200px; font-size: 20px;">ระงับบัญชีผู้ใช้</button>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<style>
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+</html>

@@ -37,12 +37,13 @@
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
             </div>
-            <select name="role" id="">
+        </div>
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+            <select name="role" id=""
+                style="margin-right: 30px; border-radius: 15px;border-color: transparent ; font-size: 20px; width: 250px; height: 40px;">
                 <option value="customer">Customer</option>
                 <option value="Seller">Seller</option>
             </select>
-        </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
             height: 46px; color: white;">
                 Log out
@@ -93,9 +94,12 @@
             </button>
         </div>
     </div>
-    <div class="center" style="margin-top: 50px; display: flex; flex-wrap: wrap; justify-content: center;">
-        <div id="showProduct"></div>
+    <div class="center" style="margin-top: 50px;">
+        <div id="showProduct"
+            style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px; justify-content: center;">
+        </div>
     </div>
+
 
 
     </div>
@@ -117,13 +121,27 @@
         };
         return icons[cata] || null;
     }
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     const roleSelect = document.querySelector('select[name="role"]');
+
+    //     // Redirect based on role selection
+    //     roleSelect.addEventListener('change', function () {
+    //         const selectedRole = roleSelect.value;
+    //         if (selectedRole === 'customer') {
+    //             window.location.href = '/homepage';
+    //         } else if (selectedRole === 'Seller') {
+    //             window.location.href = '/sellerhomepage';
+    //         }
+    //     });
+    // });
+
     function cfproduct(productId) {
-        fetch(`/product/${productId}`)
+        fetch(`/cfproduct/${productId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                window.location.href = `/product/${productId}`;
+                window.location.href = `/cfpage?productId=${productId}`;
             })
             .catch(error => {
                 console.error('Fetch error:', error);
@@ -167,7 +185,7 @@
                         </div>
                         <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
                             <div class="center">
-                               <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
+                                <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
                                 <img src="/public/img/${product.product_img}" alt="Product Image" style="height: 240px; width: 250px;">
                                 </button>
 
@@ -188,7 +206,7 @@
                         </div>
                     </div>`;
                     });
-                    showProduct.innerHTML = texts; 
+                    showProduct.innerHTML = texts;
                 } else {
                     console.error('Failed to fetch data:', response.status, response.statusText);
                 }
