@@ -3,7 +3,7 @@ const con = require("./config/db");
 const bcrypt = require('bcrypt');
 const path = require('path');
 const multer = require('multer')
-
+const session = require('express-session');
 const app = express();
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -19,7 +19,17 @@ const storage = multer.diskStorage({
     }
 });
 const Idupload = multer({ storage: storage }).single('id_img');
+const ProdectUpload = multer({ storage: storage }).single('product_img');
 
+app.use(session({
+    secret: 'key1212312121',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { 
+        secure: false,
+        maxAge: 2 * 60 * 60 * 1000
+    }
+}));
 // function isAuthenticated(req, res, next) {
 //     if (req.session && req.session.userId) {
 //         next();
@@ -101,47 +111,45 @@ app.get('/login', function (_req, res) {
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     const sql = "SELECT users_id, password, role FROM users WHERE email = ?";
+
     con.query(sql, [email], (err, results) => {
         if (err) {
             console.error(err);
-            return res.status(500).send("Database server error");
+            return res.status(500).send("Database error");
         }
-        if (results.length !== 1) {
-            return res.status(400).send("Wrong email");
-        }
-        bcrypt.compare(password, results[0].password, (err, same) => {
-            if (err) {
-                return res.status(500).send("Authentication server error");
-            }
-            if (same) {
-                res.send('homepage');
 
-            } else {
-                res.status(400).send("Wrong password");
-            }
-        });
+        if (results.length === 1) {
+            bcrypt.compare(password, results[0].password, (err, same) => {
+                if (err) return res.status(500).send("Error verifying password");
+
+                if (same) {
+                    req.session.users_id = results[0].users_id; // Set users_id in session
+                    req.session.role = results[0].role; // Save the role in session too
+
+                    // Set session to expire in 2 hours
+                    req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
+                    // Redirect based on the user's role
+                    if (results[0].role == 1) {
+                        res.send('homepage');
+                    } else if (results[0].role == 2) {
+                        res.send('sellerhomepage');
+                    } else if (results[0].role == 3) {
+                        res.send('adminpage');
+                    } else {
+                        res.status(403).send("Unauthorized role");
+                    }
+
+                } else {
+                    res.status(400).send("Wrong password");
+                }
+            });
+        } else {
+            res.status(400).send("Email not found");
+        }
     });
 });
 
-// app.get('/getRoles', (req, res) => {
-//     const userId = req.session.userId; 
-
-//     if (!userId) {
-//         return res.status(401).send("Not logged in");
-//     }
-
-//     const sql = "SELECT role FROM users WHERE users_id = ?";
-
-//     con.query(sql, [userId], (err, results) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).send("Database server error");
-//         }
-
-//         const roles = results.map(result => result.role);
-//         res.json({ roles: roles });
-//     });
-// });
 
 app.get('/getRoles', (req, res) => {
     const userId = req.session.userId; // Assuming the user ID is stored in the session
@@ -263,6 +271,54 @@ app.get('/sellerproduct', (req, res) => {
         }
     });
 });
+
+app.get('/addpost', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/add_post.html'));
+});
+app.post('/addproduct', ProdectUpload, async (req, res) => {
+    const sellerId = req.session.users_id || req.body.users_id; // Get users_id from session or request body
+
+    const sqlCheck = 'SELECT product_id FROM products WHERE product_id = ?';
+    const checkParams = [req.body.product_id];  // Correctly checking by product_id
+
+    con.query(sqlCheck, checkParams, async (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("DB error");
+        }
+        if (result.length > 0) {
+            return res.status(401).send("Product ID already exists");
+        }
+
+        // Insert new product
+        const sqlInsert = 'INSERT INTO products (product_name, product_caption, product_img, product_price, product_cate, product_type, product_detail, product_shirtsize, product_shoesize, product_time, product_time_duration, product_status, seller_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const insertParams = [
+            req.body.product_name,
+            req.body.product_caption,
+            req.file ? req.file.filename : null, // Handle file upload
+            req.body.product_price,
+            req.body.product_cate,
+            req.body.product_type,
+            req.body.product_detail,
+            req.body.product_shirtsize,
+            req.body.product_shoesize,
+            req.body.product_time,
+            req.body.product_time_duration,
+            1,
+            sellerId  // Use the users_id from session as seller_id
+        ];
+
+        con.query(sqlInsert, insertParams, (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send("DB error");
+            }
+            res.send('Product added successfully');
+        });
+    });
+});
+
+
 
 // ================== admin =====================
 // ----- user list
