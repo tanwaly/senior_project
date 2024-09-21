@@ -25,7 +25,7 @@ app.use(session({
     secret: 'key1212312121',
     resave: false,
     saveUninitialized: true,
-    cookie: { 
+    cookie: {
         secure: false,
         maxAge: 2 * 60 * 60 * 1000
     }
@@ -335,6 +335,9 @@ app.get('/alluser', (req, res) => {
         }
     });
 });
+app.get('/userdetail', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/admin/user_db.html'));
+});
 app.get('/detail', (req, res) => {
     const sql = 'SELECT * FROM users';
     con.query(sql, (err, results) => {
@@ -345,6 +348,42 @@ app.get('/detail', (req, res) => {
         }
     });
 });
+app.post('/toggleUserStatus/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        const currentUserStatus = await getCurrentUserStatus(userId);
+        const newStatus = currentUserStatus === 0 ? 1 : 0; 
+        const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
+        con.query(updateSql, [newStatus, userId], (err) => {
+            if (err) {
+                return res.status(500).send('Error updating user status');
+            }
+            res.send(`User status updated to ${newStatus}`);
+        });
+    } catch (error) {
+        console.error('Error fetching user status:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+async function getCurrentUserStatus(userId) {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT user_status FROM users WHERE users_id = ?';
+        con.query(sql, [userId], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            if (results.length > 0) {
+                resolve(results[0].user_status);
+            } else {
+                reject(new Error('User not found'));
+            }
+        });
+    });
+}
+
+
+
 // ----- verify seller list
 app.get('/sellerVerify-list', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/seller_verifiy_list.html'));
