@@ -318,6 +318,57 @@ app.post('/addproduct', ProdectUpload, async (req, res) => {
     });
 });
 
+app.get('/add-trackingnum', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/add_tracking.html'));
+});
+app.get('/trackingnum', (req, res) => {
+    const loggedInUserId = req.session.users_id;
+
+
+    const sql = `
+        SELECT 
+            orders.order_id, 
+            orders.order_tracknum AS tracking_number, 
+            products.product_name, 
+            products.product_img,        
+            users.first_name, 
+            users.last_name, 
+            users.profile_img 
+        FROM 
+            queue 
+        JOIN orders ON queue.queue_id = orders.queue_id
+        JOIN products ON queue.product_id = products.product_id  
+        JOIN users ON products.seller_id = users.users_id  
+        WHERE users.users_id = ?;      
+    `;
+
+    con.query(sql, [loggedInUserId], (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else {
+            res.json(results);  // Send the results back as JSON
+        }
+    });
+});
+
+// ----- edit tracking num
+app.put('/updateTracking', (req, res) => {
+    const { order_id, order_tracknum, order_shipname, order_status } = req.body;
+
+    const sqlUpdate = `
+        UPDATE orders
+        SET order_tracknum = ?, order_shipname = ?, order_status = ?
+        WHERE order_id = ?;
+    `;
+
+    con.query(sqlUpdate, [order_tracknum, order_shipname, order_status, order_id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Database update failed' });
+        }
+        return res.json({ success: true, message: 'Order updated successfully' });
+    });
+});
+
 
 
 // ================== admin =====================
@@ -352,7 +403,7 @@ app.post('/toggleUserStatus/:userId', async (req, res) => {
     const userId = req.params.userId;
     try {
         const currentUserStatus = await getCurrentUserStatus(userId);
-        const newStatus = currentUserStatus === 0 ? 1 : 0; 
+        const newStatus = currentUserStatus === 0 ? 1 : 0;
         const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
         con.query(updateSql, [newStatus, userId], (err) => {
             if (err) {

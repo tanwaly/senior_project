@@ -23,14 +23,13 @@
             style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/sellerhomepage"
+                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/add-trackingnum"
+                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
-                </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-person"></i> โปรไฟล์
                 </a>
             </div>
         </div>
@@ -42,135 +41,127 @@
             </button>
         </div>
     </div>
-    <div style="padding: 25px;">
-        <!-- Section 1: Default Editable Section -->
-        <div class="row">
-            <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                style="border-radius: 15px; margin-left: 25px; width: 150px; height: 150px;">
-            <div class="col" style="margin-left: 50px;">
-                <span style="font-size: 20px;">กางเกง</span>
-                <div style="display: flex;">
-                    <span>เลขพัสดุ: </span>
-                    <input type="text" id="trackingCode1"
-                        style="width: 150px; margin-left: 10px;  border-radius: 8px; border: none; color: #8D8D8D; height: 20px;"
-                        placeholder="กรุณากรอกรหัสพัสดุ">
-                </div>
-                <div style="display: flex;">
-                    <span>จัดส่งโดย: </span>
-                    <select name="transports" id="transports1"
-                        style="width: 150px; margin-left: 10px;  border-radius: 8px; border: none; color: #8D8D8D; font-size: 15px; text-align: center; height: 20px;">
-                        <option value="1">FLASH Express</option>
-                        <option value="2">J&T Express</option>
-                        <option value="3">ไปรษณีย์ไทย</option>
-                        <option value="4">Ninja Van.</option>
-                        <option value="5">Best Express</option>
-                        <option value="6">SCG Express</option>
-                        <option value="7">Lala Move</option>
-                        <option value="8">Nim Express</option>
-                        <option value="9">MAKESEND</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col center" style="margin-left: 700px;">
-                <button id="confirmBtn1" class="confirm-button" style="background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px;
-            height: 46px; color:black;" onclick="confirmEdit(1)"><span style="font-weight: bold;">ยืนยัน</span> </button>
-            </div>
-        </div>
-        <hr>
-        <!-- Section 2: Default Non-Editable Section -->
-        <div class="row">
-            <img src="https://inwfile.com/s-a/b878p8.jpg" alt="ชุดกระโปรง"
-                style="border-radius: 15px; margin-left: 25px; width: 150px; height: 150px;">
-            <div class="col" style="margin-left: 50px;">
-                <span style="font-size: 20px;">ชุดเดรส</span>
-                <span id="trackingText2">เลขพัสดุ: z56t2nk</span>
-                <span id="shippingText2">จัดส่งโดย: FLASH</span>
-            </div>
-            <div class="col center" style="margin-left: 700px;">
-                <button id="editBtn2" class="edit-button" style="background: #FFE48C; border-radius: 15px; border-color: transparent; width: 150px;
-            height: 46px; color:black;" onclick="editSection(2)"><span style="font-weight: bold;">แก้ไข</span> </button>
-            </div>
-        </div>
-    </div>
+
+    <div style="margin-top: 50px;" class="parent-container"></div>
 
     <script>
-       function editSection(sectionNumber) {
-    const trackingText = document.getElementById(`trackingText${sectionNumber}`);
-    const shippingText = document.getElementById(`shippingText${sectionNumber}`);
-    const editButton = document.getElementById(`editBtn${sectionNumber}`);
-    const confirmButton = document.createElement('button');
+// Fetch tracking data and display it
+fetch('/trackingnum')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.querySelector('.parent-container');
+        container.innerHTML = '';  // Clear any existing content
 
-    // Create input element for tracking code
-    const trackingInputContainer = document.createElement('div');
-    const trackingLabel = document.createElement('span');
-    trackingLabel.textContent = "เลขพัสดุ: ";
-    const trackingInput = document.createElement('input');
-    trackingInput.id = `trackingCode${sectionNumber}`;
-    trackingInput.type = 'text';
-    trackingInput.value = trackingText.textContent.split(': ')[1];
-    trackingInput.style = "width: 150px; margin-left: 10px;  border-radius: 8px; border: none; color: #8D8D8D; height: 20px;";
-    trackingInputContainer.appendChild(trackingLabel);
-    trackingInputContainer.appendChild(trackingInput);
+        data.forEach((item, index) => {
+            const orderTracknum = item.order_tracknum ? item.order_tracknum : 'กรุณากรอกข้อมูล';
+            const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';
 
-    // Create select element for shipping method
-    const shippingSelectContainer = document.createElement('div');
-    const shippingLabel = document.createElement('span');
-    shippingLabel.textContent = "จัดส่งโดย: ";
-    const shippingSelect = document.createElement('select');
-    shippingSelect.id = `transports${sectionNumber}`;
-    shippingSelect.style = "width: 150px; margin-left: 10px;  border-radius: 8px; border: none; color: #8D8D8D; font-size: 15px; text-align: center; height: 20px;";
-    const options = ['FLASH Express', 'J&T Express', 'ไปรษณีย์ไทย', 'Ninja Van.', 'Best Express', 'SCG Express', 'Lala Move', 'Nim Express', 'MAKESEND'];
-    options.forEach(optionText => {
-        const option = document.createElement('option');
-        option.value = optionText;
-        option.textContent = optionText;
-        shippingSelect.appendChild(option);
+            const rowHTML = `
+                <div class="row">
+                    <img src="/public/img/${item.product_img}" alt="${item.product_name}" 
+                        style="border-radius: 15px; margin-left: 25px; width: auto; max-height: 150px;">
+                    <div class="col" style="margin-left: 50px;">
+                        <span style="font-size: 26px;">${item.product_name}</span>
+                        <div id="trackingSection${index}">
+                            <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 300;">${orderTracknum}</span></span><br>
+                            <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 300;">${orderShipname}</span></span>
+                        </div>
+                    </div>
+                    <div class="col center" style="margin-left: 700px;">
+                        <button id="editBtn${index}" class="edit-button" style="background: #FFE48C; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;" onclick="editTracking(${index}, ${item.order_id})">
+                            <span style="font-weight: bold;">แก้ไข</span>
+                        </button>
+                    </div>
+                </div>
+                <hr>
+            `;
+
+            container.insertAdjacentHTML('beforeend', rowHTML);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching tracking data:', error);
     });
-    shippingSelect.value = shippingText.textContent.split(': ')[1];
-    shippingSelectContainer.appendChild(shippingLabel);
-    shippingSelectContainer.appendChild(shippingSelect);
 
-    // Replace text elements with input/select containers
-    trackingText.replaceWith(trackingInputContainer);
-    shippingText.replaceWith(shippingSelectContainer);
+// Function to replace the display with input fields
+function editTracking(index, orderId) {
+    const trackingSection = document.getElementById(`trackingSection${index}`);
+    const editButton = document.getElementById(`editBtn${index}`);
 
-    // Replace the edit button with a confirm button
-    confirmButton.id = `confirmBtn${sectionNumber}`;
-    confirmButton.className = 'confirm-button';
-    confirmButton.style = "background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;";
-    confirmButton.innerHTML = "<span style='font-weight: bold;'>ยืนยัน</span>";
-    confirmButton.onclick = function() { confirmEdit(sectionNumber); };
-    editButton.replaceWith(confirmButton);
-}
-function confirmEdit(sectionNumber) {
-    const trackingInput = document.getElementById(`trackingCode${sectionNumber}`);
-    const shippingSelect = document.getElementById(`transports${sectionNumber}`);
-    const confirmButton = document.getElementById(`confirmBtn${sectionNumber}`);
-    const editButton = document.createElement('button');
+    trackingSection.innerHTML = `
+        <div style="display:flex; margin-bottom: 15px;">
+            <span style="font-weight: 700; font-size:18px">เลขพัสดุ: </span>
+            <input type="text" id="trackingCode${index}" 
+                style="width: 150px; margin-left: 10px; border-radius: 8px; border: none; color: #8D8D8D; height: 30px;" 
+                placeholder="กรุณากรอกรหัสพัสดุ">
+        </div>
+        <div style="display: flex; margin-bottom: 15px;">
+            <span style="font-weight: 700; font-size:18px">จัดส่งโดย: </span>
+            <select name="transports" id="transports${index}" 
+                style="width: 150px; margin-left: 10px; border-radius: 8px; border: none; color: #8D8D8D; font-size: 15px; text-align: center; height: 30px;">
+                <option value="FLASH Express">FLASH Express</option>
+                <option value="J&T Express">J&T Express</option>
+                <option value="ไปรษณีย์ไทย">ไปรษณีย์ไทย</option>
+                <option value="Ninja Van">Ninja Van</option>
+                <option value="Best Express">Best Express</option>
+                <option value="SCG Express">SCG Express</option>
+                <option value="Lala Move">Lala Move</option>
+                <option value="Nim Express">Nim Express</option>
+                <option value="MAKESEND">MAKESEND</option>
+            </select>
+        </div>
+        <button id="confirmBtn${index}" class="confirm-button" style="background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;" onclick="confirmEdit(${index}, ${orderId})">
+            <span style="font-weight: bold;">ยืนยัน</span> 
+        </button>
+    `;
 
-    // Create span elements to replace the input and select, including labels
-    const trackingText = document.createElement('span');
-    trackingText.id = `trackingText${sectionNumber}`;
-    trackingText.textContent = `เลขพัสดุ: ${trackingInput.value}`;
-
-    const shippingText = document.createElement('span');
-    shippingText.id = `shippingText${sectionNumber}`;
-    shippingText.textContent = `จัดส่งโดย: ${shippingSelect.value}`;
-
-    // Replace input and select with text
-    trackingInput.parentElement.replaceWith(trackingText);
-    shippingSelect.parentElement.replaceWith(shippingText);
-
-    // Replace the confirm button with an edit button
-    editButton.id = `editBtn${sectionNumber}`;
-    editButton.className = 'edit-button';
-    editButton.style = "background: #FFE48C; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;";
-    editButton.innerHTML = "<span style='font-weight: bold;'>แก้ไข</span>";
-    editButton.onclick = function() { editSection(sectionNumber); };
-    confirmButton.replaceWith(editButton);
+    // Hide the edit button and show the confirm button
+    editButton.style.display = 'none';
 }
 
-        
+// Function to handle the confirm edit
+function confirmEdit(index, orderId) {
+    const trackingCode = document.getElementById(`trackingCode${index}`).value;
+    const transport = document.getElementById(`transports${index}`).value;
+
+    // Send the updated data to the server via a PUT request
+    fetch('/updateTracking', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            order_id: orderId,
+            order_tracknum: trackingCode,
+            order_shipname: transport,
+            order_status: 1 // Set status to 1 upon update
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the UI with the new tracking information
+            const trackingSection = document.getElementById(`trackingSection${index}`);
+            const editButton = document.getElementById(`editBtn${index}`);
+
+            trackingSection.innerHTML = `
+                <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 300;">${trackingCode}</span></span><br>
+                <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 300;">${transport}</span></span>
+            `;
+
+            // Show the edit button again
+            editButton.style.display = 'block';
+
+            alert('Tracking information updated successfully');
+        } else {
+            alert('Error updating tracking information');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
     </script>
 </body>
 <style>
