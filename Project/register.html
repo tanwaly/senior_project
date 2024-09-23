@@ -97,10 +97,10 @@
                         <label for="file-upload" class="file-upload-label">
                             <!-- <div class="file-upload-box"> -->
                             <input id="file-upload" type="file" name="id_img" accept="image/*">
-
+                        </label>
+                        <div class="preview-container" id="preview-container"></div>
                             <!-- <div class="plus-sign">+</div> -->
                     </div>
-                    </label>
                 </div>
 
                 <button class="btn mt-3" type="submit"
@@ -224,6 +224,29 @@
     //     const fileUploadContainer = document.getElementById('file-upload-container');
     //     fileUploadContainer.clear();
     // }
+    document.getElementById('file-upload').addEventListener('change', previewImage);
+
+function previewImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const previewContainer = document.getElementById('preview-container');
+        previewContainer.style.textAlign = 'center'; // จัดกึ่งกลางเนื้อหาทั้งหมดในคอนเทนเนอร์
+        previewContainer.innerHTML = `
+            <img src="${e.target.result}" alt="Image Preview" style="width: 300px; height: auto; border-radius: 8px; margin-bottom: 10px; " />
+            <button type="button" class="btn btn-danger" style="display: block; margin: 10px auto 0 auto;" onclick="removeImage()">Remove Image</button>
+        `;
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImage() {
+    document.getElementById('file-upload').value = '';
+    document.getElementById('preview-container').innerHTML = '';
+}
+
 
 </script>
 <style>
