@@ -204,26 +204,7 @@
             alert(err.message || 'An error occurred');
         }
     };
-    // function previewImage(event) {
-    //     const reader = new FileReader();
-    //     const fileUploadContainer = document.getElementById('file-upload-container');
-
-    //     reader.onload = function () {
-    //         if (reader.readyState === 2) {
-    //             fileUploadContainer.innerHTML = `
-    //                     <img src="${reader.result}" alt="Image Preview" style="width: 300px; height: auto; border-radius: 8px;" />
-    //                     <button type="button" class="btn btn-secondary mt-2" onclick="changeImage()">Change Image</button>
-    //                 `;
-    //         }
-    //     }
-
-    //     reader.readAsDataURL(event.target.files[0]);
-    // }
-
-    // function changeImage() {
-    //     const fileUploadContainer = document.getElementById('file-upload-container');
-    //     fileUploadContainer.clear();
-    // }
+  
     document.getElementById('file-upload').addEventListener('change', previewImage);
 
 function previewImage(event) {
