@@ -217,7 +217,6 @@ app.get('/product', (req, res) => {
 app.get('/cfpage', function (_req, res) {
     res.sendFile(path.join(__dirname, 'Project/customer/cf_page.html'));
 })
-
 app.get('/cfproduct/:productId', (req, res) => {
     const { productId } = req.params;
     const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img 
@@ -248,40 +247,6 @@ app.get('/queue', (req, res) => {
         }
     });
 });
-
-app.get('/payment', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/payment.html'));
-});
-
-app.get('/payment/:productId', (req, res) => {
-    const { productId } = req.params;
-    console.log(`Received productId: ${productId}`);  // Debugging line
-    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img 
-                 FROM products 
-                 JOIN users ON products.seller_id = users.users_id 
-                 WHERE products.product_id = ?`;
-
-    con.query(sql, [productId], (error, results) => {
-        if (error) {
-            console.error('Database error:', error);  // Log the error
-            return res.status(500).json({ error: 'Database error' });
-        }
-        if (results.length > 0) {
-            console.log('Product details:', results[0]);  // Debugging line
-            res.json(results[0]);
-        } else {
-            console.log('No product found with this productId');
-            res.status(404).json({ error: 'Product not found' });
-        }
-    });
-});
-
-
-
-app.get('/order_status', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/order_status.html'));
-});
-
 
 //================== seller =====================
 app.get('/sellerhomepage', (req, res) => {
