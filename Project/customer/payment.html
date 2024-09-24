@@ -1,125 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
     <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
+    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Payment</title>
-</head>
+  </head>
 
-<body style="background-color: #f1f1f1">
-    <div style="background-color:#f5eecc;" class="d-flex">
-        <div class="d-flex align-items-center"
-            style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-house-door"></i> Homepage
-                </a>
-                <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-check2-square"></i> สถานะการจอง
-                </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-truck"></i> เลขพัสดุ
-                </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-person"></i> โปรไฟล์
-                </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-chat-dots"></i> Help
-                </a>
-            </div>
+  <body style="background-color: #f1f1f1">
+    <div style="background-color: #f5eecc" class="d-flex">
+      <div
+        class="d-flex align-items-center"
+        style="
+          background: #4b2f7b;
+          border-radius: 0px 300px 300px 0px;
+          width: 1300px;
+          height: 120px;
+          padding: 20px;
+        "
+      >
+        <img src="/public/img/logo-w.png" width="100px" alt="Logo" />
+        <div class="d-flex justify-content-between" style="margin-left: 65px">
+          <a
+            href="#"
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+          >
+            <i class="bi bi-house-door"></i> Homepage
+          </a>
+          <a
+            href="#"
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+          >
+            <i class="bi bi-check2-square"></i> สถานะการจอง
+          </a>
+          <a
+            href="#"
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+          >
+            <i class="bi bi-truck"></i> เลขพัสดุ
+          </a>
+          <a
+            href="#"
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+          >
+            <i class="bi bi-person"></i> โปรไฟล์
+          </a>
+          <a
+            href="#"
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+          >
+            <i class="bi bi-chat-dots"></i> Help
+          </a>
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-          height: 46px; color: white;">
-                Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
-            </button>
-        </div>
+      </div>
+      <div
+        class="d-flex align-items-center ms-auto"
+        style="padding-right: 20px"
+      >
+        <button
+          id="btnlogout"
+          style="
+            background: #b72323;
+            border-radius: 13px;
+            border-color: transparent;
+            width: 150px;
+            height: 46px;
+            color: white;
+          "
+        >
+          Log out
+          <i class="bi bi-box-arrow-right" style="padding-left: 15px"></i>
+        </button>
+      </div>
     </div>
 
+    <div style="padding: 25px">
+      <div class="col">
+        <p style="font-weight: bold">ชื่อผู้รับ</p>
+        <form class="form-name">
+          <input
+            type="text"
+            class="form-control"
+            style="border-color: white; border-radius: 15px"
+          />
+        </form>
 
-    <div style="padding: 25px;">
-        <div class="col">
-            <p style="font-weight: bold">ชื่อผู้รับ</p>
-            <form class="form-name">
-                <input type="text" class="form-control" style="border-color: white; border-radius: 15px" />
-            </form>
+        <div class="mt-3 mb-3" style="font-weight: bold">ที่อยู่</div>
+        <textarea
+          class="form-control mb-2 mr-sm-2"
+          rows="3"
+          id="txtAddress"
+          style="border-color: white; border-radius: 15px"
+        ></textarea>
+      </div>
 
-            <div class="mt-3 mb-3" style="font-weight: bold">ที่อยู่</div>
-            <textarea class="form-control mb-2 mr-sm-2" rows="3" id="txtAddress"
-                style="border-color: white; border-radius: 15px"></textarea>
-
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <img src="/public/img/Product.png" alt="short"
-                style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
+      <hr />
+      <!-- <div class="row">
+            <img id="productImage" src="" alt="short" style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
             <div class="col">
-                <p style="font-size: 20px;"><strong>ชื่อ: </strong>ชุดเดสรดอกไม้</p>
-                <p style="font-size: 20px;"><strong>คำอธิบาย: </strong>ใส่ครั้งเดี่ยว ไม่มีตำหนิ</p>
-                <p style="font-size: 20px;"><strong>ขนาด: </strong>M</p>
-                <p style="font-size: 20px;"><strong>ราคา: </strong>100 บาท</p>
+                <p style="font-size: 20px;"><strong>ชื่อ: </strong><span id="productName"></span></p>
+                <p style="font-size: 20px;"><strong>คำอธิบาย: </strong><span id="productDescription"></span></p>
+                <p style="font-size: 20px;"><strong>ขนาด: </strong><span id="productSize"></span></p>
+                <p style="font-size: 20px;"><strong>ราคา: </strong><span id="productPrice"></span></p>
             </div>
+        </div> -->
+      <div id="CFproduct" class="container center" style="margin-top: 20px">
+        <img
+          id="productImage"
+          src=""
+          alt="Product Image"
+          style="border-radius: 20px; width: 200px; height: 180px"
+        />
+        <div class="col">
+          <p style="font-size: 20px">
+            <strong>ชื่อ: </strong><span id="productName"></span>
+          </p>
+          <p style="font-size: 20px">
+            <strong>คำอธิบาย: </strong><span id="productDescription"></span>
+          </p>
+          <p style="font-size: 20px">
+            <strong>ราคา: </strong><span id="productPrice"></span>
+          </p>
         </div>
-        <hr>
+      </div>
 
-        <p style="font-weight: bold; font-size: 20px;">QR code</p>
-        <div class="text-center">
+      <hr />
 
-            <div class="col d-flex justify-content-center align-items-center"
-                style="background:white; width: 300px; height: 250px; margin: 0 auto;">
-                <img src="/public/img/My_Gallery.png" alt="QR code" style="width: 200px; height: 180px;">
-                <p style="font-weight: bold;">15:00</p>
-            </div>
+      <p style="font-weight: bold; font-size: 20px">QR code</p>
+      <div class="text-center">
+        <div
+          class="col d-flex justify-content-center align-items-center"
+          style="background: white; width: 300px; height: 250px; margin: 0 auto"
+        >
+          <img
+            src="/public/img/My_Gallery.png"
+            alt="QR code"
+            style="width: 200px; height: 180px"
+          />
+          <p style="font-weight: bold">15:00</p>
         </div>
+      </div>
 
-        <div class="text-center" style="margin-top: 20px;">
-            <div class="align-items-center  ms-auto"></div>
-            <button id="confirmpayment" style="background: #BDE3A7; border-radius: 13px; border-color: transparent; width: 150px;
-    height: 46px; color: black; font-weight: bold;">
-                ยืนยัน
-            </button>
-        </div>
+      <div class="text-center" style="margin-top: 20px">
+        <div class="align-items-center ms-auto"></div>
+        <button
+          onclick="confirmpayment()"
+          style="
+            background: #bde3a7;
+            border-radius: 13px;
+            border-color: transparent;
+            width: 150px;
+            height: 46px;
+            color: black;
+            font-weight: bold;
+          "
+        >
+          ยืนยัน
+        </button>
+      </div>
     </div>
+  </body>
 
-</body>
-
-
-<style>
+  <style>
     .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .row {
-        display: flex;
-        flex-direction: row;
+      display: flex;
+      flex-direction: row;
     }
 
     .col {
-        display: flex;
-        flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
 
     .text-center {
-        text-align: center;
+      text-align: center;
     }
-</style>
-<script>
-    document.getElementById("confirmpayment").onclick = function () {
-        window.location.href = "http://127.0.0.1:5500/Project/customer/order_status.html";
-    };
-</script>
+  </style>
+  <script>
+    // document.getElementById("confirmpayment").onclick = function () {
+    //     window.location.href = "http://127.0.0.1:5500/Project/customer/order_status.html";
+    // };
+
+    function confirmpayment() {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Payment Success",
+        showConfirmButton: false,
+        timer: 1500, // แจ้งเตือนแสดง 1.5 วินาที
+      });
+
+      // หน่วงเวลา 1.5 วินาทีก่อนที่จะเปลี่ยนหน้า
+      setTimeout(function () {
+        location.replace("/order_status");
+      }, 1500); // หน่วงเวลาตามเวลาของ Swal (1500 มิลลิวินาที)
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const productId = window.location.pathname.split("/").pop(); // Get productId from URL
+      console.log("Fetching product for productId:", productId); // Debugging line
+
+      fetch(`/payment/${productId}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((product) => {
+          console.log("Product fetched:", product); // Debugging line
+          if (product) {
+            // Populate the product details in the HTML
+            document.getElementById("productImage").src = 'public/img/{product.product_img}';
+            document.getElementById("productName").textContent =
+              product.product_name;
+            document.getElementById("productDescription").textContent =
+              product.product_description;
+            document.getElementById("productPrice").textContent =
+              product.product_price;
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching product details:", error);
+        });
+    }); 
+  </script>
 </html>
