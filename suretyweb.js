@@ -62,15 +62,15 @@ app.get('/register', (req, res) => {
 app.post('/register', Idupload, async (req, res) => {
 
     const sqlCheck = 'SELECT users_id FROM users WHERE users_id = ?';
-    const checkParams = [req.body.iduser];
+    const checkParams = [req.body.email];
 
     con.query(sqlCheck, checkParams, async (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send("DB error");
         }
-        if (result.length > 0) {
-            return res.status(401).send("มี iduser นี้แล้ว");
+        if (checkParams.length > 0) {
+            return res.status(401).send("ลงชื่อด้วย email นี้ไปแล้วกรุณาใช้ email อื่น");
         }
 
         // Hash the password
@@ -465,6 +465,19 @@ app.get('/sellerreport', (req, res) => {
         }
     });
 });
+
+app.get('/detail', (req, res) => {
+    const sql = 'SELECT * FROM reports';
+    con.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else {
+            res.json(results);
+        }
+    });
+});
+app.po
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
