@@ -254,7 +254,11 @@ app.get('/sellerhomepage', (req, res) => {
 });
 
 app.get('/sellerproduct', (req, res) => {
-    const sellerId = req.session.iduser; // or req.userId if you're using tokens
+    const sellerId = req.session.users_id; // or req.userId if you're using tokens
+
+    if (!sellerId) {
+        return res.status(401).json({ error: 'Not logged in or session expired' });
+    }
 
     const sql = `
         SELECT products.*, users.first_name, users.last_name, users.profile_img 
@@ -266,11 +270,14 @@ app.get('/sellerproduct', (req, res) => {
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            res.status(404).json({ message: 'No products found for this seller' });
         } else {
             res.json(results); // Send the filtered seller's product data to the frontend
         }
     });
 });
+
 
 app.get('/addpost', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/add_post.html'));
@@ -368,6 +375,25 @@ app.put('/updateTracking', (req, res) => {
         return res.json({ success: true, message: 'Order updated successfully' });
     });
 });
+const cron = require('node-cron');
+
+// ทำงานทุกวันเพื่อตรวจสอบและอัปเดตสถานะ
+cron.schedule('0 0 * * *', () => {
+    const sqlCheckStatus = `
+        UPDATE orders
+        SET order_status = 3
+        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 1;
+    `;
+
+    con.query(sqlCheckStatus, (err, result) => {
+        if (err) {
+            console.error('Failed to update order status:', err);
+        } else {
+            console.log('Order status updated for orders older than 14 days');
+        }
+    });
+});
+
 
 
 
