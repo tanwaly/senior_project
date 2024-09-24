@@ -48,10 +48,12 @@
             style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/sellerhomepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/sellerhomepage"
+                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
-                <a href="/add-trackingnum" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/add-trackingnum"
+                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
                 </a>
             </div>
@@ -311,10 +313,14 @@
             async function getSellerProduct() {
                 try {
                     const response = await fetch('/sellerproduct');
-                    if (response.ok) {
-                        const data = await response.json();
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    const data = await response.json();
+                    if (data.error) {
+                        console.error(data.error);
+                    } else {
                         console.log('Fetched data:', data);
-
                         let texts = ''; // Declare texts for the HTML content
                         data.forEach(function (product) {
                             texts += `
@@ -363,8 +369,6 @@
                     </div>`;
                         });
                         showSellerProduct.innerHTML = texts;
-                    } else {
-                        console.error('Failed to fetch data:', response.status, response.statusText);
                     }
                 } catch (error) {
                     console.error('Fetch error:', error);

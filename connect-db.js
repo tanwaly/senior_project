@@ -7,4 +7,9 @@ const con = mysql.createConnection({
     database:'surety',
 });
 
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('Connected to the database.');
+});
+
 module.exports = con;
