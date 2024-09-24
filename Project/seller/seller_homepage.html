@@ -311,19 +311,21 @@
             const showSellerProduct = document.getElementById('showSellerProduct');
 
             async function getSellerProduct() {
-                try {
-                    const response = await fetch('/sellerproduct');
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const data = await response.json();
-                    if (data.error) {
-                        console.error(data.error);
-                    } else {
-                        console.log('Fetched data:', data);
-                        let texts = ''; // Declare texts for the HTML content
-                        data.forEach(function (product) {
-                            texts += `
+    try {
+        const response = await fetch('/sellerproduct');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Fetched Products:', data);  // Debug: Check what the API returned
+
+        if (data.error) {
+            console.error(data.error);  // Handle errors (like unauthorized access)
+        } else {
+            let texts = ''; // HTML content for products
+            data.forEach(function (product) {
+                texts += `
                     <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
                         <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                             <div style="display: flex; align-items: center;">
@@ -368,13 +370,12 @@
                         </div>
                     </div>`;
                         });
-                        showSellerProduct.innerHTML = texts;
+                        document.getElementById('showSellerProduct').innerHTML = texts;
                     }
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
             }
-
             getSellerProduct();
         });
         
