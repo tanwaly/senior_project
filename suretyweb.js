@@ -375,6 +375,25 @@ app.put('/updateTracking', (req, res) => {
         return res.json({ success: true, message: 'Order updated successfully' });
     });
 });
+const cron = require('node-cron');
+
+// ทำงานทุกวันเพื่อตรวจสอบและอัปเดตสถานะ
+cron.schedule('0 0 * * *', () => {
+    const sqlCheckStatus = `
+        UPDATE orders
+        SET order_status = 3
+        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 1;
+    `;
+
+    con.query(sqlCheckStatus, (err, result) => {
+        if (err) {
+            console.error('Failed to update order status:', err);
+        } else {
+            console.log('Order status updated for orders older than 14 days');
+        }
+    });
+});
+
 
 
 
