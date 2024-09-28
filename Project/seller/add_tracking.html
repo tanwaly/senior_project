@@ -45,18 +45,17 @@
     <div style="margin-top: 50px;" class="parent-container"></div>
 
     <script>
-// Fetch tracking data and display it
-fetch('/trackingnum')
-    .then(response => response.json())
-    .then(data => {
-        const container = document.querySelector('.parent-container');
-        container.innerHTML = '';  // Clear any existing content
+        fetch('/trackingnum')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.querySelector('.parent-container');
+                container.innerHTML = '';  // Clear any existing content
 
-        data.forEach((item, index) => {
-            const orderTracknum = item.order_tracknum ? item.order_tracknum : 'กรุณากรอกข้อมูล';
-            const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';
+                data.forEach((item, index) => {
+                    const orderTracknum = item.tracking_number ? item.tracking_number : 'กรุณากรอกข้อมูล';  // Use item.tracking_number
+                    const orderShipname = item.first_name ? item.first_name : 'กรุณากรอกข้อมูล';  // Use item.first_name (or the appropriate field)
 
-            const rowHTML = `
+                    const rowHTML = `
                 <div class="row">
                     <img src="/public/img/${item.product_img}" alt="${item.product_name}" 
                         style="border-radius: 15px; margin-left: 25px; width: auto; max-height: 150px;">
@@ -76,19 +75,20 @@ fetch('/trackingnum')
                 <hr>
             `;
 
-            container.insertAdjacentHTML('beforeend', rowHTML);
-        });
-    })
-    .catch(error => {
-        console.error('Error fetching tracking data:', error);
-    });
+                    container.insertAdjacentHTML('beforeend', rowHTML);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching tracking data:', error);
+            });
 
-// Function to replace the display with input fields
-function editTracking(index, orderId) {
-    const trackingSection = document.getElementById(`trackingSection${index}`);
-    const editButton = document.getElementById(`editBtn${index}`);
 
-    trackingSection.innerHTML = `
+        // Function to replace the display with input fields
+        function editTracking(index, orderId) {
+            const trackingSection = document.getElementById(`trackingSection${index}`);
+            const editButton = document.getElementById(`editBtn${index}`);
+
+            trackingSection.innerHTML = `
         <div style="display:flex; margin-bottom: 15px;">
             <span style="font-weight: 700; font-size:18px">เลขพัสดุ: </span>
             <input type="text" id="trackingCode${index}" 
@@ -115,52 +115,49 @@ function editTracking(index, orderId) {
         </button>
     `;
 
-    // Hide the edit button and show the confirm button
-    editButton.style.display = 'none';
-}
+            // Hide the edit button and show the confirm button
+            editButton.style.display = 'none';
+        }
 
-// Function to handle the confirm edit
-function confirmEdit(index, orderId) {
-    const trackingCode = document.getElementById(`trackingCode${index}`).value;
-    const transport = document.getElementById(`transports${index}`).value;
+        // Function to handle the confirm edit
+        function confirmEdit(index, orderId) {
+            const trackingCode = document.getElementById(`trackingCode${index}`).value;
+            const transport = document.getElementById(`transports${index}`).value;
 
-    // Send the updated data to the server via a PUT request
-    fetch('/updateTracking', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            order_id: orderId,
-            order_tracknum: trackingCode,
-            order_shipname: transport,
-            order_status: 1 // Set status to 1 upon update
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update the UI with the new tracking information
-            const trackingSection = document.getElementById(`trackingSection${index}`);
-            const editButton = document.getElementById(`editBtn${index}`);
+            // Send the updated data to the server via a PUT request
+            fetch('/updateTracking', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    order_tracknum: trackingCode,
+                    order_shipname: transport,
+                    order_status: 1 // Set status to 1 upon update
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the UI with the new tracking information
+                        const trackingSection = document.getElementById(`trackingSection${index}`);
+                        const editButton = document.getElementById(`editBtn${index}`);
 
-            trackingSection.innerHTML = `
+                        trackingSection.innerHTML = `
                 <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 300;">${trackingCode}</span></span><br>
                 <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 300;">${transport}</span></span>
             `;
 
-            // Show the edit button again
-            editButton.style.display = 'block';
-
-            alert('Tracking information updated successfully');
-        } else {
-            alert('Error updating tracking information');
+                        editButton.style.display = 'block';
+                    } else {
+                        alert('Error updating tracking information');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
 
     </script>
 </body>

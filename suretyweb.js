@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
-        maxAge: 2 * 60 * 60 * 1000 //2 hours
+        maxAge: 2 * 60 * 60 * 1000 
     }
 }));
 // function isAuthenticated(req, res, next) {
@@ -61,7 +61,7 @@ app.get('/register', (req, res) => {
 
 app.post('/register', Idupload, async (req, res) => {
 
-    const sqlCheck = 'SELECT users_id FROM users WHERE users_id = ?';
+    const sqlCheck = 'SELECT email FROM users WHERE email = ?';
     const checkParams = [req.body.email];
 
     con.query(sqlCheck, checkParams, async (err, result) => {
@@ -69,7 +69,7 @@ app.post('/register', Idupload, async (req, res) => {
             console.error(err);
             return res.status(500).send("DB error");
         }
-        if (checkParams.length > 0) {
+        if (result.length > 0) {  // Change this to check if the result is non-empty
             return res.status(401).send("ลงชื่อด้วย email นี้ไปแล้วกรุณาใช้ email อื่น");
         }
 
@@ -77,7 +77,7 @@ app.post('/register', Idupload, async (req, res) => {
         const bcryptPass = await bcrypt.hash(req.body.password, 10);
 
         // Prepare the INSERT query
-        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status,profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)';
+        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status, profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const insertParams = [
             req.body.first_name,
             req.body.last_name,
@@ -102,6 +102,7 @@ app.post('/register', Idupload, async (req, res) => {
 
     });
 });
+
 
 //--------- login ---------
 app.get('/login', function (_req, res) {
@@ -285,7 +286,7 @@ app.get('/payment', (req, res) => {
 
 app.get('/payment/:productId', (req, res) => {
     const { productId } = req.params;
-    const loggedInUserId =  req.session.users_id;   
+    const loggedInUserId = req.session.users_id;
 
     const sql = `
         SELECT products.*, users.first_name, users.last_name, users.profile_img
@@ -374,10 +375,88 @@ app.get('/order_status', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/order_status.html'));
 });
 
+app.get('/cf-status', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/cf_status.html'));
+});
+app.get('/productStatus', (req, res) => {
+    const loggedInUserId = req.session.users_id;
+    const sql = `
+        SELECT 
+            orders.order_id, 
+            orders.order_status, 
+            orders.order_tracknum, 
+            orders.order_shipname, 
+            products.product_name, 
+            products.product_price, 
+            products.product_img,        
+            users.first_name, 
+            users.last_name, 
+            users.profile_img,
+            queue.queue_num, 
+            queue.queue_time 
+        FROM 
+            queue 
+        JOIN orders ON queue.queue_id = orders.queue_id
+        JOIN products ON queue.product_id = products.product_id  
+        JOIN users ON queue.cus_id = users.users_id  
+        WHERE users.users_id = ?;      
+    `;
+
+    con.query(sql, [loggedInUserId], (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else {
+            res.json(results);  // Send the results back as JSON
+        }
+    });
+});
 
 //================== seller =====================
 app.get('/sellerhomepage', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/seller/seller_homepage.html'));
+    const sellerId = req.session.users_id;
+    console.log('Seller ID:', sellerId);  // Debug: Check if sellerId is being set
+
+    if (!sellerId) {
+        return res.status(401).json({ error: 'Not logged in or session expired' });
+    }
+
+    const sql = `
+        SELECT users.first_name, users.profile_img
+        FROM users
+        WHERE users.users_id = ?;
+    `;
+
+    con.query(sql, [sellerId], (err, results) => {
+        if (err) {
+            console.error('Database Error:', err);
+            res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            res.status(404).json({ error: 'User not found' });
+        } else {
+            // Send the HTML page and then let the frontend fetch the user data
+            res.sendFile(path.join(__dirname, 'Project/seller/seller_homepage.html'));
+        }
+    });
+});
+
+app.get('/getSellerData', (req, res) => {
+    const sellerId = req.session.users_id;
+
+    if (!sellerId) {
+        return res.status(401).json({ error: 'Not logged in or session expired' });
+    }
+
+    const sql = `SELECT first_name, profile_img FROM users WHERE users_id = ?;`;
+
+    con.query(sql, [sellerId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        } else {
+            res.json(results[0]);  // Return the first_name and profile_img as JSON
+        }
+    });
 });
 
 app.get('/sellerproduct', (req, res) => {
@@ -463,8 +542,6 @@ app.get('/add-trackingnum', (req, res) => {
 });
 app.get('/trackingnum', (req, res) => {
     const loggedInUserId = req.session.users_id;
-
-
     const sql = `
         SELECT 
             orders.order_id, 
