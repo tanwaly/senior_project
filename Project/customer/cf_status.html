@@ -20,7 +20,8 @@
             style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a id="btnhompage" href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a id="btnhompage" href="/homepage"
+                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
                 <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -38,7 +39,7 @@
             </div>
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
+            <button onclick="location.replace('/login');" id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
             height: 46px; color: white;">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
@@ -47,7 +48,8 @@
     </div>
     <div style="padding: 25px;">
         <div class="row">
-            <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
+            <div id="product-container"></div>
+            <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
                 style="border-radius: 15px; margin-left: 25px; width: 150px; height: 150px;">
             <div class="col" style="margin-left: 50PX;">
                 <span style="font-size: 20px;">ชื่อร้าน: AAAA</span>
@@ -58,41 +60,80 @@
             </div>
             <div class="col center" style="margin-left: 700px;">
                 <span style="font-size: 30px; color: #FFD447;font-weight: bold;">กำลังรอคิว</span>
-            </div>
+            </div> -->
         </div>
-        <hr>
-        <div class="row">
-            <img src="https://inwfile.com/s-a/b878p8.jpg" alt="ชุดกระโปรง"
-                style="border-radius: 15px; margin-left: 25px; width: 150px; height: 150px;">
-                <div class="col" style="margin-left: 50PX;">
-                    <span style="font-size: 20px;">ชื่อร้าน: JJ</span>
-                    <span>ชื่อสินค้า: เสื้อ</span>
-                    <span>ราคา: 300 บาท</span>
-                    <span>คิวที่: 4  เวลา: 17:30</span>
-    
-                </div>
-                <div class="col center" style="margin-left: 700px;">
-                    <span style="font-size: 30px; color: #BE5050; font-weight: bold;" >สิ้นสุด</span>
-                </div>
-        </div>
-        <hr>
-        <div class="row">
-            <img src="https://inwfile.com/s-cc/e8m7l2.jpg" alt="ลาบูบู้"
-                style="border-radius: 15px; margin-left: 25px; width: 150px; height: 150px;">
-                <div class="col" style="margin-left: 50PX;">
-                    <span style="font-size: 20px;">ชื่อร้าน: AAAA</span>
-                    <span>ชื่อสินค้า: ลาบูบู้</span>
-                    <span>ราคา: 150 บาท</span>
-                    <span>คิวที่: 4  เวลา: 17:30 </span>
-    
-                </div>
-                <div class="col center" style="margin-left: 700px;">
-                    <span style="font-size: 30px; color: #87B77B; font-weight: bold;">ถึงคิว</span>
-                </div>
-        </div>
-    </div>
-
 </body>
+<script>
+    function changeStatus(sta) {
+        const status = {
+            0: '<span style="color: orange;">กำลังเตรียมสินค้า</span>',
+            1: '<div class="col center"> <span style="color: #FFC226;">กำลังจัดส่งสินค้า</span> <button id="btnaccept" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black; ">ยืนยัน</button> <button button id="btncancel" style=" font-size: 18px; font - weight: bold; background: #B72323; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: white; "> ยกเลิก </button> </div>',
+            2: '<span style="color: red;">ถูกยกเลิก</span>',
+            3: '<div class="col center"><span style="color:green;">การจัดส่งสำเร็จ</span> <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า</button> </div>',
+            4: '<span style="color: grey;">การจัดส่งไม่สำเร็จ</span>',
+        };
+        return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';  // Default message for unknown status
+    }
+
+    function formatDateTime(dateTimeStr) {
+        if (!dateTimeStr) return '';
+
+        const date = new Date(dateTimeStr);
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes}`;
+    }
+
+    fetch('/productStatus')
+        .then(response => response.json())
+        .then(data => {
+            const productContainer = document.getElementById('product-container');
+            data.forEach(item => {
+                let trackingHTML = '';
+
+                // Only show tracking number and shipping provider for statuses 1 to 4
+                if (item.order_status >= 1 && item.order_status <= 4) {
+                    trackingHTML = `
+                    <span style="font-weight: 700; font-size:18px">เลขพัสดุ: 
+                        <span style="font-weight: 300;">${item.order_tracknum}</span>
+                    </span>
+                    <span style="font-weight: 700; font-size:18px">จัดส่งโดย: 
+                        <span style="font-weight: 300;">${item.order_shipname}</span>
+                    </span>
+                `;
+                }
+                if (item.order_status = 1) {
+                    trackingHTML += `
+                    <span style="color:grey; font-size:12px;">หากไม่ได้กดยืนยันรับสินค้าภายใน 14 วัน จะถือว่าจัดส่งสำเร็จแล้ว</span>
+                `;
+                }
+
+                const productHTML = `
+                <div class="row">
+                    <img src="public/img/${item.product_img}" alt="${item.product_name}"
+                        style="border-radius: 15px; margin-left: 25px; max-width: 150px; height: 150px;">
+                    <div class="col" style="margin-left: 50PX;">
+                        <span style="font-size: 20px;">ชื่อร้าน: ${item.first_name} ${item.last_name}</span>
+                        <span>ชื่อสินค้า: ${item.product_name}</span>
+                        <span>ราคา: ${item.product_price} บาท</span>
+                        <span>คิวที่: ${item.queue_num} เวลา: ${formatDateTime(item.queue_time)}</span>
+                        ${trackingHTML} <!-- Tracking number and shipping provider will show here only if status is 1-4 -->
+                    </div>
+                    <div class="col center" style="margin-left: 700px;">
+                        <span style="font-size: 30px; font-weight: bold; font-size: 20px;">
+                            ${changeStatus(item.order_status)}
+                        </span>
+                    </div>
+                </div>
+                <hr style =" margin-top:30px;">
+            `;
+                productContainer.insertAdjacentHTML('beforeend', productHTML);
+            });
+        })
+        .catch(error => console.error('Error fetching product status:', error));
+
+</script>
+
 <style>
     .center {
         display: flex;
@@ -111,12 +152,6 @@
     }
 </style>
 <script>
-    document.getElementById("btnlogout").onclick = function () {
-        location.replace('/login');
-    };
-    // document.getElementById("btnhompage").onclick = function () {
-    //     window.location.href = "http://localhost:3000/login";
-    // };
 
 
 

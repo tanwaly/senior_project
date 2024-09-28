@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
-        maxAge: 2 * 60 * 60 * 1000 //2 hours
+        maxAge: 2 * 60 * 60 * 1000 
     }
 }));
 // function isAuthenticated(req, res, next) {
@@ -311,6 +311,41 @@ app.get('/payment/:productId', (req, res) => {
     });
 });
 
+app.get('/cf-status', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/cf_status.html'));
+});
+app.get('/productStatus', (req, res) => {
+    const loggedInUserId = req.session.users_id;
+    const sql = `
+        SELECT 
+            orders.order_id, 
+            orders.order_status, 
+            orders.order_tracknum, 
+            orders.order_shipname, 
+            products.product_name, 
+            products.product_price, 
+            products.product_img,        
+            users.first_name, 
+            users.last_name, 
+            users.profile_img,
+            queue.queue_num, 
+            queue.queue_time 
+        FROM 
+            queue 
+        JOIN orders ON queue.queue_id = orders.queue_id
+        JOIN products ON queue.product_id = products.product_id  
+        JOIN users ON queue.cus_id = users.users_id  
+        WHERE users.users_id = ?;      
+    `;
+
+    con.query(sql, [loggedInUserId], (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else {
+            res.json(results);  // Send the results back as JSON
+        }
+    });
+});
 
 //================== seller =====================
 app.get('/sellerhomepage', (req, res) => {
@@ -400,8 +435,6 @@ app.get('/add-trackingnum', (req, res) => {
 });
 app.get('/trackingnum', (req, res) => {
     const loggedInUserId = req.session.users_id;
-
-
     const sql = `
         SELECT 
             orders.order_id, 
