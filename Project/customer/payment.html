@@ -8,6 +8,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
     <script src="/public/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,7 +22,7 @@
             style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
                 <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -39,7 +41,7 @@
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-          height: 46px; color: white;">
+            height: 46px; color: white;" onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
@@ -63,14 +65,7 @@
         <hr>
 
         <div class="row">
-            <img src="/public/img/Product.png" alt="short"
-                style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
-            <div class="col">
-                <p style="font-size: 20px;"><strong>ชื่อ: </strong>ชุดเดสรดอกไม้</p>
-                <p style="font-size: 20px;"><strong>คำอธิบาย: </strong>ใส่ครั้งเดี่ยว ไม่มีตำหนิ</p>
-                <p style="font-size: 20px;"><strong>ขนาด: </strong>M</p>
-                <p style="font-size: 20px;"><strong>ราคา: </strong>100 บาท</p>
-            </div>
+            <div id="showProduct"></div>
         </div>
         <hr>
 
@@ -84,17 +79,80 @@
             </div>
         </div>
 
-        <div class="text-center" style="margin-top: 20px;">
-            <div class="align-items-center  ms-auto"></div>
-            <button id="confirmpayment" style="background: #BDE3A7; border-radius: 13px; border-color: transparent; width: 150px;
-    height: 46px; color: black; font-weight: bold;">
+        <div class="text-center" style="margin-top: 20px">
+            <div class="align-items-center ms-auto"></div>
+            <button onclick="confirmpayment()"
+                style=" background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
                 ยืนยัน
             </button>
         </div>
     </div>
 
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const showProduct = document.getElementById('showProduct');
 
+        if (!showProduct) {
+            console.error('showProduct element not found');
+            return; // Exit if the element is not found
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('productId');
+
+        if (productId) {
+            getPayment(productId);
+        } else {
+            console.error('No productId found in the URL');
+        }
+
+        async function getPayment(productId) {
+            try {
+                const productResponse = await fetch(`/payment/${productId}`);
+                if (productResponse.ok) {
+                    const product = await productResponse.json();
+                    console.log('Fetched data:', product);
+
+                    // Render the product details
+                    let productHTML = `
+                    <div class="row">
+                        <img id="productImage" src="public/img/${product.product_img}" alt="product image" style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
+                        <div class="col">
+                            <p style="font-size: 20px;"><strong>ชื่อ: </strong><span>${product.product_name}</span></p>
+                            <p style="font-size: 20px;"><strong>คำอธิบาย: </strong><span>${product.product_caption}</span></p>
+                            <p style="font-size: 20px;"><strong>ราคา: </strong><span>${product.product_price}</span></p>
+                        </div>
+                    </div>`;
+
+                    showProduct.innerHTML = productHTML;
+                } else {
+                    console.error('Failed to fetch data:', productResponse.status, productResponse.statusText);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+    });
+
+
+    function confirmpayment() {
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Payment Success",
+            showConfirmButton: false,
+            timer: 1500, // แจ้งเตือนแสดง 1.5 วินาที
+        });
+
+        // หน่วงเวลา 1.5 วินาทีก่อนที่จะเปลี่ยนหน้า
+        setTimeout(function () {
+            location.replace("/order_status");
+        }, 1500); // หน่วงเวลาตามเวลาของ Swal (1500 มิลลิวินาที)
+    }
+
+
+</script>
 
 <style>
     .center {
@@ -117,9 +175,6 @@
         text-align: center;
     }
 </style>
-<script>
-    document.getElementById("confirmpayment").onclick = function () {
-        window.location.href = "http://127.0.0.1:5500/Project/customer/order_status.html";
-    };
-</script>
+
+
 </html>

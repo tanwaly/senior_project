@@ -59,11 +59,6 @@
             </div>
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <select name="role" id=""
-                style="margin-right: 30px; border-radius: 15px;border-color: transparent ; font-size: 20px; width: 250px; height: 40px;">
-                <option value="Seller">Seller</option>
-                <option value="customer">Customer</option>
-            </select>
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
             height: 46px; color: white;">
                 Log out
@@ -245,13 +240,34 @@
                 </div>
             </div>
         </div>
-
-        <div id="showSellerProduct"
-            style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px; justify-content: center;">
+        <div class="center" style="margin-top: 50px;">
+            <div id="showSellerProduct"
+                style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px; justify-content: center;">
+            </div>
         </div>
     </div>
 
     <script>
+        function changeIcon(cata) {
+            const icons = {
+                1: 'icon-shirt',
+                2: 'icon-coat',
+                3: 'icon-dress',
+                4: 'icon-pants',
+                5: 'icon-skirt',
+                6: 'icon-sock',
+                7: 'icon-shoe',
+                8: 'icon-hat',
+                9: 'icon-necklace',
+                10: 'icon-chair'
+            };
+            return icons[cata] || null;
+        }
+
+        function formatTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':');
+            return `${hours}:${minutes}`;
+        }
         //for post popup
         document.getElementById('uploadButton').addEventListener('click', function () {
             document.getElementById('addProductImage').click();
@@ -294,26 +310,13 @@
         //product show
 
         document.addEventListener('DOMContentLoaded', () => {
-            const roleSelect = document.querySelector('select[name="role"]');
-
-            // Redirect based on role selection
-            roleSelect.addEventListener('change', function () {
-                const selectedRole = roleSelect.value;
-                if (selectedRole === 'customer') {
-                    window.location.href = '/homepage';
-                } else if (selectedRole === 'Seller') {
-                    window.location.href = '/sellerhomepage';
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
             const showSellerProduct = document.getElementById('showSellerProduct');
 
             async function getSellerProduct() {
                 try {
                     const response = await fetch('/sellerproduct');
                     if (!response.ok) {
+                        const product = await productResponse.json();
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                     const data = await response.json();
@@ -340,7 +343,7 @@
                                 </div>
                                 <div style="width: 100%; display: flex; justify-content: end;">
                                     <div style="width: 150px; height: 40px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
-                                        <span style="font-size: 20px; font-weight: 700;">เริ่ม ${product.product_time}</span>
+                                        <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatTime(product.product_time)}</span>
                                     </div>
                                 </div>
                             </div>
@@ -377,10 +380,10 @@
 
             getSellerProduct();
         });
-        
-    document.getElementById("btnlogout").onclick = function () {
-        window.location.href = "http://localhost:3000/login";
-    };
+
+        document.getElementById("btnlogout").onclick = function () {
+            window.location.href = "http://localhost:3000/login";
+        };
 
     </script>
 

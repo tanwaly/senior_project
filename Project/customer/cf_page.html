@@ -19,7 +19,7 @@
             style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/Project/customer/homepage.html" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
                 <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -37,43 +37,21 @@
             </div>
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout"  style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
+            height: 46px; color: white;" onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
         </div>
     </div>
     <div class="container" style="margin-top: 20px;">
-        <div class="search-box">
-            <input
-                style="background: #EFF7FF; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 23px; width: 1384px; height: 67px; border-color: transparent; padding: 30px;"
-                type="text" placeholder="Search...">
-            <button
-                style="background-color: transparent; font-size: 20px; border-color: transparent; margin-left: -50px;">
-                <i class="bi bi-search"></i>
-            </button>
-        </div>
-        <div class="category">
-            <button class="category-btn"><span class="icon-shirt"></span></button>
-            <button class="category-btn"><span class="icon-coat"></span></button>
-            <button class="category-btn"><span class="icon-dress"></span></button>
-            <button class="category-btn"><span class="icon-pants"></span></button>
-            <button class="category-btn"><span class="icon-skirt"></span></button>
-            <button class="category-btn"><span class="icon-sock"></span></button>
-            <button class="category-btn"><span class="icon-shoe"></span></button>
-            <button class="category-btn"><span class="icon-hat"></span></button>
-            <button class="category-btn"><span class="icon-necklace"></span></button>
-            <button class="category-btn"><span class="icon-chair"></span></button>
-        </div>
         <div class="container center" style="margin-top: 20px;">
-
-            <div id="CFproduct">asdsssssssssssssssss</div>
+            <div id="CFproduct"></div>
         </div>
     </div>
 </body>
-<script>
 
+<script>
     function formatTime(timeStr) {
         const [hours, minutes] = timeStr.split(':');
         return `${hours}:${minutes}`;
@@ -85,13 +63,11 @@
         const date = new Date(dateTimeStr);
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
-
         return `${hours}:${minutes}`;
     }
-    
-
 
     const CFproduct = document.getElementById('CFproduct');
+    const paymentSection = document.getElementById('paymentSection');
 
     // Extract productId from the URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -106,7 +82,7 @@
     async function getCFProduct(productId) {
         try {
             const productResponse = await fetch(`/cfproduct/${productId}`);
-            const queueResponse = await fetch('/queue');
+            const queueResponse = await fetch(`/queue/${productId}`);
 
             if (!productResponse.ok) {
                 throw new Error('Product not found');
@@ -115,120 +91,187 @@
             const product = await productResponse.json();
             const queue = await queueResponse.json();
 
-            // Ensure queue is an array
-            if (!Array.isArray(queue)) {
-                throw new Error('Queue data is not in the expected format');
-            }
-
-            // Construct the queue items dynamically
-            let queueHTML = queue.map((q, index) => `
-        <div class="row"
-            style="display: flex; align-items: center; justify-content: space-between; width: 1000px;">
-            <div style="display: flex; font-weight: 600; font-size: 34px;">
-                คิวที่ ${q.queue_num + 1}
+            let queueHTML = queue.length > 0 ? queue.map((q, index) => `
+            <div class="row" style="display: flex; align-items: center; justify-content: space-between; width: 1000px;">
+                <div style="display: flex; font-weight: 600; font-size: 34px;">
+                    คิวที่ ${q.queue_num}
+                </div>
+                <span style="display: flex; font-weight: 400; font-size: 34px; margin-bottom: -45px;">
+                    ${q.first_name} ${q.last_name}
+                </span>
+                <div style="display: flex; justify-content: flex-end;">
+                    <div class="time" style="font-size: 30px;">${formatDateTime(q.queue_time)}</div>
+                </div>
             </div>
-            <span style="display: flex; font-weight: 400; font-size: 34px; margin-bottom: -45px;">
-                ${q.first_name} ${q.last_name}
-            </span>
-            <div style="display: flex; justify-content: flex-end;">
-                <div class="time" style="font-size: 30px;">${formatDateTime(q.queue_time)}</div>
-            </div>
-        </div>
-        <hr style="border: 2px solid black; margin-top: 20px; width: calc(100% - 50px);">
-    `).join('');
+            <hr style="border: 2px solid black; margin-top: 20px; width: calc(100% - 50px);">
+            `).join('') : '<p style="font-size: 34px; font-weight: 600;">ยังไม่มีคิว</p>';
 
             let productHTML = `
-        <!-- grey container -->
         <div style="width: 1370px; min-height: 1520px; height: auto; background: #E1E1E1; border-radius: 5px; padding-bottom: 75px;">
-            <!-- Product Details -->
             <div style="width: 1370px; height: 135px; background:#FFFFF7; border-radius: 5px 5px 0px 0px;">
                 <div style="display: flex; align-items: center;">
-                    <img src="/public/img/${product.profile_img}" alt="Avatar" width="120px"
-                        style="border-radius: 50%; margin: 10px;">
+                    <img src="/public/img/${product.profile_img}" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;">
                     <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
                     <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
                     <div style="width: 100%; display: flex; justify-content: flex-end; margin-right: 25px;">
-                        <div
-                            style="width: 177px; height: 70px; background: #BDE3A7; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
+                        <div style="width: 177px; height: 70px; background: #BDE3A7; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
                             <span style="font-size: 20px; font-weight: 700;">${formatTime(product.product_time)}</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Post Details -->
-            <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 20px; display: flex;
-            justify-content: center;">
+            <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 20px; display: flex; justify-content: center;">
                 <div>
-                    <div class="container center"
-                        style="width: 1045px; min-height: 596px; height: auto; background: #BDE3A7; border-radius: 20px; margin-top: 120px; flex-direction: row;">
-                        <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px"
-                            style="margin-left: 50px;">
+                    <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #BDE3A7; border-radius: 20px; margin-top: 120px; flex-direction: row;">
+                        <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px;">
                         <div class="container col" style="margin-left: 45px; height: auto; width: 0px;">
                             <span class="name-p">Name : <span class="name-p2">${product.product_name}</span></span>
                             <span class="name-p">Price : <span class="name-p2">${product.product_price}</span></span>
                             <span class="name-p">Size : <span class="name-p2">${product.product_size}</span></span>
-                            <span class="name-p">Description :<div class="name-p2">
-                                    ${product.product_detail}
-                                </div>
-                            </span>
+                            <span class="name-p">Description :<div class="name-p2">${product.product_detail}</div></span>
                             <button id="cfButton" class="center" style="width: 276px; height: 66px;background: #F3F3E3; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
-                                    CF
+                                CF
                             </button>
                         </div>
                     </div>
-                    <!-- Queue Display -->
                     <div class="center" style="flex-direction: column;">
                         <span style="font-weight: 700; font-size: 42px;">Queue</span>
-                        ${queueHTML}
+                        <div id="queueSection">${queueHTML}</div> <!-- Changed here -->
                     </div>
-                    <!-- payment tab -->
-                     <div id="paymentSection" style="display: none; background: #F3F3E3; width: 1115px ; height: 80px; margin-top: 10px;">
-                         <div style="display: flex; align-items: center; justify-content: space-between;">
-                             <span style="font-weight: 700; font-size: 42px; margin-left: 20px;">Payment</span>
-                             <button style="font-size: 30px; background: #CCCCCC; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">ชำระเงิน</button>
+                    <div id="paymentSection" style="display: none; background: #F3F3E3; width: 1115px ; height: 80px; margin-top: 10px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="font-weight: 700; font-size: 42px; margin-left: 20px;">Payment</span>
+                            <button  onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #CCCCCC; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">ชำระเงิน</button>
                         </div>
                     </div>
-                     <!-- payment tab -->
-                    </div>
                 </div>
-        </div>
-    `;
+            </div>
+        </div>`;
 
             CFproduct.innerHTML = productHTML;
 
-            // Move the event listener for the CF button here
             const cfButton = document.getElementById('cfButton');
             const paymentSection = document.getElementById('paymentSection');
 
-            cfButton.addEventListener('click', function () {
-                paymentSection.style.display = 'block'; 
-            });
+            // disenable button 
+            await checkIfInQueue();
 
+            cfButton.addEventListener('click', async function () {
+                const loggedInUserId = localStorage.getItem('cus_id');
+                const queueData = {
+                    product_id: productId,
+                    cus_id: loggedInUserId,
+                    queue_status: 0 
+                };
+
+                try {
+                    const response = await fetch('/queue', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(queueData),
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        cfButton.disabled = true;
+                        cfButton.innerText = 'CF';
+                        cfButton.style.backgroundColor = '#cccccc';
+
+                        await updateQueue(productId);
+
+                        paymentSection.style.display = 'block';
+                    } else {
+                        const errorData = await response.json();
+                    }
+                } catch (error) {
+                    console.error('Error posting queue data:', error);
+                }
+            });
         } catch (error) {
             console.error('Error fetching product or queue:', error);
         }
     }
 
-
-    //show paymet tab
-    document.addEventListener('DOMContentLoaded', function () {
+    // Check if the user is already in the queue
+    async function checkIfInQueue() {
+        const loggedInUserId = localStorage.getItem('cus_id');
+        const productId = new URLSearchParams(window.location.search).get('productId');
         const cfButton = document.getElementById('cfButton');
         const paymentSection = document.getElementById('paymentSection');
 
-        cfButton.addEventListener('click', function () {
-            paymentSection.style.display = 'block';
-        });
-    });
+        try {
+            const response = await fetch(`/isUserInQueue/${productId}/${loggedInUserId}`);
+            const data = await response.json();
 
-    document.getElementById("btnlogout").onclick = function () {
-        location.replace('/login');
-    };
+            if (data.inQueue) {
+                cfButton.disabled = true;
+                cfButton.innerText = 'CF';  
+                cfButton.style.backgroundColor = '#cccccc'; 
 
-   
-   
+                paymentSection.style.display = 'block'; 
+            }
+        } catch (error) {
+            console.error('Error checking queue status:', error);
+        }
+    }
 
+    // Function to update the queue dynamically in the specific queue section
+    async function updateQueue(productId) {
+        try {
+            const queueResponse = await fetch(`/queue/${productId}`);
+            const queue = await queueResponse.json();
 
+            let queueHTML = queue.length > 0 ? queue.map((q, index) => `
+            <div class="row" style="display: flex; align-items: center; justify-content: space-between; width: 1000px;">
+                <div style="display: flex; font-weight: 600; font-size: 34px;">
+                    คิวที่ ${q.queue_num}
+                </div>
+                <span style="display: flex; font-weight: 400; font-size: 34px; margin-bottom: -45px;">
+                    ${q.first_name} ${q.last_name}
+                </span>
+                <div style="display: flex; justify-content: flex-end;">
+                    <div class="time" style="font-size: 30px;">${formatDateTime(q.queue_time)}</div>
+                </div>
+            </div>
+            <hr style="border: 2px solid black; margin-top: 20px; width: calc(100% - 50px);">
+            `).join('') : '<p style="font-size: 34px; font-weight: 600;">ยังไม่มีคิว</p>';
+
+            document.getElementById('queueSection').innerHTML = queueHTML; // Updated queue section dynamically
+        } catch (error) {
+            console.error('Error updating queue:', error);
+        }
+    }
+
+    // Load logged-in user ID if it's not in localStorage
+    async function getLoggedInUserId() {
+        try {
+            const response = await fetch('/getUserId');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.cus_id) {
+                    localStorage.setItem('cus_id', data.cus_id); // Store it in localStorage for later use
+                } else {
+                    console.error('User not logged in');
+                }
+            } else {
+                console.error('Failed to fetch user ID');
+            }
+        } catch (error) {
+            console.error('Error fetching user ID:', error);
+        }
+    }
+
+    getLoggedInUserId();
+
+    // document.getElementById("btnlogout").onclick = function () {
+    //     location.replace('/login');
+    // };
 </script>
+
+
+
 <style>
     .center {
         display: flex;
@@ -246,44 +289,6 @@
         flex-direction: column;
     }
 
-    .search-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 25px;
-    }
-
-    .bi-search {
-        background-color: transparent;
-        font-size: 20px;
-        border: none;
-        margin-left: -50px;
-    }
-
-    .category {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-    }
-
-    .category-btn {
-        background: #fff8e5;
-        border-radius: 60px;
-        width: 120px;
-        height: 53px;
-        /* border-color: darkgray; */
-        border: transparent;
-        transition: 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.019);
-    }
-
-    .category-btn:hover {
-        transform: scale(1.1);
-    }
-
     .name-p {
         font-style: normal;
         font-weight: 700;
@@ -295,7 +300,6 @@
         font-weight: 500;
         font-size: 28px;
         word-wrap: break-word;
-        /* width: 100%;  */
     }
 
     .time {
