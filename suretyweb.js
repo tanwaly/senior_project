@@ -62,15 +62,15 @@ app.get('/register', (req, res) => {
 app.post('/register', Idupload, async (req, res) => {
 
     const sqlCheck = 'SELECT users_id FROM users WHERE users_id = ?';
-    const checkParams = [req.body.iduser];
+    const checkParams = [req.body.email];
 
     con.query(sqlCheck, checkParams, async (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send("DB error");
         }
-        if (result.length > 0) {
-            return res.status(401).send("มี iduser นี้แล้ว");
+        if (checkParams.length > 0) {
+            return res.status(401).send("ลงชื่อด้วย email นี้ไปแล้วกรุณาใช้ email อื่น");
         }
 
         // Hash the password
@@ -170,35 +170,16 @@ app.get('/getRoles', (req, res) => {
         res.json({ roles: roles });  // Send roles as a response
     });
 });
+app.get('/getUserId', (req, res) => {
+    const userId = req.session.users_id;
+    if (!userId) {
+        return res.status(401).json({ error: 'User not logged in' });
+    }
+    res.json({ cus_id: userId });
+});
 
-// ----convert password---------
-// app.get('/password/:pass', function (req, res) {
-//     const raw = req.params.pass;
-//     bcrypt.hash(raw, 10, function (err, hash) {
-//         if (err) {
-//             res.status(500).send('Hash error');
-//         }
-//         else {
-//             res.send(hash);
-//         }
-//     });
-// });
-// app.get('/product', function (req, res) {
-//     const sql = "SELECT * FROM `products`";
-//     con.query(sql, function (err, results) {
-//         if (err) {
-//             console.error(err);
-//             res.status(500).send('DB error');
-//         } else {
 
-//         }
-//     });
-// });
-
-// app.get('/productslist', function (_req, res) {
-//     res.sendFile(path.join(__dirname, 'Project/customer/homepage.html'));
-
-// })
+// ==================== users ==================
 // honepage.html
 app.get('/homepage', function (_req, res) {
     res.sendFile(path.join(__dirname, 'Project/customer/homepage.html'));
@@ -236,17 +217,99 @@ app.get('/cfproduct/:productId', (req, res) => {
         res.json(results[0]); // Return product details as JSON
     });
 });
-app.get('/queue', (req, res) => {
-    const sql = 'SELECT queue.*, users.first_name, users.last_name, users.profile_img FROM queue JOIN users ON queue.cus_id = users.users_id WHERE users.role = 1;';
+app.get('/queue/:productId', (req, res) => {
+    const { productId } = req.params;
+    const sql = 'SELECT queue.*, users.first_name, users.last_name FROM queue JOIN users ON queue.cus_id = users.users_id WHERE queue.product_id = ?';
 
-    con.query(sql, (err, results) => {
+    con.query(sql, [productId], (err, results) => {
         if (err) {
-            res.status(500).json({ error: 'Database query failed' });
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No queue found for this product' });
+        }
+        res.json(results);
+    });
+});
+
+app.get('/isUserInQueue/:product_id/:cus_id', (req, res) => {
+    const { product_id, cus_id } = req.params;
+
+    const checkQueueQuery = `SELECT * FROM queue WHERE product_id = ? AND cus_id = ?`;
+    con.query(checkQueueQuery, [product_id, cus_id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        if (results.length > 0) {
+            // User is already in the queue
+            return res.json({ inQueue: true });
         } else {
-            res.json(results); // Return the full list of results
+            // User is not in the queue
+            return res.json({ inQueue: false });
         }
     });
 });
+
+
+app.post('/queue', (req, res) => {
+    const { product_id, cus_id, queue_status } = req.body;
+    const findMaxQueueNumQuery = `SELECT MAX(queue_num) AS max_queue_num FROM queue WHERE product_id = ?`;
+
+    con.query(findMaxQueueNumQuery, [product_id], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        let nextQueueNum = 1;  // Default to 1 if no queue exists
+        if (results[0].max_queue_num !== null) {
+            nextQueueNum = results[0].max_queue_num + 1;
+        }
+
+        const insertQueueQuery = `INSERT INTO queue (product_id, cus_id, queue_num, queue_status) VALUES (?, ?, ?, ?)`;
+
+        con.query(insertQueueQuery, [product_id, cus_id, nextQueueNum, queue_status], (error, insertResults) => {
+            if (error) {
+                return res.status(500).json({ error: 'Database insert failed' });
+            }
+            res.status(200).json({ success: true, queue_id: insertResults.insertId, queue_num: nextQueueNum });
+        });
+    });
+});
+
+
+
+app.get('/payment', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/payment.html'));
+});
+
+app.get('/payment/:productId', (req, res) => {
+    const { productId } = req.params;
+    const loggedInUserId =  req.session.users_id;   
+
+    const sql = `
+        SELECT products.*, users.first_name, users.last_name, users.profile_img
+        FROM products
+        JOIN users ON products.seller_id = users.users_id
+        JOIN queue ON queue.product_id = products.product_id
+        WHERE queue.cus_id = ? AND products.product_id = ?`; // Filter by both user ID and product ID
+
+    con.query(sql, [loggedInUserId, productId], (error, results) => {
+        if (error) {
+            console.error('Database error:', error); // Log the error
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        if (results.length > 0) {
+            console.log('Product details:', results[0]); // Debugging line
+            res.json(results[0]); // Return the product details
+        } else {
+            console.log('No product found with this productId for the logged-in user');
+            res.status(404).json({ error: 'Product not found or not available in queue' });
+        }
+    });
+});
+
 
 //================== seller =====================
 app.get('/sellerhomepage', (req, res) => {
@@ -497,6 +560,19 @@ app.get('/sellerreport', (req, res) => {
         }
     });
 });
+
+app.get('/detail', (req, res) => {
+    const sql = 'SELECT * FROM reports';
+    con.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else {
+            res.json(results);
+        }
+    });
+});
+app.po
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

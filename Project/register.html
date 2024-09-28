@@ -110,7 +110,7 @@
             <p class="account" style="color: #AAAAAA; font-weight: bold;">Already have an account? <a href="/login"
                     style="color: #4873E2;">Login</a></p>
         </center>
-        
+
     </div>
 
 </body>
@@ -197,8 +197,8 @@
                 const data = await res.text();
                 location.replace('/login');
             } else if (res.status === 401) {
-                const data = await res.text();
-                throw Error(data);
+                const message = await res.text();
+                alert(message);
             }
         } catch (err) {
             alert(err.message || 'An error occurred');

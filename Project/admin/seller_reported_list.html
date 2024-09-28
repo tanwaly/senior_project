@@ -4,10 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>manegseller1(list)</title>
+    <title>Manage Seller Reports</title>
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,7 +68,6 @@
             font-size: 20px;
         }
 
-        
         table {
             width: 100%;
             border-collapse: collapse;
@@ -108,6 +106,22 @@
         .btn-details:hover {
             background-color: #bbb;
         }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -137,6 +151,57 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="modal fade" id="reportDetail" tabindex="-1" role="dialog" aria-labelledby="reportDetailTitle"
+            aria-hidden="true">
+            <div class="modal-dialog center" role="document">
+                <div class="modal-content"
+                    style="background-color:  #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
+                    <div class="modal-header" style="background-color:  #272727;">
+                        <h5 class="modal-title" id="reportDetailTitle" style="color: white; font-size: 22px;">
+                            เหตุผลที่ถูกรายงาน
+                        </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container" style="font-size: 20px; margin-top: 30px;">
+                            <div class="col">
+                                <div
+                                    style="background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px; margin-bottom: 20px;">
+                                    <p>ชื่อ: testttttttttt testtttttttttttttttt</p>
+                                    <p>ID: testttttttttttt</p>
+                                </div>
+
+                                <div
+                                    style="background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px;">
+                                    <p>เหตุผล: testtttt</p>
+                                    <p style="word-wrap: break-word;">
+                                        รายละเอียด:
+                                        testtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px; border-radius: 20px;">
+                                <u style="font-size: 25px; color: rgb(0, 0, 0);">หลักฐาน</u>
+                                <div class="row center"
+                                    style="margin-top: 20px; display: flex; justify-content: space-evenly;">
+                                    <img src="/public/img/test.jpg" alt="" style="max-width: 500px; width: auto;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row center" style="display: flex; justify-content: space-around; margin-top: 20px;">
+                            <button id="deny-report-btn" onclick="denyReport()"
+                                style="background: #FFE48C; border: none; border-radius: 10px;width: 200px; height: 65px;">ปฎิเสธการรายงาน</button>
+                            <button id="ban-seller-btn" onclick="banSeller()"
+                                style="background: #b72323; color: white;border: none; border-radius: 10px;width: 200px; height: 65px;">ระงับบัญชีผู้ใช้</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
         function changeRole(role) {
@@ -165,8 +230,8 @@
                         const data = await response.json();
                         console.log('Fetched data:', data);
 
-                        allUsers = data; // Store fetched data
-                        filterUsers(); // Initial display
+                        allUsers = data;
+                        filterUsers();
                     } else {
                         console.error('Failed to fetch data:', response.status, response.statusText);
                     }
@@ -191,19 +256,28 @@
                     <tr>
                         <td>${formatUserId(user.users_id)}</td>
                         <td>ชื่อ:${user.first_name} ${user.last_name}</td>
-                        <td>${changeRole(user.role)}</td>
-                        <td><a href="details.html" class="btn-details">รายละเอียด</a></td>
+                        <td>${changeRole(user.role_id)}</td>
+                        <td><button class="btn-details" data-user-id="${user.users_id}" data-bs-toggle="modal" data-bs-target="#reportDetail">รายละเอียด</button></td>
                     </tr>`;
                 });
+
                 userTableBody.innerHTML = rows;
             }
 
             searchInput.addEventListener('input', filterUsers);
-
             allList();
         });
-    </script>
 
+        function denyReport() {
+            console.log('Deny report action');
+            // Implement your deny logic here
+        }
+
+        function banSeller() {
+            console.log('Ban seller action');
+            // Implement your ban logic here
+        }
+    </script>
 </body>
 
 </html>
