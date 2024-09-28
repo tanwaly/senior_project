@@ -371,13 +371,12 @@
                         </div>
                     </div>`;
                         });
-                        showSellerProduct.innerHTML = texts;
+                        document.getElementById('showSellerProduct').innerHTML = texts;
                     }
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
             }
-
             getSellerProduct();
         });
 

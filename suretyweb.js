@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
-        maxAge: 2 * 60 * 60 * 1000
+        maxAge: 2 * 60 * 60 * 1000 //2 hours
     }
 }));
 // function isAuthenticated(req, res, next) {
@@ -317,7 +317,9 @@ app.get('/sellerhomepage', (req, res) => {
 });
 
 app.get('/sellerproduct', (req, res) => {
-    const sellerId = req.session.users_id; // or req.userId if you're using tokens
+    const sellerId = req.session.users_id; // Ensure users_id is set correctly in session
+
+    console.log('Seller ID:', sellerId);  // Debug: Check if sellerId is being set
 
     if (!sellerId) {
         return res.status(401).json({ error: 'Not logged in or session expired' });
@@ -332,11 +334,15 @@ app.get('/sellerproduct', (req, res) => {
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
+            console.error('Database Error:', err);  // Debug: Log SQL errors
             res.status(500).json({ error: 'Database query failed' });
-        } else if (results.length === 0) {
-            res.status(404).json({ message: 'No products found for this seller' });
         } else {
-            res.json(results); // Send the filtered seller's product data to the frontend
+            console.log('Query Results:', results);  // Debug: Check the query results
+            if (results.length === 0) {
+                res.status(404).json({ message: 'No products found for this seller' });
+            } else {
+                res.json(results);
+            }
         }
     });
 });
