@@ -61,7 +61,7 @@ app.get('/register', (req, res) => {
 
 app.post('/register', Idupload, async (req, res) => {
 
-    const sqlCheck = 'SELECT users_id FROM users WHERE users_id = ?';
+    const sqlCheck = 'SELECT email FROM users WHERE email = ?';
     const checkParams = [req.body.email];
 
     con.query(sqlCheck, checkParams, async (err, result) => {
@@ -69,7 +69,7 @@ app.post('/register', Idupload, async (req, res) => {
             console.error(err);
             return res.status(500).send("DB error");
         }
-        if (checkParams.length > 0) {
+        if (result.length > 0) {  // Change this to check if the result is non-empty
             return res.status(401).send("ลงชื่อด้วย email นี้ไปแล้วกรุณาใช้ email อื่น");
         }
 
@@ -77,7 +77,7 @@ app.post('/register', Idupload, async (req, res) => {
         const bcryptPass = await bcrypt.hash(req.body.password, 10);
 
         // Prepare the INSERT query
-        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status,profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)';
+        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status, profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const insertParams = [
             req.body.first_name,
             req.body.last_name,
@@ -102,6 +102,7 @@ app.post('/register', Idupload, async (req, res) => {
 
     });
 });
+
 
 //--------- login ---------
 app.get('/login', function (_req, res) {
@@ -285,7 +286,7 @@ app.get('/payment', (req, res) => {
 
 app.get('/payment/:productId', (req, res) => {
     const { productId } = req.params;
-    const loggedInUserId =  req.session.users_id;   
+    const loggedInUserId = req.session.users_id;
 
     const sql = `
         SELECT products.*, users.first_name, users.last_name, users.profile_img
