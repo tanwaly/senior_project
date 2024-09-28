@@ -349,7 +349,50 @@ app.get('/productStatus', (req, res) => {
 
 //================== seller =====================
 app.get('/sellerhomepage', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/seller/seller_homepage.html'));
+    const sellerId = req.session.users_id;
+    console.log('Seller ID:', sellerId);  // Debug: Check if sellerId is being set
+
+    if (!sellerId) {
+        return res.status(401).json({ error: 'Not logged in or session expired' });
+    }
+
+    const sql = `
+        SELECT users.first_name, users.profile_img
+        FROM users
+        WHERE users.users_id = ?;
+    `;
+
+    con.query(sql, [sellerId], (err, results) => {
+        if (err) {
+            console.error('Database Error:', err);
+            res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            res.status(404).json({ error: 'User not found' });
+        } else {
+            // Send the HTML page and then let the frontend fetch the user data
+            res.sendFile(path.join(__dirname, 'Project/seller/seller_homepage.html'));
+        }
+    });
+});
+
+app.get('/getSellerData', (req, res) => {
+    const sellerId = req.session.users_id;
+
+    if (!sellerId) {
+        return res.status(401).json({ error: 'Not logged in or session expired' });
+    }
+
+    const sql = `SELECT first_name, profile_img FROM users WHERE users_id = ?;`;
+
+    con.query(sql, [sellerId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        } else {
+            res.json(results[0]);  // Return the first_name and profile_img as JSON
+        }
+    });
 });
 
 app.get('/sellerproduct', (req, res) => {
