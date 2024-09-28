@@ -151,6 +151,90 @@
         }, 1500); // หน่วงเวลาตามเวลาของ Swal (1500 มิลลิวินาที)
     }
 
+      // Get productId from URL
+      const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('productId');
+    const btnConfirm = document.getElementById('btnConfirm');
+
+    // ตรวจสอบสถานะการชำระเงินเมื่อหน้าโหลด
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Fetch payment status from backend
+            const response = await fetch(`/api/payment-status?productId=${productId}`);
+            const paymentData = await response.json();
+
+            if (paymentData.status === 'confirmed') {
+                // If payment is already confirmed, disable the button
+                btnConfirm.disabled = true;
+                btnConfirm.innerText = 'ชำระเงินแล้ว';  // เปลี่ยนข้อความปุ่ม
+                btnConfirm.style.background = '#ccc';    // เปลี่ยนสไตล์ของปุ่ม
+            }
+        } catch (error) {
+            console.error('Error fetching payment status:', error);
+        }
+    });
+
+    // ฟังก์ชันยืนยันการชำระเงินเมื่อกดปุ่ม
+    async function confirmPayment() {
+        try {
+            // ตรวจสอบสถานะการชำระเงินก่อนทำการยืนยัน
+            const response = await fetch(`/api/payment-status?productId=${productId}`);
+            const paymentData = await response.json();
+
+            if (paymentData.status === 'confirmed') {
+                Swal.fire({
+                    icon: "error",
+                    title: "คุณได้ชำระเงินไปแล้ว",
+                });
+                return;
+            }
+
+            // ยืนยันการชำระเงินกับ backend
+            const confirmResponse = await fetch(`/api/confirm-payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId })
+            });
+
+            if (confirmResponse.ok) {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Payment Success",
+                    showConfirmButton: false,
+                    timer: 1500, // แจ้งเตือน 1.5 วินาที
+                });
+
+                // ปิดการใช้งานปุ่มเมื่อชำระเงินสำเร็จ
+                btnConfirm.disabled = true;
+                btnConfirm.innerText = 'ชำระเงินแล้ว';
+                btnConfirm.style.background = '#ccc';
+
+                // เปลี่ยนหน้าไปยังสถานะการสั่งซื้อหลังจาก 1.5 วินาที
+                setTimeout(function () {
+                    location.replace("/order_status");
+                }, 1500);
+            } else {
+                console.error('Payment confirmation failed:', confirmResponse.statusText);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'การชำระเงินล้มเหลว',
+                    text: 'กรุณาลองใหม่อีกครั้ง',
+                });
+            }
+
+        } catch (error) {
+            console.error('Error confirming payment:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'เกิดข้อผิดพลาด',
+                text: 'ไม่สามารถยืนยันการชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
+            });
+        }
+    }
+
 
 </script>
 
