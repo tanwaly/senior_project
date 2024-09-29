@@ -311,6 +311,70 @@ app.get('/payment/:productId', (req, res) => {
     });
 });
 
+app.post('/postpayment', async (req, res) => {
+    const orderAddress = req.body.order_address;
+    const orderShipName = req.body.order_shipname;
+    const orderStatus = req.body.order_status; // Typically, you'd define a status
+    const queueId = req.body.queue_id || null; // Assuming queue_id might be optional
+    const productId = req.body.product_id; // Get the product_id from the request body
+
+    try {
+        // Start a transaction
+        await new Promise((resolve, reject) => {
+            con.beginTransaction((err) => {
+                if (err) return reject(err);
+                resolve();
+            });
+        });
+
+        // Insert the order into the orders table
+        const sqlInsertOrder = 'INSERT INTO orders (queue_id, order_address, order_shipname, order_status) VALUES (?, ?, ?, ?)';
+        const insertOrderParams = [queueId, orderAddress, orderShipName, orderStatus];
+        
+        await new Promise((resolve, reject) => {
+            con.query(sqlInsertOrder, insertOrderParams, (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+
+        // Update the product status to 0 (indicating it's no longer available)
+        const sqlUpdateProduct = 'UPDATE products SET product_status = ? WHERE product_id = ?';
+        const updateProductParams = [0, productId];
+        
+        await new Promise((resolve, reject) => {
+            con.query(sqlUpdateProduct, updateProductParams, (err) => {
+                if (err) return reject(err);
+                resolve();
+            });
+        });
+
+        // Commit the transaction
+        await new Promise((resolve, reject) => {
+            con.commit((err) => {
+                if (err) return reject(err);
+                resolve();
+            });
+        });
+
+        res.send('Payment successfully');
+    } catch (error) {
+        console.error(error);
+        await new Promise((resolve) => {
+            con.rollback(() => {
+                resolve();
+            });
+        });
+        res.status(500).send("DB error");
+    }
+});
+
+
+
+app.get('/order_status', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/order_status.html'));
+});
+
 app.get('/cf-status', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/cf_status.html'));
 });

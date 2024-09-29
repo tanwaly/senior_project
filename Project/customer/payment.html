@@ -3,9 +3,6 @@
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -40,26 +37,22 @@
             </div>
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: white;" onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
         </div>
     </div>
 
-
     <div style="padding: 25px;">
         <div class="col">
             <p style="font-weight: bold">ชื่อผู้รับ</p>
             <form class="form-name">
-                <input type="text" class="form-control" style="border-color: white; border-radius: 15px" />
+                <input type="text" id="orderShipName" class="form-control" style="border-color: white; border-radius: 15px" />
             </form>
 
             <div class="mt-3 mb-3" style="font-weight: bold">ที่อยู่</div>
-            <textarea class="form-control mb-2 mr-sm-2" rows="3" id="txtAddress"
-                style="border-color: white; border-radius: 15px"></textarea>
-
+            <textarea id="orderAddress" class="form-control mb-2 mr-sm-2" rows="3" style="border-color: white; border-radius: 15px"></textarea>
         </div>
 
         <hr>
@@ -71,7 +64,6 @@
 
         <p style="font-weight: bold; font-size: 20px;">QR code</p>
         <div class="text-center">
-
             <div class="col d-flex justify-content-center align-items-center"
                 style="background:white; width: 300px; height: 250px; margin: 0 auto;">
                 <img src="/public/img/My_Gallery.png" alt="QR code" style="width: 200px; height: 180px;">
@@ -81,184 +73,135 @@
 
         <div class="text-center" style="margin-top: 20px">
             <div class="align-items-center ms-auto"></div>
-            <button onclick="confirmpayment()"
-                style=" background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
+            <button id="payButton" onclick="confirmPayment()"
+                style="background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
                 ยืนยัน
             </button>
         </div>
     </div>
 
-</body>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const showProduct = document.getElementById('showProduct');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const showProduct = document.getElementById('showProduct');
 
-        if (!showProduct) {
-            console.error('showProduct element not found');
-            return; // Exit if the element is not found
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('productId');
-
-        if (productId) {
-            getPayment(productId);
-        } else {
-            console.error('No productId found in the URL');
-        }
-
-        async function getPayment(productId) {
-            try {
-                const productResponse = await fetch(`/payment/${productId}`);
-                if (productResponse.ok) {
-                    const product = await productResponse.json();
-                    console.log('Fetched data:', product);
-
-                    // Render the product details
-                    let productHTML = `
-                    <div class="row">
-                        <img id="productImage" src="public/img/${product.product_img}" alt="product image" style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
-                        <div class="col">
-                            <p style="font-size: 20px;"><strong>ชื่อ: </strong><span>${product.product_name}</span></p>
-                            <p style="font-size: 20px;"><strong>คำอธิบาย: </strong><span>${product.product_caption}</span></p>
-                            <p style="font-size: 20px;"><strong>ราคา: </strong><span>${product.product_price}</span></p>
-                        </div>
-                    </div>`;
-
-                    showProduct.innerHTML = productHTML;
-                } else {
-                    console.error('Failed to fetch data:', productResponse.status, productResponse.statusText);
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
+            if (!showProduct) {
+                console.error('showProduct element not found');
+                return; // Exit if the element is not found
             }
-        }
-    });
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('productId');
 
-    function confirmpayment() {
-        Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Payment Success",
-            showConfirmButton: false,
-            timer: 1500, // แจ้งเตือนแสดง 1.5 วินาที
+            if (productId) {
+                getPayment(productId);
+            } else {
+                console.error('No productId found in the URL');
+            }
+
+            async function getPayment(productId) {
+                try {
+                    const productResponse = await fetch(`/payment/${productId}`);
+                    if (productResponse.ok) {
+                        const product = await productResponse.json();
+                        console.log('Fetched data:', product);
+
+                        // Render the product details
+                        let productHTML = `
+                        <div class="row">
+                            <img id="productImage" src="/public/img/${product.product_img}" alt="product image" style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
+                            <div class="col">
+                                <p style="font-size: 20px;"><strong>ชื่อ: </strong><span>${product.product_name}</span></p>
+                                <p style="font-size: 20px;"><strong>คำอธิบาย: </strong><span>${product.product_caption}</span></p>
+                                <p style="font-size: 20px;"><strong>ราคา: </strong><span>${product.product_price}</span></p>
+                            </div>
+                        </div>`;
+
+                        showProduct.innerHTML = productHTML;
+                    } else {
+                        console.error('Failed to fetch data:', productResponse.status, productResponse.statusText);
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+            }
         });
 
-        // หน่วงเวลา 1.5 วินาทีก่อนที่จะเปลี่ยนหน้า
-        setTimeout(function () {
-            location.replace("/order_status");
-        }, 1500); // หน่วงเวลาตามเวลาของ Swal (1500 มิลลิวินาที)
-    }
+        async function confirmPayment() {
+            const orderAddress = document.getElementById("orderAddress").value; // Get the order address
+            const orderShipName = document.getElementById("orderShipName").value; // Get the shipping name
+            const orderStatus = 1; // Assuming 1 means the order is pending
+            const queueId = null; // Or get this from another input if applicable
+            const productId = new URLSearchParams(window.location.search).get('productId'); // Get the product ID from URL
 
-    // Get productId from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('productId');
-    const btnConfirm = document.getElementById('btnConfirm');
-
-    // ตรวจสอบสถานะการชำระเงินเมื่อหน้าโหลด
-    document.addEventListener('DOMContentLoaded', async () => {
-        try {
-            // Fetch payment status from backend
-            const response = await fetch(`/api/payment-status?productId=${productId}`);
-            const paymentData = await response.json();
-
-            if (paymentData.status === 'confirmed') {
-                // If payment is already confirmed, disable the button
-                btnConfirm.disabled = true;
-                btnConfirm.innerText = 'ชำระเงินแล้ว';  // เปลี่ยนข้อความปุ่ม
-                btnConfirm.style.background = '#ccc';    // เปลี่ยนสไตล์ของปุ่ม
-            }
-        } catch (error) {
-            console.error('Error fetching payment status:', error);
-        }
-    });
-
-    // ฟังก์ชันยืนยันการชำระเงินเมื่อกดปุ่ม
-    async function confirmPayment() {
-        try {
-            // ตรวจสอบสถานะการชำระเงินก่อนทำการยืนยัน
-            const response = await fetch(`/api/payment-status?productId=${productId}`);
-            const paymentData = await response.json();
-
-            if (paymentData.status === 'confirmed') {
-                Swal.fire({
-                    icon: "error",
-                    title: "คุณได้ชำระเงินไปแล้ว",
-                });
-                return;
-            }
-
-            // ยืนยันการชำระเงินกับ backend
-            const confirmResponse = await fetch(`/api/confirm-payment`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ productId })
-            });
-
-            if (confirmResponse.ok) {
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Payment Success",
-                    showConfirmButton: false,
-                    timer: 1500, // แจ้งเตือน 1.5 วินาที
+            try {
+                const response = await fetch('/postpayment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        order_address: orderAddress,
+                        order_shipname: orderShipName,
+                        order_status: orderStatus,
+                        queue_id: queueId,
+                        product_id: productId
+                    })
                 });
 
-                // ปิดการใช้งานปุ่มเมื่อชำระเงินสำเร็จ
-                btnConfirm.disabled = true;
-                btnConfirm.innerText = 'ชำระเงินแล้ว';
-                btnConfirm.style.background = '#ccc';
+                if (response.ok) {
+                    const result = await response.text();
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: result,
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
 
-                // เปลี่ยนหน้าไปยังสถานะการสั่งซื้อหลังจาก 1.5 วินาที
-                setTimeout(function () {
-                    location.replace("/cf-status");
-                }, 1500);
-            } else {
-                console.error('Payment confirmation failed:', confirmResponse.statusText);
+                    // Delay before navigating to the order status page
+                    setTimeout(() => {
+                        location.replace("/order_status");
+                    }, 1500);
+                } else {
+                    const error = await response.text();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error,
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
                 Swal.fire({
                     icon: 'error',
-                    title: 'การชำระเงินล้มเหลว',
-                    text: 'กรุณาลองใหม่อีกครั้ง',
+                    title: 'Error',
+                    text: 'There was an error processing your payment.',
                 });
             }
-
-        } catch (error) {
-            console.error('Error confirming payment:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'เกิดข้อผิดพลาด',
-                text: 'ไม่สามารถยืนยันการชำระเงินได้ กรุณาลองใหม่อีกครั้ง',
-            });
         }
-    }
+    </script>
 
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-</script>
+        .row {
+            display: flex;
+            flex-direction: row;
+        }
 
-<style>
-    .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+        .col {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .row {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .col {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .text-center {
-        text-align: center;
-    }
-</style>
-
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</body>
 
 </html>
