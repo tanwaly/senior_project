@@ -162,16 +162,16 @@
                                     Catagory:
                                     <select name="product_cate" id="category"
                                         style="height: 40px; border-radius: 10px; border: none;">
-                                        <option value="Shirt">Shirt</option>
-                                        <option value="Coat">Coat</option>
-                                        <option value="Dress">Dress</option>
-                                        <option value="Pants">Pants</option>
-                                        <option value="Skirt">Skirt</option>
-                                        <option value="Socks">Socks</option>
-                                        <option value="Shoes">Shoes</option>
-                                        <option value="Hat">Hat</option>
-                                        <option value="Accessories">Accessories</option>
-                                        <option value="Appliance">Appliance</option>
+                                        <option value="1">Shirt</option>
+                                        <option value="2">Coat</option>
+                                        <option value="3">Dress</option>
+                                        <option value="4">Pants</option>
+                                        <option value="5">Skirt</option>
+                                        <option value="6">Socks</option>
+                                        <option value="7">Shoes</option>
+                                        <option value="8">Hat</option>
+                                        <option value="9">Accessories</option>
+                                        <option value="10">Appliance</option>
                                     </select>
                                     เวลาที่ขายสินค้า:
                                     <input type="time" name="product_time"
@@ -235,6 +235,7 @@
                                 <div id="clothSizeSelect" class="select-container" style="display: none;">
                                     <select name="product_shirtsize"
                                         style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;">
+                                        <option value="Freesize">Free size</option>
                                         <option value="XS">XS</option>
                                         <option value="S">S</option>
                                         <option value="M">M</option>
@@ -282,6 +283,27 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sizeRadios = document.querySelectorAll('input[name="product_type"]');
+            const clothSizeSelect = document.getElementById('clothSizeSelect');
+            const shoesSizeSelect = document.getElementById('shoesSizeSelect');
+
+            sizeRadios.forEach(option => {
+                option.addEventListener('change', function () {
+                    if (this.value === 'cloth') {
+                        clothSizeSelect.style.display = 'block';
+                        shoesSizeSelect.style.display = 'none';
+                    } else if (this.value === 'shoes') {
+                        clothSizeSelect.style.display = 'none';
+                        shoesSizeSelect.style.display = 'block';
+                    } else {
+                        clothSizeSelect.style.display = 'none';
+                        shoesSizeSelect.style.display = 'none';
+                    }
+                });
+            });
+        });
+
         function changeIcon(cata) {
             const icons = {
                 1: 'icon-shirt',
@@ -316,29 +338,6 @@
                 };
                 reader.readAsDataURL(file);  // Read the file as a data URL for preview
             }
-        });
-
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const sizeRadios = document.querySelectorAll('input[name="size"]');
-            const clothSizeSelect = document.getElementById('clothSizeSelect');
-            const shoesSizeSelect = document.getElementById('shoesSizeSelect');
-
-            sizeRadios.forEach(option => {
-                option.addEventListener('change', function () {
-                    if (this.value === 'cloth') {
-                        clothSizeSelect.style.display = 'block';
-                        shoesSizeSelect.style.display = 'none';
-                    } else if (this.value === 'shoes') {
-                        clothSizeSelect.style.display = 'none';
-                        shoesSizeSelect.style.display = 'block';
-                    } else {
-                        clothSizeSelect.style.display = 'none';
-                        shoesSizeSelect.style.display = 'none';
-                    }
-                });
-            });
         });
 
         // connecting info (first name and profile)

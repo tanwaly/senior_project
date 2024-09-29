@@ -468,7 +468,7 @@ app.post('/addproduct', ProdectUpload, async (req, res) => {
                 console.error(err);
                 return res.status(500).send("DB error");
             }
-            res.send('Product added successfully');
+            res.redirect('/sellerhomepage');
         });
     });
 });
@@ -523,7 +523,6 @@ app.put('/updateTracking', (req, res) => {
 });
 const cron = require('node-cron');
 
-// ทำงานทุกวันเพื่อตรวจสอบและอัปเดตสถานะ
 cron.schedule('0 0 * * *', () => {
     const sqlCheckStatus = `
         UPDATE orders

@@ -151,8 +151,8 @@
         }, 1500); // หน่วงเวลาตามเวลาของ Swal (1500 มิลลิวินาที)
     }
 
-      // Get productId from URL
-      const urlParams = new URLSearchParams(window.location.search);
+    // Get productId from URL
+    const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('productId');
     const btnConfirm = document.getElementById('btnConfirm');
 
@@ -214,7 +214,7 @@
 
                 // เปลี่ยนหน้าไปยังสถานะการสั่งซื้อหลังจาก 1.5 วินาที
                 setTimeout(function () {
-                    location.replace("/order_status");
+                    location.replace("/cf-status");
                 }, 1500);
             } else {
                 console.error('Payment confirmation failed:', confirmResponse.statusText);
