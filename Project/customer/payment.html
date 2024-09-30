@@ -37,7 +37,9 @@
             </div>
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: white;" onclick="location.replace('/login');">
+            <button id="btnlogout"
+                style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: white;"
+                onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
@@ -48,11 +50,13 @@
         <div class="col">
             <p style="font-weight: bold">ชื่อผู้รับ</p>
             <form class="form-name">
-                <input type="text" id="orderShipName" class="form-control" style="border-color: white; border-radius: 15px" />
+                <input type="text" id="orderAddName" class="form-control"
+                    style="border-color: white; border-radius: 15px" />
             </form>
 
             <div class="mt-3 mb-3" style="font-weight: bold">ที่อยู่</div>
-            <textarea id="orderAddress" class="form-control mb-2 mr-sm-2" rows="3" style="border-color: white; border-radius: 15px"></textarea>
+            <textarea id="orderAddress" class="form-control mb-2 mr-sm-2" rows="3"
+                style="border-color: white; border-radius: 15px"></textarea>
         </div>
 
         <hr>
@@ -70,19 +74,15 @@
                 <p style="font-weight: bold;">15:00</p>
             </div>
         </div>
+        <div id="confirmbtn" style="margin-top: 20px">
 
-        <div class="text-center" style="margin-top: 20px">
-            <div class="align-items-center ms-auto"></div>
-            <button id="payButton" onclick="confirmPayment()"
-                style="background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
-                ยืนยัน
-            </button>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const showProduct = document.getElementById('showProduct');
+            const confirmbtn = document.getElementById('confirmbtn');
 
             if (!showProduct) {
                 console.error('showProduct element not found');
@@ -105,7 +105,6 @@
                         const product = await productResponse.json();
                         console.log('Fetched data:', product);
 
-                        // Render the product details
                         let productHTML = `
                         <div class="row">
                             <img id="productImage" src="/public/img/${product.product_img}" alt="product image" style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
@@ -114,9 +113,18 @@
                                 <p style="font-size: 20px;"><strong>คำอธิบาย: </strong><span>${product.product_caption}</span></p>
                                 <p style="font-size: 20px;"><strong>ราคา: </strong><span>${product.product_price}</span></p>
                             </div>
-                        </div>`;
+                        </div>
+                        `;
+                        let cbtn = `<div class="text-center" style="margin-top: 20px">
+                            <button id="payButton" onclick="confirmPayment()" data-queue-id="${product.queue_id}"
+                             style="background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
+                                ยืนยัน
+                            </button>
+                        </div>
+                        `;
 
                         showProduct.innerHTML = productHTML;
+                        confirmbtn.innerHTML = cbtn;
                     } else {
                         console.error('Failed to fetch data:', productResponse.status, productResponse.statusText);
                     }
@@ -127,24 +135,35 @@
         });
 
         async function confirmPayment() {
-            const orderAddress = document.getElementById("orderAddress").value; // Get the order address
-            const orderShipName = document.getElementById("orderShipName").value; // Get the shipping name
-            const orderStatus = 1; // Assuming 1 means the order is pending
-            const queueId = null; // Or get this from another input if applicable
-            const productId = new URLSearchParams(window.location.search).get('productId'); // Get the product ID from URL
+            const orderAddress = document.getElementById("orderAddress").value.trim(); 
+            const orderAddName = document.getElementById("orderAddName").value.trim();
+            const queueId = document.getElementById('payButton').dataset.queueId;
+            const productId = new URLSearchParams(window.location.search).get('productId'); 
+
+            // Validate input
+            if (!orderAddName || !orderAddress) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณากรอกชื่อผู้รับและที่อยู่ให้ครบถ้วน',
+                });
+                return;
+            }
+
+            // const paymentTime = new Date().toISOString();
 
             try {
-                const response = await fetch('/postpayment', {
+                const response = await fetch('/addorder', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         order_address: orderAddress,
-                        order_shipname: orderShipName,
-                        order_status: orderStatus,
+                        order_addname: orderAddName,
+                        order_status: 0,
                         queue_id: queueId,
                         product_id: productId
+                        // payment_time: paymentTime
                     })
                 });
 
@@ -160,7 +179,7 @@
 
                     // Delay before navigating to the order status page
                     setTimeout(() => {
-                        location.replace("/order_status");
+                        location.replace("/cf-status");
                     }, 1500);
                 } else {
                     const error = await response.text();
@@ -180,6 +199,7 @@
             }
         }
     </script>
+
 
     <style>
         .center {

@@ -53,7 +53,7 @@
 
                 data.forEach((item, index) => {
                     const orderTracknum = item.tracking_number ? item.tracking_number : 'กรุณากรอกข้อมูล';  // Use item.tracking_number
-                    const orderShipname = item.first_name ? item.first_name : 'กรุณากรอกข้อมูล';  // Use item.first_name (or the appropriate field)
+                    const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';  // Use item.first_name (or the appropriate field)
 
                     const rowHTML = `
                 <div class="row">

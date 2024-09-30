@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         secure: false,
-        maxAge: 2 * 60 * 60 * 1000 
+        maxAge: 2 * 60 * 60 * 1000
     }
 }));
 // function isAuthenticated(req, res, next) {
@@ -186,7 +186,7 @@ app.get('/homepage', function (_req, res) {
     res.sendFile(path.join(__dirname, 'Project/customer/homepage.html'));
 })
 app.get('/product', (req, res) => {
-    const sql = 'SELECT products.*, users.first_name,last_name,profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE users.role = 2;';
+    const sql = 'SELECT products.*, users.first_name,last_name,profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE product_status = 1;';
     con.query(sql, (err, results) => {
         if (err) {
             res.status(500).json({ error: 'Database query failed' });
@@ -289,12 +289,16 @@ app.get('/payment/:productId', (req, res) => {
     const loggedInUserId = req.session.users_id;
 
     const sql = `
-        SELECT products.*, users.first_name, users.last_name, users.profile_img
-        FROM products
-        JOIN users ON products.seller_id = users.users_id
-        JOIN queue ON queue.product_id = products.product_id
-        WHERE queue.cus_id = ? AND products.product_id = ?`; // Filter by both user ID and product ID
-
+        SELECT products.*, 
+       users.first_name, 
+       users.last_name, 
+       users.profile_img, 
+       queue.queue_id
+            FROM products
+            JOIN users ON products.seller_id = users.users_id
+            JOIN queue ON queue.product_id = products.product_id
+            WHERE queue.cus_id = ? AND products.product_id = ?
+`;
     con.query(sql, [loggedInUserId, productId], (error, results) => {
         if (error) {
             console.error('Database error:', error); // Log the error
@@ -311,12 +315,13 @@ app.get('/payment/:productId', (req, res) => {
     });
 });
 
-app.post('/postpayment', async (req, res) => {
+app.post('/addorder', async (req, res) => {
     const orderAddress = req.body.order_address;
-    const orderShipName = req.body.order_shipname;
-    const orderStatus = req.body.order_status; // Typically, you'd define a status
-    const queueId = req.body.queue_id || null; // Assuming queue_id might be optional
-    const productId = req.body.product_id; // Get the product_id from the request body
+    const orderAddName = req.body.order_addname;
+    const orderStatus = req.body.order_status;
+    const queueId = req.body.queue_id;
+    const productId = req.body.product_id;
+    const paymentTime = req.body.payment_time;
 
     try {
         // Start a transaction
@@ -328,9 +333,9 @@ app.post('/postpayment', async (req, res) => {
         });
 
         // Insert the order into the orders table
-        const sqlInsertOrder = 'INSERT INTO orders (queue_id, order_address, order_shipname, order_status) VALUES (?, ?, ?, ?)';
-        const insertOrderParams = [queueId, orderAddress, orderShipName, orderStatus];
-        
+        const sqlInsertOrder = 'INSERT INTO orders (queue_id, order_address, order_addname, order_status) VALUES (?, ?, ?, ?)';
+        const insertOrderParams = [queueId, orderAddress, orderAddName, orderStatus, paymentTime];
+
         await new Promise((resolve, reject) => {
             con.query(sqlInsertOrder, insertOrderParams, (err, result) => {
                 if (err) return reject(err);
@@ -341,7 +346,7 @@ app.post('/postpayment', async (req, res) => {
         // Update the product status to 0 (indicating it's no longer available)
         const sqlUpdateProduct = 'UPDATE products SET product_status = ? WHERE product_id = ?';
         const updateProductParams = [0, productId];
-        
+
         await new Promise((resolve, reject) => {
             con.query(sqlUpdateProduct, updateProductParams, (err) => {
                 if (err) return reject(err);
@@ -369,16 +374,10 @@ app.post('/postpayment', async (req, res) => {
     }
 });
 
-
-
-app.get('/order_status', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/order_status.html'));
-});
-
 app.get('/cf-status', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/cf_status.html'));
 });
-app.get('/productStatus', (req, res) => {
+app.get('/orderStatus', (req, res) => {
     const loggedInUserId = req.session.users_id;
     const sql = `
         SELECT 
@@ -408,6 +407,25 @@ app.get('/productStatus', (req, res) => {
         } else {
             res.json(results);  // Send the results back as JSON
         }
+    });
+});
+app.put('/updateOrderStatus/:orderId', (req, res) => {
+    const { orderId } = req.params;
+    const { order_status } = req.body;
+
+    const sql = `UPDATE orders SET order_status = ? WHERE order_id = ?`;
+
+    con.query(sql, [order_status, orderId], (error, results) => {
+        if (error) {
+            console.error('Error updating order status:', error);
+            return res.status(500).json({ success: false, message: 'Database error' });
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+
+        res.json({ success: true, message: 'Order status updated successfully' });
     });
 });
 
@@ -546,6 +564,7 @@ app.get('/trackingnum', (req, res) => {
         SELECT 
             orders.order_id, 
             orders.order_tracknum AS tracking_number, 
+            orders.order_shipname, 
             products.product_name, 
             products.product_img,        
             users.first_name, 

@@ -6,6 +6,7 @@
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <meta charset="UTF-8">
@@ -38,7 +39,7 @@
                 </a>
             </div>
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px; ">
             <button onclick="location.replace('/login');" id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
             height: 46px; color: white;">
                 Log out
@@ -64,16 +65,8 @@
         </div>
 </body>
 <script>
-    function changeStatus(sta) {
-        const status = {
-            0: '<span style="color: orange;">กำลังเตรียมสินค้า</span>',
-            1: '<div class="col center"> <span style="color: #FFC226;">กำลังจัดส่งสินค้า</span> <button id="btnaccept" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black; ">ยืนยัน</button> <button button id="btncancel" style=" font-size: 18px; font - weight: bold; background: #B72323; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: white; "> ยกเลิก </button> </div>',
-            2: '<span style="color: red;">ถูกยกเลิก</span>',
-            3: '<div class="col center"><span style="color:green;">การจัดส่งสำเร็จ</span> <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า</button> </div>',
-            4: '<span style="color: grey;">การจัดส่งไม่สำเร็จ</span>',
-        };
-        return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';  // Default message for unknown status
-    }
+
+
 
     function formatDateTime(dateTimeStr) {
         if (!dateTimeStr) return '';
@@ -84,15 +77,49 @@
         return `${hours}:${minutes}`;
     }
 
-    fetch('/productStatus')
+    fetch('/orderStatus')
         .then(response => response.json())
         .then(data => {
             const productContainer = document.getElementById('product-container');
             data.forEach(item => {
                 let trackingHTML = '';
+                function changeStatus(sta) {
+                    const status = {
+                        0: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: skyblue">กำลังเตรียมสินค้า</span>',
+                        1: `<div class="col center">
+                                <span style="background:white; padding:0px 10px 0px 10px; border-radius: 50px; color: #FFC226; margin-bottom:10px;">กำลังจัดส่งสินค้า</span>
+                                <button id="btnaccept" data-order-id="${item.order_id}" style="margin-bottom: 10px; color:white; font-size: 18px; font-weight: bold; background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">
+                                 ยืนยัน
+                                </button>
+                                <button id="btncancel" data-order-id="${item.order_id}" style="font-size: 18px; font-weight: bold; background: #B72323; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: white;">
+                                 ยกเลิก
+                                </button>
+                            </div>`,
+
+                        2: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: red;">ถูกยกเลิก</span>',
+                        3: `<div class="col center">
+                             <span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color:green;  margin-bottom:10px; ">การจัดส่งสำเร็จ</span> 
+                                <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า
+                                </button>
+                            </div>`,
+                        4: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">การจัดส่งไม่สำเร็จ</span>',
+                    };
+                    return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';  // Default message for unknown status
+                }
 
                 // Only show tracking number and shipping provider for statuses 1 to 4
-                if (item.order_status >= 1 && item.order_status <= 4) {
+                if (item.order_status == 1 || item.order_status == 3) {
+                    trackingHTML = `
+                    <span style="font-weight: 700; font-size:18px">เลขพัสดุ: 
+                        <span style="font-weight: 300;">${item.order_tracknum}</span>
+                    </span>
+                    <span style="font-weight: 700; font-size:18px">จัดส่งโดย: 
+                        <span style="font-weight: 300;">${item.order_shipname}</span>
+                    </span>
+                     <span style="color:grey; font-size:12px;">หากไม่ได้กดยืนยันรับสินค้าภายใน 14 วัน จะถือว่าจัดส่งสำเร็จแล้ว</span>
+                `;
+                }
+                else if (item.order_status == 2 || item.order_status == 4) {
                     trackingHTML = `
                     <span style="font-weight: 700; font-size:18px">เลขพัสดุ: 
                         <span style="font-weight: 300;">${item.order_tracknum}</span>
@@ -102,35 +129,76 @@
                     </span>
                 `;
                 }
-                if (item.order_status = 1) {
-                    trackingHTML += `
-                    <span style="color:grey; font-size:12px;">หากไม่ได้กดยืนยันรับสินค้าภายใน 14 วัน จะถือว่าจัดส่งสำเร็จแล้ว</span>
-                `;
-                }
 
                 const productHTML = `
-                <div class="row">
-                    <img src="public/img/${item.product_img}" alt="${item.product_name}"
-                        style="border-radius: 15px; margin-left: 25px; max-width: 150px; height: 150px;">
-                    <div class="col" style="margin-left: 50PX;">
-                        <span style="font-size: 20px;">ชื่อร้าน: ${item.first_name} ${item.last_name}</span>
-                        <span>ชื่อสินค้า: ${item.product_name}</span>
-                        <span>ราคา: ${item.product_price} บาท</span>
-                        <span>คิวที่: ${item.queue_num} เวลา: ${formatDateTime(item.queue_time)}</span>
-                        ${trackingHTML} <!-- Tracking number and shipping provider will show here only if status is 1-4 -->
-                    </div>
-                    <div class="col center" style="margin-left: 700px;">
-                        <span style="font-size: 30px; font-weight: bold; font-size: 20px;">
-                            ${changeStatus(item.order_status)}
-                        </span>
-                    </div>
-                </div>
-                <hr style =" margin-top:30px;">
-            `;
+                            <div class="row">
+                                <img src="public/img/${item.product_img}" alt="${item.product_name}" style="border-radius: 15px; margin-left: 25px; max-width: 150px; height: 150px;">
+                                <div class="col" style="margin-left: 50PX;">
+                                    <span style="font-size: 20px;">ชื่อร้าน: ${item.first_name} ${item.last_name}</span>
+                                    <span>ชื่อสินค้า: ${item.product_name}</span>
+                                    <span>ราคา: ${item.product_price} บาท</span>
+                                    <span>คิวที่: ${item.queue_num} เวลา: ${formatDateTime(item.queue_time)}</span>
+                                    ${trackingHTML}
+                                </div>
+                                <div class="col center" style="margin-left: 700px;">
+                                    <span style="font-size: 30px; font-weight: bold; font-size: 20px;">
+                                        ${changeStatus(item.order_status)}
+                                    </span>
+                                </div>
+                            </div>
+                            <hr>`;
+
                 productContainer.insertAdjacentHTML('beforeend', productHTML);
+                const orderDiv = productContainer.lastChild; // Get the last added product div
+                const btnAccept = orderDiv.querySelector('#btnaccept');
+                const btnCancel = orderDiv.querySelector('#btncancel');
+
+                if (btnAccept) {
+                    btnAccept.addEventListener('click', () => {
+                        updateOrderStatus(item.order_id, 3); // Update status to 3
+                    });
+                }
+
+                if (btnCancel) {
+                    btnCancel.addEventListener('click', () => {
+                        updateOrderStatus(item.order_id, 2); // Update status to 2
+                    });
+                }
             });
         })
         .catch(error => console.error('Error fetching product status:', error));
+    document.addEventListener('click', function (event) {
+        const btnAccept = event.target.closest('#btnaccept');
+        const btnCancel = event.target.closest('#btncancel');
+
+        if (btnAccept || btnCancel) {
+            const orderId = btnAccept ? btnAccept.dataset.orderId : btnCancel.dataset.orderId;
+            const statusUpdate = btnAccept ? 3 : 2;
+
+            updateOrderStatus(orderId, statusUpdate);
+        }
+    });
+    function updateOrderStatus(orderId, status) {
+        console.log('Updating order:', orderId, 'to status:', status);  // Debug
+        fetch(`/updateOrderStatus/${orderId}`, {  // Use PUT request
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                order_status: status
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error updating order status:', error);
+            });
+    }
 
 </script>
 
@@ -151,10 +219,5 @@
         flex-direction: column;
     }
 </style>
-<script>
-
-
-
-</script>
 
 </html>
