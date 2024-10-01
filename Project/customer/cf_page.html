@@ -90,6 +90,7 @@
 
             const product = await productResponse.json();
             const queue = await queueResponse.json();
+            let sizeHTML = product.product_size ? `<span class="name-p">Size : <span class="name-p2">${product.product_size}</span></span>` : '';
 
             let queueHTML = queue.length > 0 ? queue.map((q, index) => `
             <div class="row" style="display: flex; align-items: center; justify-content: space-between; width: 1000px;">
@@ -123,11 +124,11 @@
             <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 20px; display: flex; justify-content: center;">
                 <div>
                     <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #BDE3A7; border-radius: 20px; margin-top: 120px; flex-direction: row;">
-                        <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px;">
+                        <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px; max-height: 500px; max-width: 500px; width: auto; height: auto; object-fit: contain;">
                         <div class="container col" style="margin-left: 45px; height: auto; width: 0px;">
                             <span class="name-p">Name : <span class="name-p2">${product.product_name}</span></span>
                             <span class="name-p">Price : <span class="name-p2">${product.product_price}</span></span>
-                            <span class="name-p">Size : <span class="name-p2">${product.product_size}</span></span>
+                            ${sizeHTML}
                             <span class="name-p">Description :<div class="name-p2">${product.product_detail}</div></span>
                             <button id="cfButton" class="center" style="width: 276px; height: 66px;background: #F3F3E3; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
                                 CF
@@ -265,9 +266,6 @@
 
     getLoggedInUserId();
 
-    // document.getElementById("btnlogout").onclick = function () {
-    //     location.replace('/login');
-    // };
 </script>
 
 

@@ -233,8 +233,9 @@
                                 </div>
 
                                 <div id="clothSizeSelect" class="select-container" style="display: none;">
-                                    <select name="product_shirtsize"
+                                    <select name="product_clothsize"
                                         style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;">
+                                        <option option value="" disabled selected>Select Cloth size</option>
                                         <option value="Freesize">Free size</option>
                                         <option value="XS">XS</option>
                                         <option value="S">S</option>
@@ -247,6 +248,7 @@
                                 <div id="shoesSizeSelect" class="select-container" style="display: none;">
                                     <select name="product_shoesize"
                                         style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;">
+                                        <option option value="" disabled selected>Select Shoes size</option>
                                         <option value="36">36</option>
                                         <option value="37">37</option>
                                         <option value="38">38</option>
@@ -287,22 +289,29 @@
             const sizeRadios = document.querySelectorAll('input[name="product_type"]');
             const clothSizeSelect = document.getElementById('clothSizeSelect');
             const shoesSizeSelect = document.getElementById('shoesSizeSelect');
+            const clothSizeField = document.querySelector('select[name="product_clothsize"]');
+            const shoesSizeField = document.querySelector('select[name="product_shoesize"]');
 
             sizeRadios.forEach(option => {
                 option.addEventListener('change', function () {
-                    if (this.value === 'cloth') {
+                    if (this.value === 'cloth') {  // Cloth
                         clothSizeSelect.style.display = 'block';
                         shoesSizeSelect.style.display = 'none';
-                    } else if (this.value === 'shoes') {
+                        shoesSizeField.value = '';  // Clear shoes size field
+                    } else if (this.value === 'shoes') {  // Shoes
                         clothSizeSelect.style.display = 'none';
                         shoesSizeSelect.style.display = 'block';
-                    } else {
+                        clothSizeField.value = '';  // Clear cloth size field
+                    } else {  // Appliance
                         clothSizeSelect.style.display = 'none';
                         shoesSizeSelect.style.display = 'none';
+                        clothSizeField.value = '';  // Clear cloth size field
+                        shoesSizeField.value = '';  // Clear shoes size field
                     }
                 });
             });
         });
+
 
         function changeIcon(cata) {
             const icons = {
@@ -384,7 +393,7 @@
                     <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
                         <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                             <div style="display: flex; align-items: center;">
-                                <button style="background-color: transparent; border: none;"><img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                                <button style="background-color: transparent; border: none;"><img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px; ">
                                 </button>
                                     <div class="row">
                                     <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
@@ -405,7 +414,7 @@
                         <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
                             <div class="center">
                                <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
-                                <img src="/public/img/${product.product_img}" alt="Product Image" style="height: 240px; width: 250px;">
+                                <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; width: auto; height: auto; object-fit: contain;">
                                 </button>
 
                             </div>

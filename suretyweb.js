@@ -201,10 +201,15 @@ app.get('/cfpage', function (_req, res) {
 })
 app.get('/cfproduct/:productId', (req, res) => {
     const { productId } = req.params;
-    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img 
-                 FROM products 
-                 JOIN users ON products.seller_id = users.users_id 
-                 WHERE products.product_id = ?`;
+    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img,
+    CASE
+        WHEN products.product_type = 'cloth' THEN products.product_clothsize
+        WHEN products.product_type = 'shoes' THEN products.product_shoesize
+        ELSE NULL
+    END as product_size
+FROM products
+JOIN users ON products.seller_id = users.users_id
+WHERE products.product_id =?`;
 
     con.query(sql, [productId], (error, results) => {
         if (error) {
@@ -432,7 +437,6 @@ app.put('/updateOrderStatus/:orderId', (req, res) => {
 //================== seller =====================
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;
-    console.log('Seller ID:', sellerId);  // Debug: Check if sellerId is being set
 
     if (!sellerId) {
         return res.status(401).json({ error: 'Not logged in or session expired' });
@@ -478,9 +482,7 @@ app.get('/getSellerData', (req, res) => {
 });
 
 app.get('/sellerproduct', (req, res) => {
-    const sellerId = req.session.users_id; // Ensure users_id is set correctly in session
-
-    console.log('Seller ID:', sellerId);  // Debug: Check if sellerId is being set
+    const sellerId = req.session.users_id; 
 
     if (!sellerId) {
         return res.status(401).json({ error: 'Not logged in or session expired' });
@@ -512,48 +514,37 @@ app.get('/sellerproduct', (req, res) => {
 app.get('/addpost', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/add_post.html'));
 });
+
 app.post('/addproduct', ProdectUpload, async (req, res) => {
     const sellerId = req.session.users_id || req.body.users_id; // Get users_id from session or request body
 
-    const sqlCheck = 'SELECT product_id FROM products WHERE product_id = ?';
-    const checkParams = [req.body.product_id];  // Correctly checking by product_id
+    const sqlInsert = 'INSERT INTO products (product_name, product_caption, product_img, product_price, product_cate, product_type, product_detail, product_clothsize, product_shoesize, product_time, product_time_duration, product_status, seller_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
-    con.query(sqlCheck, checkParams, async (err, result) => {
+    const insertParams = [
+        req.body.product_name,
+        req.body.product_caption,
+        req.file ? req.file.filename : null, // Handle file upload
+        req.body.product_price,
+        req.body.product_cate,
+        req.body.product_type,
+        req.body.product_detail,
+        req.body.product_clothsize || null,
+        req.body.product_shoesize || null,
+        req.body.product_time,
+        req.body.product_time_duration,
+        1,
+        sellerId  // Use the users_id from session as seller_id
+    ];
+
+    con.query(sqlInsert, insertParams, (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send("DB error");
         }
-        if (result.length > 0) {
-            return res.status(401).send("Product ID already exists");
-        }
-
-        // Insert new product
-        const sqlInsert = 'INSERT INTO products (product_name, product_caption, product_img, product_price, product_cate, product_type, product_detail, product_shirtsize, product_shoesize, product_time, product_time_duration, product_status, seller_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const insertParams = [
-            req.body.product_name,
-            req.body.product_caption,
-            req.file ? req.file.filename : null, // Handle file upload
-            req.body.product_price,
-            req.body.product_cate,
-            req.body.product_type,
-            req.body.product_detail,
-            req.body.product_shirtsize,
-            req.body.product_shoesize,
-            req.body.product_time,
-            req.body.product_time_duration,
-            1,
-            sellerId  // Use the users_id from session as seller_id
-        ];
-
-        con.query(sqlInsert, insertParams, (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).send("DB error");
-            }
-            res.redirect('/sellerhomepage');
-        });
+        res.redirect('/sellerhomepage');
     });
 });
+
 
 app.get('/add-trackingnum', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/add_tracking.html'));

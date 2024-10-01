@@ -3,9 +3,7 @@
 
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
   <script src="/public/js/bootstrap.bundle.min.js"></script>
   <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
@@ -57,7 +55,10 @@
     const pass = document.querySelector('#password').value;
 
     if (email === '' || pass === '') {
-      alert('Please fill out all required fields.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Please fill out all required fields',
+      });
       return;
     }
 
@@ -74,10 +75,14 @@
 
       if (res.ok) {
         const data = await res.text();
-        location.replace(data); // Redirect to the page you want
+        location.replace(data);
       } else if (res.status === 400) {
         const error = await res.text();
-        throw Error(error); // Show error message from server
+        Swal.fire({
+          icon: 'error',
+          title: error,
+        });
+
       }
     } catch (err) {
       alert(err.message);
