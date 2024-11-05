@@ -116,6 +116,18 @@
         };
         return icons[cata] || null;
     }
+    function formatDateTime(dateTimeStr) {
+        if (!dateTimeStr) return '';
+
+        const date = new Date(dateTimeStr);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${hours}:${minutes}<br>${day}/${month}/${year}`;
+    }
     function formatTime(timeStr) {
         const [hours, minutes] = timeStr.split(':');
         return `${hours}:${minutes}`;
@@ -143,52 +155,94 @@
         }
 
         // Function to display products
+        // Function to display products and then check time for each
         function displayProducts(products) {
             let texts = '';
             products.forEach(function (product) {
                 texts += `
-                    <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
-                        <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
-                            <div style="display: flex; align-items: center;">
-                                <button style="background-color: transparent; border: none;">
-                                    <img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
-                                </button>
-                                <div class="row">
-                                    <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
-                                    <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
-                                    <div class="row" style="padding: 15px;">
-                                        <div class="category-sh">
-                                            <span class="${changeIcon(product.product_cate)}"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="width: 100%; display: flex; justify-content: end;">
-                                    <div style="width: 150px; height: 40px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
-                                        <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatTime(product.product_time)}</span>
-                                    </div>
+            <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
+                <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
+                    <div style="display: flex; align-items: center;">
+                        <button style="background-color: transparent; border: none;">
+                            <img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                        </button>
+                        <div class="row">
+                            <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
+                            <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
+                            <div class="row" style="padding: 15px;">
+                                <div class="category-sh">
+                                    <span class="${changeIcon(product.product_cate)}"></span>
                                 </div>
                             </div>
                         </div>
-                        <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
-                            <div class="center">
-                                <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
-                                    <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; width: auto; height: auto; object-fit: contain;">
-                                </button>
-                            </div>
-                            <div class="row" style="justify-content: end;">
-                                <button style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
-                                    <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
-                                </button>
-                            </div>
-                            <div class='col'>
-                                <span style="width: 300px; font-size: 20px; font-weight: 700; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
-                                <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
+                        <div style="width: 100%; display: flex; justify-content: end;">
+                            <div id="productTimeDisplay_${product.product_id}" style="width: 150px; height: 80px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
+                                <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
                             </div>
                         </div>
-                    </div>`;
+                    </div>
+                </div>
+                <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
+                    <div class="center">
+                        <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
+                            <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; width: auto; height: auto; object-fit: contain;">
+                        </button>
+                    </div>
+                    <div class="row" style="justify-content: end;">
+                        <button style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
+                            <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
+                        </button>
+                    </div>
+                    <div class='col'>
+                        <span style="width: 300px; font-size: 20px; font-weight: 700; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
+                        <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
+                    </div>
+                </div>
+            </div>`;
             });
             showProduct.innerHTML = texts;
+            checkAndUpdateProductTimes(products);  // Ensure color update runs after rendering products
         }
+
+        // Function to check and update background color based on `product_time`
+        function checkAndUpdateProductTimes(products) {
+            products.forEach(product => {
+                const productTimeDiv = document.getElementById(`productTimeDisplay_${product.product_id}`);
+                const productTime = new Date(product.product_time);
+
+                const updateBackgroundColor = () => {
+                    const currentTime = new Date();
+                    if (currentTime >= productTime) {
+                        productTimeDiv.style.backgroundColor = '#BDE3A7'; // Turn green when time has passed
+                    } else {
+                        productTimeDiv.style.backgroundColor = '#ffa4a4'; // Remain red if time hasn't passed
+                    }
+                };
+
+                // Initial background check and set interval
+                updateBackgroundColor();
+                requestAnimationFrame(() => setInterval(updateBackgroundColor, 60000)); // Check every minute
+            });
+        }
+
+        // Fetch and display products on page load
+        async function getProduct() {
+            try {
+                const response = await fetch('/product');
+                if (response.ok) {
+                    const products = await response.json();
+                    productsData = products;
+                    displayProducts(productsData); // Display products and initiate background checks
+                } else {
+                    console.error('Failed to fetch data:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', getProduct);
+
 
         // Filter products by category with toggle functionality
         categoryButtons.forEach((button, index) => {
@@ -233,6 +287,45 @@
             .catch(error => {
                 console.error('Fetch error:', error);
             });
+    }
+    // Function to check and update background color based on `product_time`
+    function checkAndUpdateProductTimes(products) {
+        products.forEach(product => {
+            const productTimeDiv = document.getElementById(`productTimeDisplay_${product.product_id}`);
+            const productTime = new Date(product.product_time);
+
+            const updateBackgroundColor = () => {
+                const currentTime = new Date();
+                if (currentTime >= productTime) {
+                    productTimeDiv.style.backgroundColor = '#BDE3A7'; // Turn green when time has passed
+                } else {
+                    productTimeDiv.style.backgroundColor = '#ffa4a4'; // Remain red if time hasn't passed
+                }
+            };
+
+            // Run the initial check and set interval to update every minute
+            updateBackgroundColor();
+            setInterval(updateBackgroundColor, 60000); // Check every minute
+        });
+    }
+
+    // Call this function with fetched product data
+    async function getProduct() {
+        try {
+            const response = await fetch('/product');
+            if (response.ok) {
+                const products = await response.json();
+                productsData = products;
+                displayProducts(productsData);
+
+                // Run time check and update for each product
+                checkAndUpdateProductTimes(productsData);
+            } else {
+                console.error('Failed to fetch data:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+        }
     }
 
 </script>

@@ -186,7 +186,7 @@ app.get('/homepage', function (_req, res) {
     res.sendFile(path.join(__dirname, 'Project/customer/homepage.html'));
 })
 app.get('/product', (req, res) => {
-    const sql = 'SELECT products.*, users.first_name,last_name,profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE product_status = 1;';
+    const sql = 'SELECT products.*, users.first_name,last_name,profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE product_status = 1 ORDER BY products.product_id DESC;';
     con.query(sql, (err, results) => {
         if (err) {
             res.status(500).json({ error: 'Database query failed' });
@@ -223,9 +223,15 @@ WHERE products.product_id =?`;
         res.json(results[0]); // Return product details as JSON
     });
 });
+
 app.get('/queue/:productId', (req, res) => {
     const { productId } = req.params;
-    const sql = 'SELECT queue.*, users.first_name, users.last_name FROM queue JOIN users ON queue.cus_id = users.users_id WHERE queue.product_id = ?';
+    const sql = `
+        SELECT queue.*, users.first_name, users.last_name, products.product_time_duration, 
+    DATE_ADD(queue.queue_time, INTERVAL TIME_TO_SEC(products.product_time_duration) SECOND) AS estimated_time FROM queue 
+JOIN users ON queue.cus_id = users.users_id 
+JOIN products ON queue.product_id = products.product_id 
+WHERE queue.product_id = ?;`;
 
     con.query(sql, [productId], (err, results) => {
         if (err) {
@@ -237,6 +243,7 @@ app.get('/queue/:productId', (req, res) => {
         res.json(results);
     });
 });
+
 
 app.get('/isUserInQueue/:product_id/:cus_id', (req, res) => {
     const { product_id, cus_id } = req.params;
@@ -284,7 +291,7 @@ app.post('/queue', (req, res) => {
 });
 
 
-
+//payment
 app.get('/payment', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/payment.html'));
 });
@@ -482,7 +489,7 @@ app.get('/getSellerData', (req, res) => {
 });
 
 app.get('/sellerproduct', (req, res) => {
-    const sellerId = req.session.users_id; 
+    const sellerId = req.session.users_id;
 
     if (!sellerId) {
         return res.status(401).json({ error: 'Not logged in or session expired' });
@@ -492,7 +499,7 @@ app.get('/sellerproduct', (req, res) => {
         SELECT products.*, users.first_name, users.last_name, users.profile_img 
         FROM products 
         JOIN users ON products.seller_id = users.users_id 
-        WHERE users.role = 2 AND users.users_id = ?;
+        WHERE users.role = 2 AND users.users_id = ? ORDER BY products.product_id DESC;
     `;
 
     con.query(sql, [sellerId], (err, results) => {
@@ -517,13 +524,17 @@ app.get('/addpost', (req, res) => {
 
 app.post('/addproduct', ProdectUpload, async (req, res) => {
     const sellerId = req.session.users_id || req.body.users_id; // Get users_id from session or request body
+    const durationInMinutes = parseInt(req.body.product_time_duration, 10);
+    const hours = Math.floor(durationInMinutes / 60);
+    const minutes = durationInMinutes % 60;
+    const timeDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:00`;
 
     const sqlInsert = 'INSERT INTO products (product_name, product_caption, product_img, product_price, product_cate, product_type, product_detail, product_clothsize, product_shoesize, product_time, product_time_duration, product_status, seller_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
     const insertParams = [
         req.body.product_name,
         req.body.product_caption,
-        req.file ? req.file.filename : null, // Handle file upload
+        req.file ? req.file.filename : null,
         req.body.product_price,
         req.body.product_cate,
         req.body.product_type,
@@ -531,9 +542,9 @@ app.post('/addproduct', ProdectUpload, async (req, res) => {
         req.body.product_clothsize || null,
         req.body.product_shoesize || null,
         req.body.product_time,
-        req.body.product_time_duration,
+        timeDuration,
         1,
-        sellerId  // Use the users_id from session as seller_id
+        sellerId
     ];
 
     con.query(sqlInsert, insertParams, (err, result) => {
