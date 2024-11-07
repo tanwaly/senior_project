@@ -75,31 +75,92 @@
                 ${q.first_name} ${q.last_name}
             </span>
             <div style="display: flex; justify-content: flex-end;">
-                <div class="time" style="font-size: 30px;">${formatDateTime(q.estimated_time, false)}</div>
+                <div class="time" style="font-size: 30px;">Pay Before: ${formatDateTime(q.estimated_time, false)}</div>
             </div>
         </div>
-        <hr style="border: 2px solid black; margin-top: 20px; width: calc(100% - 50px);">
+        <hr style="border: 2px solid black; margin-top: 20px; width: auto;">
     `).join('') : '<p style="font-size: 34px; font-weight: 600;">ยังไม่มีคิว</p>';
     }
 
-    function manageButtonState(cfButton, productTime) {
-        const currentTime = new Date();
-        if (currentTime < productTime) {
-            cfButton.disabled = true;
-            cfButton.style.backgroundColor = '#cccccc';
+    async function checkIfInQueue(productId) {
+        const loggedInUserId = localStorage.getItem('cus_id');
+        const cfButton = document.getElementById('cfButton');
+        const paymentSection = document.getElementById('paymentSection');
 
-            const interval = setInterval(() => {
-                if (new Date() >= productTime) {
-                    cfButton.disabled = false;
-                    cfButton.style.backgroundColor = '';
-                    clearInterval(interval);
-                }
-            }, 60000);
-        } else {
-            cfButton.disabled = false;
-            cfButton.style.backgroundColor = '';
+        try {
+            const response = await fetch(`/isUserInQueue/${productId}/${loggedInUserId}`);
+            const data = await response.json();
+
+            if (data.inQueue) {
+                cfButton.disabled = true;
+                cfButton.style.backgroundColor = '#cccccc';
+                paymentSection.style.display = 'block';
+                paymentSection.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; font-size: 42px; margin-left: 20px;">
+                        คุณอยู่คิวที่ ${data.queue_num}
+                    </span>
+                    <button id="payButton" onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">
+                        ชำระเงิน
+                    </button>
+                </div>`;
+
+                const payButton = document.getElementById('payButton');
+                const estimatedTime = new Date(data.estimated_time);
+
+                manageButtonState(payButton, estimatedTime);
+            }
+        } catch (error) {
+            console.error('Error checking if user is in queue:', error);
         }
     }
+
+
+
+
+    async function updateQueue(productId) {
+        try {
+            const queueResponse = await fetch(`/queue/${productId}`);
+            const queue = await queueResponse.json();
+            document.getElementById('queueSection').innerHTML = generateQueueHTML(queue);
+        } catch (error) {
+            console.error('Error updating queue:', error);
+        }
+    }
+
+    async function getLoggedInUserId() {
+        try {
+            const response = await fetch('/getUserId');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.cus_id) {
+                    localStorage.setItem('cus_id', data.cus_id);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching user ID:', error);
+        }
+    }
+    getLoggedInUserId();
+
+    function manageButtonState(button, deadlineTime) {
+            const currentTime = new Date();
+
+            if (currentTime >= deadlineTime) {
+                button.disabled = true;
+                button.style.backgroundColor = '#cccccc';
+                button.onclick = (e) => e.preventDefault();
+                // clearInterval(interval);
+            } else {
+                button.disabled = false;
+                button.style.backgroundColor = '';
+                button.onclick = null;
+            }
+        }
+  
+
+
+
 
     const CFproduct = document.getElementById('CFproduct');
     const urlParams = new URLSearchParams(window.location.search);
@@ -139,7 +200,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 20px; display: flex; justify-content: center;">
+                    <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 8px; display: flex; justify-content: center;">
                         <div>
                             <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #BDE3A7; border-radius: 20px; margin-top: 120px; flex-direction: row;">
                                 <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px; max-height: 500px; max-width: 500px; width: auto; height: auto; object-fit: contain;">
@@ -157,10 +218,10 @@
                                 <span style="font-weight: 700; font-size: 42px;">Queue</span>
                                 <div id="queueSection">${queueHTML}</div>
                             </div>
-                            <div id="paymentSection" style="display: none; background: #F3F3E3; width: 1115px ; height: 80px; margin-top: 10px;">
+                            <div id="paymentSection" style="display: none; background: #F3F3E3; width: 1115px ; height: 100px; margin-top: 10px;">
                                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <span style="font-weight: 700; font-size: 42px; margin-left: 20px;">Payment</span>
-                                    <button onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #CCCCCC; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">ชำระเงิน</button>
+                                    <span style="font-weight: 700; font-size: 38px; margin-left: 20px;">คุณอยู่คิวที่ ${queue.queue_num}</span>
+                                    <button onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">ชำระเงิน</button>
                                 </div>
                             </div>
                         </div>
@@ -182,11 +243,25 @@
                     const response = await fetch('/queue', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(queueData) });
 
                     if (response.ok) {
+                        const result = await response.json();  
+                        const queueNumber = result.queue_num;
+
                         cfButton.disabled = true;
                         cfButton.innerText = 'CF';
                         cfButton.style.backgroundColor = '#cccccc';
                         await updateQueue(productId);
+
+                        const paymentSection = document.getElementById('paymentSection');
                         paymentSection.style.display = 'block';
+                        paymentSection.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-weight: 700; font-size: 42px; margin-left: 20px;">
+                        คุณอยู่คิวที่ ${queueNumber}
+                    </span>
+                    <button onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">
+                        ชำระเงิน
+                    </button>
+                </div>`;
                     }
                 } catch (error) {
                     console.error('Error posting queue data:', error);
@@ -197,50 +272,6 @@
         }
     }
 
-    async function checkIfInQueue(productId) {
-        const loggedInUserId = localStorage.getItem('cus_id');
-        const cfButton = document.getElementById('cfButton');
-        const paymentSection = document.getElementById('paymentSection');
-
-        try {
-            const response = await fetch(`/isUserInQueue/${productId}/${loggedInUserId}`);
-            const data = await response.json();
-
-            if (data.inQueue) {
-                cfButton.disabled = true;
-                cfButton.innerText = 'CF';
-                cfButton.style.backgroundColor = '#cccccc';
-                paymentSection.style.display = 'block';
-            }
-        } catch (error) {
-            console.error('Error checking queue status:', error);
-        }
-    }
-
-    async function updateQueue(productId) {
-        try {
-            const queueResponse = await fetch(`/queue/${productId}`);
-            const queue = await queueResponse.json();
-            document.getElementById('queueSection').innerHTML = generateQueueHTML(queue);
-        } catch (error) {
-            console.error('Error updating queue:', error);
-        }
-    }
-
-    async function getLoggedInUserId() {
-        try {
-            const response = await fetch('/getUserId');
-            if (response.ok) {
-                const data = await response.json();
-                if (data.cus_id) {
-                    localStorage.setItem('cus_id', data.cus_id);
-                }
-            }
-        } catch (error) {
-            console.error('Error fetching user ID:', error);
-        }
-    }
-    getLoggedInUserId();
 </script>
 
 <style>
@@ -274,13 +305,20 @@
     }
 
     .time {
-        width: 100px;
+        width: auto;
         height: 50px;
-        background: lightgray;
+        padding: 10px;
+        background: rgb(227, 227, 227);
         border-radius: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    button:disabled {
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.5;
     }
 </style>
 

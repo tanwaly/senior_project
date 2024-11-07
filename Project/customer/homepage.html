@@ -136,16 +136,16 @@
         const showProduct = document.getElementById('showProduct');
         const searchBox = document.querySelector('.search-box input');
         const categoryButtons = document.querySelectorAll('.category-btn');
-        let productsData = []; // Store fetched products for filtering
-        let activeCategory = null; // Track the active category
+        let productsData = [];
+        let activeCategory = null;
 
         async function getProduct() {
             try {
                 const response = await fetch('/product');
                 if (response.ok) {
                     const data = await response.json();
-                    productsData = data; // Save fetched data for filtering
-                    displayProducts(productsData); // Display all products initially
+                    productsData = data;
+                    displayProducts(productsData);
                 } else {
                     console.error('Failed to fetch data:', response.status, response.statusText);
                 }
@@ -153,9 +153,7 @@
                 console.error('Fetch error:', error);
             }
         }
-
-        // Function to display products
-        // Function to display products and then check time for each
+        // display products
         function displayProducts(products) {
             let texts = '';
             products.forEach(function (product) {
@@ -193,15 +191,16 @@
                             <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
                         </button>
                     </div>
-                    <div class='col'>
-                        <span style="width: 300px; font-size: 20px; font-weight: 700; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
+                    <div class="col">
+                        <span style="width: 300px; font-size: 26px; font-weight: 600; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
+                         <span style="font-size: 18px; font-weight: 500; margin-left: 20px; color:#4b2f7b;">฿<span style =" font-size: 28px; font-weight: 800;">${product.product_price}</span></span>
                         <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
-                    </div>
+                </div>
                 </div>
             </div>`;
             });
             showProduct.innerHTML = texts;
-            checkAndUpdateProductTimes(products);  // Ensure color update runs after rendering products
+            checkAndUpdateProductTimes(products);
         }
 
         // Function to check and update background color based on `product_time`
@@ -213,45 +212,25 @@
                 const updateBackgroundColor = () => {
                     const currentTime = new Date();
                     if (currentTime >= productTime) {
-                        productTimeDiv.style.backgroundColor = '#BDE3A7'; // Turn green when time has passed
+                        productTimeDiv.style.backgroundColor = '#BDE3A7';
                     } else {
-                        productTimeDiv.style.backgroundColor = '#ffa4a4'; // Remain red if time hasn't passed
+                        productTimeDiv.style.backgroundColor = '#ffa4a4';
                     }
                 };
 
-                // Initial background check and set interval
                 updateBackgroundColor();
-                requestAnimationFrame(() => setInterval(updateBackgroundColor, 60000)); // Check every minute
+                requestAnimationFrame(() => setInterval(updateBackgroundColor, 60000));
             });
-        }
-
-        // Fetch and display products on page load
-        async function getProduct() {
-            try {
-                const response = await fetch('/product');
-                if (response.ok) {
-                    const products = await response.json();
-                    productsData = products;
-                    displayProducts(productsData); // Display products and initiate background checks
-                } else {
-                    console.error('Failed to fetch data:', response.status, response.statusText);
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
-            }
         }
 
         document.addEventListener('DOMContentLoaded', getProduct);
 
-
-        // Filter products by category with toggle functionality
         categoryButtons.forEach((button, index) => {
             button.addEventListener('click', () => {
                 const selectedCategory = index + 1;
 
-                // If the same category button is clicked, reset the filter
                 if (activeCategory === selectedCategory) {
-                    activeCategory = null; // Reset active category
+                    activeCategory = null;
                     displayProducts(productsData); // Show all products
                 } else {
                     // Set the new active category and filter
@@ -272,7 +251,7 @@
             displayProducts(filteredProducts);
         });
 
-        getProduct(); // Fetch products on page load
+        getProduct();
     });
 
     // Function to handle product click and redirect
@@ -287,45 +266,6 @@
             .catch(error => {
                 console.error('Fetch error:', error);
             });
-    }
-    // Function to check and update background color based on `product_time`
-    function checkAndUpdateProductTimes(products) {
-        products.forEach(product => {
-            const productTimeDiv = document.getElementById(`productTimeDisplay_${product.product_id}`);
-            const productTime = new Date(product.product_time);
-
-            const updateBackgroundColor = () => {
-                const currentTime = new Date();
-                if (currentTime >= productTime) {
-                    productTimeDiv.style.backgroundColor = '#BDE3A7'; // Turn green when time has passed
-                } else {
-                    productTimeDiv.style.backgroundColor = '#ffa4a4'; // Remain red if time hasn't passed
-                }
-            };
-
-            // Run the initial check and set interval to update every minute
-            updateBackgroundColor();
-            setInterval(updateBackgroundColor, 60000); // Check every minute
-        });
-    }
-
-    // Call this function with fetched product data
-    async function getProduct() {
-        try {
-            const response = await fetch('/product');
-            if (response.ok) {
-                const products = await response.json();
-                productsData = products;
-                displayProducts(productsData);
-
-                // Run time check and update for each product
-                checkAndUpdateProductTimes(productsData);
-            } else {
-                console.error('Failed to fetch data:', response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error('Fetch error:', error);
-        }
     }
 
 </script>

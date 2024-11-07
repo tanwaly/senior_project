@@ -93,7 +93,7 @@
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;">
+            height: 46px; color: white;" onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
@@ -106,23 +106,8 @@
             <div class="flex" style="gap: 720px;">
                 <div class="column">
                     <div class="flex mt-4">
-                        <!-- Seller's name will be dynamically updated here -->
                         <span style="font-size: 40px; font-weight: bold;">Eiei</span>
-                        <!-- <span style="font-size: 30px; color: grey; margin-left: 40px; margin-top: 10px;">ID Line:
-                            eieishop55</span>
-                        <i class="bi bi-pencil-fill" style="font-size: 30px; margin-left: 10px; margin-top: 10px;"></i> -->
                     </div>
-                    <!-- <div class="flex">
-                        <i class="bi bi-star-fill" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                        <i class="bi bi-star-fill" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                        <i class="bi bi-star-fill" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                        <i class="bi bi-star-fill" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                        <i class="bi bi-star-fill" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                        <span
-                            style="font-size: 25px; font-weight: bold; margin-left: 15px; margin-top: 10px;">5/5</span>
-                        <button
-                            style="border: none; background-color: #e2e2e2; width: 100px; height: 25px; text-align: center; margin-left: 20px; margin-top: 15px; border-radius: 5px; ">ดูรีวิว</button>
-                    </div> -->
                 </div>
                 <div style="display: flex; flex-direction: column; margin-top: 15px;">
                     <button
@@ -284,182 +269,249 @@
         </div>
     </div>
 
-    <script>
-        function formatDateTime(dateTimeStr) {
-            if (!dateTimeStr) return '';
+    <!--Show product Modal -->
+    <div class="modal fade" id="shpModal" tabindex="-1" aria-labelledby="shpModalLabel" aria-hidden="true">
+        <div class="modal-dialog center">
+            <div class="modal-content" style="width: 1000px; min-height: 600px; background-color: #F3F3E3;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shpModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        style="background-color: transparent; border: transparent;"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div style="margin-top: 20px; font-size: 18px;" id="shsellerproduct">
+                            <div class="center">
+                                <img style="height: 250px;" src="/public/img/test.jpg">
+                            </div>
+                            <div style="margin-top: 30px;">
+                                <span>Name: <span>${product.product_name}</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            const date = new Date(dateTimeStr);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
+        <script>
+            function formatDateTime(dateTimeStr) {
+                if (!dateTimeStr) return '';
 
-            return `${hours}:${minutes}<br>${day}/${month}/${year}`;
-        }
-        document.addEventListener('DOMContentLoaded', function () {
-            const sizeRadios = document.querySelectorAll('input[name="product_type"]');
-            const clothSizeSelect = document.getElementById('clothSizeSelect');
-            const shoesSizeSelect = document.getElementById('shoesSizeSelect');
-            const clothSizeField = document.querySelector('select[name="product_clothsize"]');
-            const shoesSizeField = document.querySelector('select[name="product_shoesize"]');
+                const date = new Date(dateTimeStr);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
 
-            sizeRadios.forEach(option => {
-                option.addEventListener('change', function () {
-                    if (this.value === 'cloth') {  // Cloth
-                        clothSizeSelect.style.display = 'block';
-                        shoesSizeSelect.style.display = 'none';
-                        shoesSizeField.value = '';  // Clear shoes size field
-                    } else if (this.value === 'shoes') {  // Shoes
-                        clothSizeSelect.style.display = 'none';
-                        shoesSizeSelect.style.display = 'block';
-                        clothSizeField.value = '';  // Clear cloth size field
-                    } else {  // Appliance
-                        clothSizeSelect.style.display = 'none';
-                        shoesSizeSelect.style.display = 'none';
-                        clothSizeField.value = '';  // Clear cloth size field
-                        shoesSizeField.value = '';  // Clear shoes size field
-                    }
+                return `${hours}:${minutes}<br>${day}/${month}/${year}`;
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                const sizeRadios = document.querySelectorAll('input[name="product_type"]');
+                const clothSizeSelect = document.getElementById('clothSizeSelect');
+                const shoesSizeSelect = document.getElementById('shoesSizeSelect');
+                const clothSizeField = document.querySelector('select[name="product_clothsize"]');
+                const shoesSizeField = document.querySelector('select[name="product_shoesize"]');
+
+                sizeRadios.forEach(option => {
+                    option.addEventListener('change', function () {
+                        if (this.value === 'cloth') {  // Cloth
+                            clothSizeSelect.style.display = 'block';
+                            shoesSizeSelect.style.display = 'none';
+                            shoesSizeField.value = '';  // Clear shoes size field
+                        } else if (this.value === 'shoes') {  // Shoes
+                            clothSizeSelect.style.display = 'none';
+                            shoesSizeSelect.style.display = 'block';
+                            clothSizeField.value = '';  // Clear cloth size field
+                        } else {  // Appliance
+                            clothSizeSelect.style.display = 'none';
+                            shoesSizeSelect.style.display = 'none';
+                            clothSizeField.value = '';  // Clear cloth size field
+                            shoesSizeField.value = '';  // Clear shoes size field
+                        }
+                    });
                 });
             });
-        });
 
 
-        function changeIcon(cata) {
-            const icons = {
-                1: 'icon-shirt',
-                2: 'icon-coat',
-                3: 'icon-dress',
-                4: 'icon-pants',
-                5: 'icon-skirt',
-                6: 'icon-sock',
-                7: 'icon-shoe',
-                8: 'icon-hat',
-                9: 'icon-necklace',
-                10: 'icon-chair'
-            };
-            return icons[cata] || null;
-        }
-
-        // function formatTime(timeStr) {
-        //     const [hours, minutes] = timeStr.split(':');
-        //     return `${hours}:${minutes}`;
-        // }
-        //for post popup
-        document.getElementById('uploadButton').addEventListener('click', function () {
-            document.getElementById('addProductImage').click();
-        });
-
-        document.getElementById('addProductImage').addEventListener('change', function (event) {
-            const file = event.target.files[0];  // Get the selected file
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('previewImage').src = e.target.result;  // Set the image preview
+            function changeIcon(cata) {
+                const icons = {
+                    1: 'icon-shirt',
+                    2: 'icon-coat',
+                    3: 'icon-dress',
+                    4: 'icon-pants',
+                    5: 'icon-skirt',
+                    6: 'icon-sock',
+                    7: 'icon-shoe',
+                    8: 'icon-hat',
+                    9: 'icon-necklace',
+                    10: 'icon-chair'
                 };
-                reader.readAsDataURL(file);  // Read the file as a data URL for preview
+                return icons[cata] || null;
             }
-        });
 
-        // connecting info (first name and profile)
-        document.addEventListener('DOMContentLoaded', () => {
-            async function getUserData() {
-                try {
-                    const response = await fetch('/getSellerData'); // Use the correct endpoint
-                    const data = await response.json(); // Parse the JSON response
+            document.getElementById('uploadButton').addEventListener('click', function () {
+                document.getElementById('addProductImage').click();
+            });
 
-                    if (data.error) {
-                        console.error(data.error);
-                    } else {
-                        document.querySelector('span[style*="font-size: 40px;"]').textContent = data.first_name;
-                        document.querySelector('img.rounded-circle').src = `/public/img/${data.profile_img}`;
-                    }
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
+            document.getElementById('addProductImage').addEventListener('change', function (event) {
+                const file = event.target.files[0];  // Get the selected file
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('previewImage').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
                 }
-            }
+            });
 
-            getUserData();  // Fetch user data once page has loaded
-        });
+            document.addEventListener('DOMContentLoaded', () => {
+                async function getUserData() {
+                    try {
+                        const response = await fetch('/getSellerData'); // Use the correct endpoint
+                        const data = await response.json(); // Parse the JSON response
 
-
-        //product show
-        document.addEventListener('DOMContentLoaded', () => {
-            const showSellerProduct = document.getElementById('showSellerProduct');
-
-            async function getSellerProduct() {
-                try {
-                    const response = await fetch('/sellerproduct');
-                    if (!response.ok) {
-                        const product = await productResponse.json();
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        if (data.error) {
+                            console.error(data.error);
+                        } else {
+                            document.querySelector('span[style*="font-size: 40px;"]').textContent = data.first_name;
+                            document.querySelector('img.rounded-circle').src = `/public/img/${data.profile_img}`;
+                        }
+                    } catch (error) {
+                        console.error('Error fetching user data:', error);
                     }
-                    const data = await response.json();
-                    if (data.error) {
-                        console.error(data.error);
-                    } else {
-                        console.log('Fetched data:', data);
-                        let texts = ''; // Declare texts for the HTML content
-                        data.forEach(function (product) {
-                            texts += `
-                    <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
-                        <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
-                            <div style="display: flex; align-items: center;">
-                                <button style="background-color: transparent; border: none;"><img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px; ">
-                                </button>
-                                    <div class="row">
-                                    <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
-                                    <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
-                                    <div class="row" style="padding: 15px;">
-                                        <div class="category-sh">
-                                            <span class="${changeIcon(product.product_cate)}"></span>
+                }
+
+                getUserData();
+            });
+
+
+            //product show
+            document.addEventListener('DOMContentLoaded', () => {
+                const showSellerProduct = document.getElementById('showSellerProduct');
+
+                // Fetch seller products and display them
+                async function getSellerProduct() {
+                    try {
+                        const response = await fetch('/sellerproduct');
+                        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                        const data = await response.json();
+                        if (data.error) console.error(data.error);
+
+                        let html = '';
+                        data.forEach(product => {
+                            html += `
+                            <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
+                                <div style="min-height: 147px; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
+                                    <div style="display: flex; align-items: center;">
+                                        <button style="background-color: transparent; border: none;">
+                                            <img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                                        </button>
+                                        <div class="row">
+                                            <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name} ${product.last_name}</span>
+                                            <div class="category-sh">
+                                                <span class="${changeIcon(product.product_cate)}"></span>
+                                            </div>
+                                        </div>
+                                        <div style="width: 100%; display: flex; justify-content: end;">
+                                           
+                                            <div id="productTimeDisplay_${product.product_id}" style="width: 150px; height: 80px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
+                                                <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div style="width: 100%; display: flex; justify-content: end;">
-                                    <div style="width: 150px; height: 80px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
-                                        <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
+                                <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
+                                    <div class="center">
+                                        <button style="background-color: transparent; border: none;"  data-bs-toggle="modal" data-bs-target="#shpModal" onclick="cfproduct('${product.product_id}')">
+                                            <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; object-fit: contain;">
+                                        </button>
+                                    </div>
+                                    <div class="col">
+                                        <span style="font-size: 24px; font-weight: 700; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
+                                         <span style="font-size: 18px; font-weight: 500; margin-left: 20px; color:#4b2f7b;">฿<span style =" font-size: 28px; font-weight: 800;">${product.product_price}</span></span>
+                                        <span style="font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
-                            <div class="center">
-                               <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
-                                <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; width: auto; height: auto; object-fit: contain;">
-                                </button>
-
-                            </div>
-                            <div class="row" style="justify-content: end;">
-                                <button style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
-                                    <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
-                                </button>
-                            </div>
-                            <div class = 'col'>
-                            <span style="width: 300px; font-size: 20px; font-weight: 700; margin-left: 20px; word-wrap: break-word;">
-                                ${product.product_name}
-                            </span>
-                            <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">
-                                ${product.product_caption}
-                            </span>
-                        </div>
-                        </div>
-                    </div>`;
+                            </div>`;
                         });
-                        document.getElementById('showSellerProduct').innerHTML = texts;
+
+                        showSellerProduct.innerHTML = html;
+                        checkAndUpdateProductTimes(data);
+                    } catch (error) {
+                        console.error('Fetch error:', error);
                     }
-                } catch (error) {
-                    console.error('Fetch error:', error);
+                }
+
+                // Function to change background color of product time div based on product's time
+                function checkAndUpdateProductTimes(products) {
+                    products.forEach(product => {
+                        const productTimeDiv = document.getElementById(`productTimeDisplay_${product.product_id}`);
+                        const productTime = new Date(product.product_time);
+
+                        const updateBackgroundColor = () => {
+                            const currentTime = new Date();
+                            if (currentTime >= productTime) {
+                                productTimeDiv.style.backgroundColor = '#BDE3A7';
+                            } else {
+                                productTimeDiv.style.backgroundColor = '#ffa4a4';
+                            }
+                        };
+
+                        // Run initial check and then every minute
+                        updateBackgroundColor();
+                        setInterval(updateBackgroundColor, 60000);
+                    });
+                }
+
+                // Format date for display
+                function formatDateTime(dateTimeStr) {
+                    const date = new Date(dateTimeStr);
+                    return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}<br>${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+                }
+
+                // Function to get icon class based on category
+                function changeIcon(cata) {
+                    const icons = {
+                        1: 'icon-shirt', 2: 'icon-coat', 3: 'icon-dress', 4: 'icon-pants',
+                        5: 'icon-skirt', 6: 'icon-sock', 7: 'icon-shoe', 8: 'icon-hat',
+                        9: 'icon-necklace', 10: 'icon-chair'
+                    };
+                    return icons[cata] || null;
+                }
+
+                getSellerProduct();
+            });
+
+            function showUserDetails(userId) {
+                const user = allUsers.find(u => u.users_id === userId);
+                if (user) {
+                    currentUserId = user.users_id;
+                    updateButtonAppearance(user.user_status);
+
+                    document.getElementById('dataDetailTitle').innerText = `Details for ${user.first_name} ${user.last_name}`;
+                    const modalBody = document.querySelector('#shsellerproduct');
+
+                    const bankDetails = `
+                <div class="center">
+                    <img style="height: 250px;" src="/public/img/${product.profile_img}">
+                </div>
+                <p><span>Product category:${changeIcon(product.product_cate)}</span></p>
+                <p><span>Name:${product.product_name}</span></p>
+                <p><span>Size Type:${product.product_type}</span></p>
+                <p><span>Size:${product.product_clothsize}</span></p>
+                <p><span>Size:${product.product_shoesize}</span></p>
+                <p><span>Caption:${product.product_caption}</span></p>
+                <p><span>Caption:${product.detail}</span></p>
+                <p><span>เวลาที่เปิด:${formatDateTime(product.product_time)}</span></p>`;
                 }
             }
-            getSellerProduct();
-        });
 
-        document.getElementById("btnlogout").onclick = function () {
-            window.location.href = "http://localhost:3000/login";
-        };
 
-    </script>
+        </script>
 
 </body>
 

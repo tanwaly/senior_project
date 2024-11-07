@@ -248,21 +248,22 @@ WHERE queue.product_id = ?;`;
 app.get('/isUserInQueue/:product_id/:cus_id', (req, res) => {
     const { product_id, cus_id } = req.params;
 
-    const checkQueueQuery = `SELECT * FROM queue WHERE product_id = ? AND cus_id = ?`;
+    const checkQueueQuery = `SELECT queue_num FROM queue WHERE product_id = ? AND cus_id = ?`;
     con.query(checkQueueQuery, [product_id, cus_id], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
         }
 
         if (results.length > 0) {
-            // User is already in the queue
-            return res.json({ inQueue: true });
+            // User is in the queue, return their queue number
+            return res.json({ inQueue: true, queue_num: results[0].queue_num });
         } else {
             // User is not in the queue
             return res.json({ inQueue: false });
         }
     });
 });
+
 
 
 app.post('/queue', (req, res) => {
