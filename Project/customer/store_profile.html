@@ -63,12 +63,12 @@
     </div>
     <div>
         <div class="flex">
-            <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+            <img id="profileImg" src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
                 class="rounded-circle m-4" style="height: 120px;">
             <div class="column">
                 <div class="flex mt-4" style="gap: 740px;">
                     <div>
-                        <span style="font-size: 40px; font-weight: bold;">Eiei</span>
+                        <span id="sellerName" style="font-size: 40px; font-weight: bold;"></span>
                         <button
                             style="border: none; background-color: #BDE3A7; width: 150px; height: 50px; text-align: center; margin-left: 50px; border-radius: 30px; font-weight: bold; font-size: 20px;"
                             class="mt-3">รองเท้า</button>
@@ -103,10 +103,12 @@
                         <div class="modal fade" id="addPostModel" tabindex="-1" role="dialog"
                             aria-labelledby="addPostModelLabel" aria-hidden="true">
                             <div class="modal-dialog center" role="document">
-                                <div class="modal-content" style="width: 1000px ; min-height: 300px; height: auto; background-color: #A9B489; border-radius: 10px; text-align: center; ">
+                                <div class="modal-content"
+                                    style="width: 1000px ; min-height: 300px; height: auto; background-color: #A9B489; border-radius: 10px; text-align: center; ">
                                     ช่องทางการติดต่อ
-                                    <div class="d-flex align-items-center" style="background: #F3F3E3;  height: 120px; padding: 20px;">
-                                        
+                                    <div class="d-flex align-items-center"
+                                        style="background: #F3F3E3;  height: 120px; padding: 20px;">
+
                                     </div>
                                 </div>
                             </div>
@@ -142,9 +144,13 @@
             </div>
         </div>
     </div>
+    <!-- post ขาย หลัก -->
+    <div>
+        <!-- <h2>Products by this Seller</h2> -->
+        <div id="sellerProducts"></div>
+    </div>
 
-    <div class="flex" style="justify-content: center;">
-        <!-- post ขาย -->
+    <!-- <div class="flex" style="justify-content: center;">
         <div class="m-5">
             <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
                 <div class="flex">
@@ -166,12 +172,6 @@
 
                     <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
                         style="height: 240px; width: 250px;">
-                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
                 </div>
                 <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
             </div>
@@ -197,19 +197,12 @@
 
                     <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
                         style="height: 240px; width: 250px;">
-                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
                 </div>
                 <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
             </div>
         </div>
     </div>
     <div class="flex" style="justify-content: center;">
-        <!-- post ขาย -->
         <div class="m-5">
             <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
                 <div class="flex">
@@ -231,12 +224,6 @@
 
                     <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
                         style="height: 240px; width: 250px;">
-                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
                 </div>
 
                 <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
@@ -263,19 +250,12 @@
 
                     <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
                         style="height: 240px; width: 250px;">
-                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
                 </div>
                 <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
             </div>
         </div>
     </div>
     <div class="flex" style="justify-content: center;">
-        <!-- post ขาย -->
         <div class="m-5">
             <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
                 <div class="flex">
@@ -297,12 +277,6 @@
 
                     <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
                         style="height: 240px; width: 250px;">
-                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
                 </div>
                 <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
             </div>
@@ -328,24 +302,17 @@
 
                     <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
                         style="height: 240px; width: 250px;">
-                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
                 </div>
                 <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
             </div>
         </div>
-    </div>
-    </div>
-
-    </div>
+    </div> -->
 
 </body>
 
 <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const sellerId = window.location.pathname.split('/').pop(); // Get sellerId from the URL
     
     function openPopup() {
         document.getElementById('popupOverlay').style.display = 'flex';
@@ -356,6 +323,34 @@
         document.getElementById('popupOverlay').style.display = 'none';
     }
 
+        // Fetch seller's information
+        const response = await fetch(`/sellerInfo/${sellerId}`);
+        const sellerData = await response.json();
+
+        if (sellerData.error) {
+            console.error(sellerData.error);
+        } else {
+            document.getElementById('profileImg').src = `/public/img/${sellerData.profile_img}`;
+            document.getElementById('sellerName').textContent = `${sellerData.first_name} ${sellerData.last_name}`;
+            document.getElementById('storeDescription').textContent = sellerData.store_description;
+        }
+
+        // Fetch and display seller's products
+        const productsResponse = await fetch(`/sellerProducts/${sellerId}`);
+        const products = await productsResponse.json();
+
+        const productsContainer = document.getElementById('sellerProducts');
+        products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.innerHTML = `
+                    <h3>${product.product_name}</h3>
+                    <img src="/public/img/${product.product_img}" alt="${product.product_name}" style="width: 100px; height: 100px;">
+                    <p>${product.product_caption}</p>
+                    <p>Price: ${product.product_price} Baht</p>
+                `;
+            productsContainer.appendChild(productDiv);
+        });
+    });
 </script>
 
 </html>
