@@ -102,7 +102,8 @@
                 </div>
 
                 <button class="btn mt-3" type="submit"
-                    style="background-color: #8472AC; color: white; width: 500px; height: 50px; font-size: 18px; font-weight: bold; border-radius: 30px;">Register</button>
+                    style="background-color: #8472AC; color: white; width: 500px; height: 50px; 
+                    font-size: 18px; font-weight: bold; border-radius: 30px;">Register</button>
             </form>
             <hr style="width: 600px;">
             <p class="account" style="color: #AAAAAA; font-weight: bold;">Already have an account? <a href="/login"
@@ -204,7 +205,13 @@
 
             if (res.ok) {
                 const data = await res.text();
+                Swal.fire({
+                title: "Register success!",
+                text: "You have successfully registered!",
+                icon: "success"
+            }).then(() => {
                 location.replace('/login');
+            });
             } else if (res.status === 401) {
                 const message = await res.text();
                 alert(message);
