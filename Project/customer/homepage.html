@@ -30,7 +30,8 @@
                 <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/customerprofile"
+                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-person"></i> โปรไฟล์
                 </a>
                 <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; "
@@ -186,9 +187,12 @@
                 <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                     <div style="display: flex; align-items: center;">
                         <button style="background-color: transparent; border: none;">
-                            <img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                            <a href="/seller/${product.seller_id}">
+                                <img src="/public/img/${product.profile_img}" alt="Profile Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                            </a>
                         </button>
-                        <div class="row">
+            <div>
+        <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit;">
                             <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
                             <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
                             <div class="row" style="padding: 15px;">
@@ -196,7 +200,8 @@
                                     <span class="${changeIcon(product.product_cate)}"></span>
                                 </div>
                             </div>
-                        </div>
+        </a>
+    </div>
                         <div style="width: 100%; display: flex; justify-content: end;">
                             <div id="productTimeDisplay_${product.product_id}" style="width: 150px; height: 80px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
                                 <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
