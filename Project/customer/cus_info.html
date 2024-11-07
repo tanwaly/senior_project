@@ -11,7 +11,12 @@
     <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
     <style>
         .br {
+            display: flex;
             margin-bottom: 15px;
+        }
+
+        input::placeholder {
+            font-size: 25px;
         }
     </style>
 </head>
@@ -31,7 +36,8 @@
                 <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/customerprofile"
+                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-person"></i> โปรไฟล์
                 </a>
                 <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -50,31 +56,109 @@
     <h1 style="text-align: center; font-weight: bold; margin: 30px;">ประวัติส่วนตัว</h1>
     <div style="margin-left: 150px; font-size: 30px;">
         <div class="br">
-            <strong>ชื่อ: </strong>
-            <span>นายณเดช คูกิมิยะ</span>
+            <strong id="cusname">ชื่อ: </strong>
+            <span id="nameDisplay"></span>
+            <input type="text" id="nameInput" class="form-control"
+                style="width: 1200px; margin-left: 10px; display: none;">
         </div>
         <div class="br">
-            <strong>อายุ: </strong>
-            <span>32</span>
+            <strong id="custel">เบอร์โทร: </strong>
+            <span id="telDisplay"></span>
+            <input type="text" id="telInput" class="form-control"
+                style="width: 1122px; margin-left: 10px; display: none;">
         </div>
         <div class="br">
-            <strong>วัน/เดือน/ปีเกิด: </strong>
-            <span>17/12/1991</span>
-        </div>
-        <div class="br">
-            <strong>เบอร์โทร: </strong>
-            <span>012-3456789</span>
-        </div>
-        <div class="br">
-            <strong >Email: </strong>
-            <span>nadech@gmail.com</span>
+            <strong id="cusemail">Email: </strong>
+            <span id="emailDisplay"></span>
+            <input type="text" id="emailInput" class="form-control"
+                style="width: 1162px; margin-left: 10px; display: none;">
         </div>
     </div>
+
     <center>
-        <button
-            style="border: none; background-color: #FFE48C; width: 180px; height: 60px; border-radius: 15px; font-weight: bold; font-size: 25px; margin-top: 100px;">แก้ไข</button>
+        <button id="editButton"
+            style="border: none; background-color: #FFE48C; width: 180px; height: 60px; border-radius: 15px; font-weight: bold; font-size: 25px; margin-top: 100px;">
+            แก้ไข
+        </button>
+        <button id="saveButton"
+            style="border: none; background-color: #bde3a7; width: 180px; height: 60px; border-radius: 15px; font-weight: bold; font-size: 25px; margin-top: 100px; display: none;">
+            บันทึก
+        </button>
     </center>
 
 </body>
 
 </html>
+<script>
+    // Function to toggle to edit mode
+    document.getElementById('editButton').onclick = function () {
+        document.getElementById('editButton').style.display = 'none';
+        document.getElementById('saveButton').style.display = 'inline-block';
+
+        // Show input fields and hide display spans
+        document.getElementById('nameDisplay').style.display = 'none';
+        document.getElementById('nameInput').style.display = 'inline-block';
+        document.getElementById('nameInput').value = document.getElementById('nameDisplay').textContent;
+
+        document.getElementById('telDisplay').style.display = 'none';
+        document.getElementById('telInput').style.display = 'inline-block';
+        document.getElementById('telInput').value = document.getElementById('telDisplay').textContent;
+
+        document.getElementById('emailDisplay').style.display = 'none';
+        document.getElementById('emailInput').style.display = 'inline-block';
+        document.getElementById('emailInput').value = document.getElementById('emailDisplay').textContent;
+    };
+
+    // Function to save data
+    document.getElementById('saveButton').onclick = async function () {
+        const updatedData = {
+            first_name: document.getElementById('nameInput').value.split(' ')[0],
+            last_name: document.getElementById('nameInput').value.split(' ')[1] || '',
+            phonenum: document.getElementById('telInput').value,
+            email: document.getElementById('emailInput').value
+        };
+
+        // Send updated data to the backend
+        const response = await fetch('/updateCustomerInfo', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedData)
+        });
+
+        if (response.ok) {
+            // Update the display mode with new data
+            document.getElementById('nameDisplay').textContent = `${updatedData.first_name} ${updatedData.last_name}`;
+            document.getElementById('telDisplay').textContent = updatedData.phonenum;
+            document.getElementById('emailDisplay').textContent = updatedData.email;
+
+            // Toggle back to view mode
+            document.getElementById('editButton').style.display = 'inline-block';
+            document.getElementById('saveButton').style.display = 'none';
+
+            document.getElementById('nameDisplay').style.display = 'inline';
+            document.getElementById('nameInput').style.display = 'none';
+
+            document.getElementById('telDisplay').style.display = 'inline';
+            document.getElementById('telInput').style.display = 'none';
+
+            document.getElementById('emailDisplay').style.display = 'inline';
+            document.getElementById('emailInput').style.display = 'none';
+        } else {
+            console.error('Failed to update information');
+        }
+    };
+
+    // Fetch and display initial data
+    async function getCustomerInfo() {
+        const response = await fetch('/customerinfo');
+        const data = await response.json();
+
+        document.getElementById('nameDisplay').textContent = `${data.first_name} ${data.last_name}`;
+        document.getElementById('telDisplay').textContent = data.phonenum;
+        document.getElementById('emailDisplay').textContent = data.email;
+    }
+
+    getCustomerInfo();
+</script>
