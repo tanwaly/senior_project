@@ -111,7 +111,7 @@ app.get('/login', function (_req, res) {
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    const sql = "SELECT users_id, password, role FROM users WHERE email = ?";
+    const sql = "SELECT users_id, password, role FROM users WHERE email = ? AND user_status = 1";
 
     con.query(sql, [email], (err, results) => {
         if (err) {
@@ -697,7 +697,7 @@ app.get('/sellerVerify-list', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/seller_verifiy_list.html'));
 });
 app.get('/sellerverify', (req, res) => {
-    const sql = 'SELECT * FROM users WHERE users.user_status = 3';
+    const sql = 'SELECT * FROM users WHERE users.user_status = 2';
     con.query(sql, (err, results) => {
         if (err) {
             res.status(500).json({ error: 'Database query failed' });
@@ -705,6 +705,30 @@ app.get('/sellerverify', (req, res) => {
             res.json(results);
         }
     });
+});
+app.post('/updateSeller/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    const { status } = req.body;  // Get the desired status from the request body
+
+    if (![1, 4].includes(status)) {
+        return res.status(400).send('Invalid status value');
+    }
+
+    try {
+        const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
+        con.query(updateSql, [status, userId], (err, result) => {
+            if (err) {
+                console.error('Error updating user status:', err);
+                return res.status(500).send('Error updating user status');
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).send('User not found');
+            }
+        });
+    } catch (error) {
+        console.error('Unexpected error:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 
