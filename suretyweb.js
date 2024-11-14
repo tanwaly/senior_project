@@ -518,6 +518,15 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
 
 
 //================== seller =====================
+
+app.get('/sellerinfo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
+});
+
+app.get('/sellerinfoedit', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/seller_info_edit.html'));
+});
+
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;
 
