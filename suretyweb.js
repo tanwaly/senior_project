@@ -3,6 +3,7 @@ const con = require("./config/db");
 const bcrypt = require('bcrypt');
 const path = require('path');
 const multer = require('multer')
+const upload = multer({ dest: 'public/img/' });
 const session = require('express-session');
 const app = express();
 app.use("/public", express.static(path.join(__dirname, "public")));
@@ -505,7 +506,7 @@ app.get('/sellerInfo/:sellerId', (req, res) => {
 app.get('/sellerProducts/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
 
-    const sql = `SELECT product_name, product_img, product_caption, product_price FROM products WHERE seller_id = ?;`;
+    const sql = `SELECT * FROM products WHERE seller_id = ?;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -591,6 +592,22 @@ app.get('/sellerproduct', (req, res) => {
         }
     });
 });
+app.get('/sellerproduct/:id', (req, res) => {
+    const productId = req.params.id;
+
+    const sql = `SELECT * FROM products WHERE product_id = ?`;
+    con.query(sql, [productId], (err, results) => {
+        if (err) {
+            console.error('Database Error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.json(results[0]);
+    });
+});
+
 
 
 app.get('/addpost', (req, res) => {
@@ -628,6 +645,44 @@ app.post('/addproduct', ProdectUpload, async (req, res) => {
             return res.status(500).send("DB error");
         }
         res.redirect('/sellerhomepage');
+    });
+});
+
+app.put('/updateProduct/:id', upload.single('product_img'), (req, res) => {
+    const productId = req.params.id;
+    const { product_caption, product_cate, product_time, product_time_duration, product_name, product_price, product_detail, product_type, product_clothsize, product_shoesize } = req.body;
+
+    let sqlUpdate = `
+        UPDATE products SET 
+            product_caption = ?, 
+            product_cate = ?, 
+            product_time = ?, 
+            product_time_duration = ?, 
+            product_name = ?, 
+            product_price = ?, 
+            product_detail = ?, 
+            product_type = ?, 
+            product_clothsize = ?, 
+            product_shoesize = ?`;
+
+    const values = [product_caption, product_cate, product_time, product_time_duration, product_name, product_price, product_detail, product_type, product_clothsize, product_shoesize];
+
+    // If a new image is uploaded, include it in the update
+    if (req.file) {
+        sqlUpdate += `, product_img = ?`;
+        values.push(req.file.filename); // Use the uploaded file's name
+    }
+
+    sqlUpdate += ` WHERE product_id = ?`;
+    values.push(productId);
+
+    con.query(sqlUpdate, values, (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            res.status(500).json({ error: 'Failed to update product' });
+        } else {
+            res.status(200).json({ message: 'Product updated successfully' });
+        }
     });
 });
 
@@ -780,30 +835,27 @@ app.get('/sellerverify', (req, res) => {
         }
     });
 });
-app.post('/updateSeller/:userId', async (req, res) => {
+app.post('/updateSeller/:userId', (req, res) => {
     const userId = req.params.userId;
-    const { status } = req.body;  // Get the desired status from the request body
+    const { status } = req.body;
 
     if (![1, 4].includes(status)) {
-        return res.status(400).send('Invalid status value');
+        return res.status(400).json({ error: 'Invalid status value' });
     }
 
-    try {
-        const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
-        con.query(updateSql, [status, userId], (err, result) => {
-            if (err) {
-                console.error('Error updating user status:', err);
-                return res.status(500).send('Error updating user status');
-            }
-            if (result.affectedRows === 0) {
-                return res.status(404).send('User not found');
-            }
-        });
-    } catch (error) {
-        console.error('Unexpected error:', error);
-        res.status(500).send('Internal Server Error');
-    }
+    const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
+    con.query(updateSql, [status, userId], (err, result) => {
+        if (err) {
+            console.error('Error updating user status:', err);
+            return res.status(500).json({ error: 'Error updating user status' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json('User status updated successfully');
+    });
 });
+
 
 
 // ----- seller report list
@@ -821,17 +873,29 @@ app.get('/sellerreport', (req, res) => {
     });
 });
 
-app.get('/detail', (req, res) => {
-    const sql = 'SELECT * FROM reports';
-    con.query(sql, (err, results) => {
+
+app.post('/updateReportStatus/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const { status } = req.body;
+
+    // Only allow status 0 (ban) or 5 (deny report)
+    if (![0, 5].includes(status)) {
+        return res.status(400).send('Invalid status value');
+    }
+
+    const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
+    con.query(updateSql, [status, userId], (err, result) => {
         if (err) {
-            res.status(500).json({ error: 'Database query failed' });
-        } else {
-            res.json(results);
+            console.error('Error updating user status:', err);
+            return res.status(500).send('Error updating user status');
         }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('User not found');
+        }
+        res.send(`User status updated to ${status}`);
     });
 });
-app.po
+
 
 
 const PORT = 3000;

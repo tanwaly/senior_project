@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Homepage</title>
+    <title>Homepage</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/public/css/icon-cat.css">
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
@@ -152,19 +153,23 @@
                         </p>
                     </div>
                     <div class="button">
-                        <button style="border: none; background-color: #FBFBEB; width: 150px; height: 30px; text-align: center; 
-                        border-radius: 5px; font-weight: bold; font-size: 13px; margin-left: -20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);" 
-                        onclick="openModal()">แก้ไขโปรไฟล์</button>
+                        <button
+                            style="border: none; background-color: #FBFBEB; width: 150px; height: 30px; text-align: center; 
+                        border-radius: 5px; font-weight: bold; font-size: 13px; margin-left: -20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);"
+                            onclick="openModal()">แก้ไขโปรไฟล์</button>
                     </div>
                     <!-- โมดอลสำหรับแก้ไขโปรไฟล์ -->
-                    <div id="editProfileModal" class="modal" >
-                        <div style="border-radius: 15px;"class="modal-content" >
+                    <div id="editProfileModal" class="modal">
+                        <div style="border-radius: 15px;" class="modal-content">
                             <h3>แก้ไขโปรไฟล์</h3>
-                            <input style="border-radius: 5px; border: none;"type="text" id="line-id-input" placeholder="   กรอก ID Line ใหม่">
+                            <input style="border-radius: 5px; border: none;" type="text" id="line-id-input"
+                                placeholder="   กรอก ID Line ใหม่">
                             <br>
-                            <button style="border-radius: 5px;" class="button save-button" onclick="saveLineID()">บันทึก</button>
+                            <button style="border-radius: 5px;" class="button save-button"
+                                onclick="saveLineID()">บันทึก</button>
                             <br>
-                            <button style="border-radius: 5px;" class="button close-button" onclick="closeModal()">ยกเลิก</button>
+                            <button style="border-radius: 5px;" class="button close-button"
+                                onclick="closeModal()">ยกเลิก</button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +182,8 @@
                     <button type="button" class="btn mt-3 shadow"
                         style="background-color: #FBFBEB; width: 200px; height: 50px; text-align: center; border-radius: 15px; font-weight: bold; font-size: 20px; margin-right: 30px;"
                         data-bs-toggle="modal" data-bs-target="#addPostModel">
-                        <span class="bi bi-plus" style="font-size: 20px;"><span style="font-size: 20px;">เพิ่มโพสต์</span></span>
+                        <span class="bi bi-plus" style="font-size: 20px;"><span
+                                style="font-size: 20px;">เพิ่มโพสต์</span></span>
                     </button>
                 </div>
             </div>
@@ -247,13 +253,15 @@
                                 <img id="previewImage" src="/public/img/logo.png" alt="Preview Image" width="500px"
                                     style="margin-top: 10px;" />
                                 <div style="margin-top: 10px; font-size: 20px;">
-                                    Product's name:
+                                    <label
+                                        style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">Product's
+                                        name:</label>
                                     <input type="text" name="product_name" placeholder="Name" class="form-control"
-                                        id="productName"
                                         style="padding: 20px; width: 780px; height: 65px; border-radius: 10px; border: none;">
                                 </div>
                                 <div style="margin-top: 10px; font-size: 20px;">
-                                    Description:
+                                    <label
+                                        style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">Description:</label>
                                     <input type="text" name="product_detail" placeholder="Description"
                                         class="form-control" id="productDescription"
                                         style="padding: 20px; width: 780px; height: 80px; border-radius: 10px; border: none;">
@@ -287,6 +295,33 @@
                                         <option value="L">L</option>
                                         <option value="XL">XL</option>
                                         <option value="XXL">XXL</option>
+                                        <div id="clothSizeSelect" class="select-container" style="display: none;">
+                                            <select name="product_clothsize"
+                                                style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;">
+                                                <option option value="" disabled selected>Select Cloth size</option>
+                                                <option value="Freesize">Free size</option>
+                                                <option value="XS">XS</option>
+                                                <option value="S">S</option>
+                                                <option value="M">M</option>
+                                                <option value="L">L</option>
+                                                <option value="XL">XL</option>
+                                                <option value="XXL">XXL</option>
+                                            </select>
+                                        </div>
+                                        <div id="shoesSizeSelect" class="select-container" style="display: none;">
+                                            <select name="product_shoesize"
+                                                style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;">
+                                                <option option value="" disabled selected>Select Shoes size</option>
+                                                <option value="36">36</option>
+                                                <option value="37">37</option>
+                                                <option value="38">38</option>
+                                                <option value="39">39</option>
+                                                <option value="40">40</option>
+                                                <option value="41">41</option>
+                                                <option value="42">42</option>
+                                                <option value="43">43</option>
+                                            </select>
+                                        </div>
                                     </select>
                                 </div>
                                 <div id="shoesSizeSelect" class="select-container" style="display: none;">
@@ -311,7 +346,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit"
-                                        style="width: 500px; height: 60px; background: #BDE3A7; border: none; border-radius: 15px;">
+                                        style="width: 900px; height: 60px; background: #BDE3A7; border: none; border-radius: 15px;">
                                         Add Post
                                     </button>
                                 </div>
@@ -331,161 +366,125 @@
     <!--Show product Modal -->
     <div class="modal fade" id="shpModal" tabindex="-1" aria-labelledby="shpModalLabel" aria-hidden="true">
         <div class="modal-dialog center">
-            <div class="modal-content" style="width: 1000px; min-height: 600px; background-color: #F3F3E3;">
+            <div class="modal-content" style="width: 1800px; min-height: 600px; background-color: #F3F3E3;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="shpModalLabel">Product Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         style="background-color: transparent; border: transparent;"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div style="margin-top: 20px; font-size: 18px;" id="shsellerproduct">
-                            <div class="center">
-                                <img style="height: 250px;" src="/public/img/test.jpg">
-                            </div>
-                            <div style="margin-top: 30px;">
-                                <span>Name: <span>${product.product_name}</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
+                <div class="sellerPD">
+
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            // ฟังก์ชันเปิดโมดอล
-            function openModal() {
-                document.getElementById("editProfileModal").style.display = "flex";
+    <script>
+        //edit contact part
+        // ฟังก์ชันเปิดโมดอล
+        function openModal() {
+            document.getElementById("editProfileModal").style.display = "flex";
+        }
+
+        // ฟังก์ชันปิดโมดอล
+        function closeModal() {
+            document.getElementById("editProfileModal").style.display = "none";
+        }
+
+        // ฟังก์ชันบันทึก ID Line
+        function saveLineID() {
+            // รับค่าจากช่องกรอกข้อมูล
+            const newLineID = document.getElementById("line-id-input").value.trim();
+
+            // อัปเดต ID Line ที่แสดงถ้ามีการกรอกข้อมูล
+            if (newLineID) {
+                document.getElementById("line-id-display").textContent = "@" + newLineID;
             }
 
-            // ฟังก์ชันปิดโมดอล
-            function closeModal() {
-                document.getElementById("editProfileModal").style.display = "none";
-            }
+            // ปิดโมดอล
+            closeModal();
+        }
 
-            // ฟังก์ชันบันทึก ID Line
-            function saveLineID() {
-                // รับค่าจากช่องกรอกข้อมูล
-                const newLineID = document.getElementById("line-id-input").value.trim();
+        // Add post part
 
-                // อัปเดต ID Line ที่แสดงถ้ามีการกรอกข้อมูล
-                if (newLineID) {
-                    document.getElementById("line-id-display").textContent = "@" + newLineID;
-                }
+        document.addEventListener('DOMContentLoaded', function () {
+            const sizeRadios = document.querySelectorAll('input[name="product_type"]');
+            const clothSizeSelect = document.getElementById('clothSizeSelect');
+            const shoesSizeSelect = document.getElementById('shoesSizeSelect');
+            const clothSizeField = document.querySelector('select[name="product_clothsize"]');
+            const shoesSizeField = document.querySelector('select[name="product_shoesize"]');
 
-                // ปิดโมดอล
-                closeModal();
-            }
-            function formatDateTime(dateTimeStr) {
-                if (!dateTimeStr) return '';
-
-                const date = new Date(dateTimeStr);
-                const day = String(date.getDate()).padStart(2, '0');
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const year = date.getFullYear();
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-
-                return `${hours}:${minutes}<br>${day}/${month}/${year}`;
-            }
-            document.addEventListener('DOMContentLoaded', function () {
-                const sizeRadios = document.querySelectorAll('input[name="product_type"]');
-                const clothSizeSelect = document.getElementById('clothSizeSelect');
-                const shoesSizeSelect = document.getElementById('shoesSizeSelect');
-                const clothSizeField = document.querySelector('select[name="product_clothsize"]');
-                const shoesSizeField = document.querySelector('select[name="product_shoesize"]');
-
-                sizeRadios.forEach(option => {
-                    option.addEventListener('change', function () {
-                        if (this.value === 'cloth') {  // Cloth
-                            clothSizeSelect.style.display = 'block';
-                            shoesSizeSelect.style.display = 'none';
-                            shoesSizeField.value = '';  // Clear shoes size field
-                        } else if (this.value === 'shoes') {  // Shoes
-                            clothSizeSelect.style.display = 'none';
-                            shoesSizeSelect.style.display = 'block';
-                            clothSizeField.value = '';  // Clear cloth size field
-                        } else {  // Appliance
-                            clothSizeSelect.style.display = 'none';
-                            shoesSizeSelect.style.display = 'none';
-                            clothSizeField.value = '';  // Clear cloth size field
-                            shoesSizeField.value = '';  // Clear shoes size field
-                        }
-                    });
+            sizeRadios.forEach(option => {
+                option.addEventListener('change', function () {
+                    if (this.value === 'cloth') {  // Cloth
+                        clothSizeSelect.style.display = 'block';
+                        shoesSizeSelect.style.display = 'none';
+                        shoesSizeField.value = '';  // Clear shoes size field
+                    } else if (this.value === 'shoes') {  // Shoes
+                        clothSizeSelect.style.display = 'none';
+                        shoesSizeSelect.style.display = 'block';
+                        clothSizeField.value = '';  // Clear cloth size field
+                    } else {  // Appliance
+                        clothSizeSelect.style.display = 'none';
+                        shoesSizeSelect.style.display = 'none';
+                        clothSizeField.value = '';  // Clear cloth size field
+                        shoesSizeField.value = '';  // Clear shoes size field
+                    }
                 });
             });
+        });
 
+        document.getElementById('uploadButton').addEventListener('click', function () {
+            document.getElementById('addProductImage').click();
+        });
 
-            function changeIcon(cata) {
-                const icons = {
-                    1: 'icon-shirt',
-                    2: 'icon-coat',
-                    3: 'icon-dress',
-                    4: 'icon-pants',
-                    5: 'icon-skirt',
-                    6: 'icon-sock',
-                    7: 'icon-shoe',
-                    8: 'icon-hat',
-                    9: 'icon-necklace',
-                    10: 'icon-chair'
+        document.getElementById('addProductImage').addEventListener('change', function (event) {
+            const file = event.target.files[0];  // Get the selected file
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('previewImage').src = e.target.result;
                 };
-                return icons[cata] || null;
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            async function getUserData() {
+                try {
+                    const response = await fetch('/getSellerData'); // Use the correct endpoint
+                    const data = await response.json(); // Parse the JSON response
+
+                    if (data.error) {
+                        console.error(data.error);
+                    } else {
+                        document.querySelector('span[style*="font-size: 40px;"]').textContent = data.first_name;
+                        document.querySelector('img.rounded-circle').src = `/public/img/${data.profile_img}`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
             }
 
-            document.getElementById('uploadButton').addEventListener('click', function () {
-                document.getElementById('addProductImage').click();
-            });
-
-            document.getElementById('addProductImage').addEventListener('change', function (event) {
-                const file = event.target.files[0];  // Get the selected file
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        document.getElementById('previewImage').src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            document.addEventListener('DOMContentLoaded', () => {
-                async function getUserData() {
-                    try {
-                        const response = await fetch('/getSellerData'); // Use the correct endpoint
-                        const data = await response.json(); // Parse the JSON response
-
-                        if (data.error) {
-                            console.error(data.error);
-                        } else {
-                            document.querySelector('span[style*="font-size: 40px;"]').textContent = data.first_name;
-                            document.querySelector('img.rounded-circle').src = `/public/img/${data.profile_img}`;
-                        }
-                    } catch (error) {
-                        console.error('Error fetching user data:', error);
-                    }
-                }
-
-                getUserData();
-            });
+            getUserData();
+        });
 
 
-            //product show
-            document.addEventListener('DOMContentLoaded', () => {
-                const showSellerProduct = document.getElementById('showSellerProduct');
+        //product show
+        document.addEventListener('DOMContentLoaded', () => {
+            const showSellerProduct = document.getElementById('showSellerProduct');
 
-                // Fetch seller products and display them
-                async function getSellerProduct() {
-                    try {
-                        const response = await fetch('/sellerproduct');
-                        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                        const data = await response.json();
-                        if (data.error) console.error(data.error);
+            // Fetch seller products and display them
+            async function getSellerProduct() {
+                try {
+                    const response = await fetch('/sellerproduct');
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    const data = await response.json();
+                    if (data.error) console.error(data.error);
 
-                        let html = '';
-                        data.forEach(product => {
-                            html += `
+                    let html = '';
+                    data.forEach(product => {
+                        html += `
                             <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
                                 <div style="min-height: 147px; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                                     <div style="display: flex; align-items: center;">
@@ -508,7 +507,7 @@
                                 </div>
                                 <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
                                     <div class="center">
-                                        <button style="background-color: transparent; border: none;"  data-bs-toggle="modal" data-bs-target="#shpModal" onclick="cfproduct('${product.product_id}')">
+                                        <button style="background-color: transparent; border: none;"  data-bs-toggle="modal" data-bs-target="#shpModal" onclick="sellerProductDetail('${product.product_id}')">
                                             <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; object-fit: contain;">
                                         </button>
                                     </div>
@@ -519,81 +518,364 @@
                                     </div>
                                 </div>
                             </div>`;
-                        });
-
-                        showSellerProduct.innerHTML = html;
-                        checkAndUpdateProductTimes(data);
-                    } catch (error) {
-                        console.error('Fetch error:', error);
-                    }
-                }
-
-                // Function to change background color of product time div based on product's time
-                function checkAndUpdateProductTimes(products) {
-                    products.forEach(product => {
-                        const productTimeDiv = document.getElementById(`productTimeDisplay_${product.product_id}`);
-                        const productTime = new Date(product.product_time);
-
-                        const updateBackgroundColor = () => {
-                            const currentTime = new Date();
-                            if (currentTime >= productTime) {
-                                productTimeDiv.style.backgroundColor = '#BDE3A7';
-                            } else {
-                                productTimeDiv.style.backgroundColor = '#ffa4a4';
-                            }
-                        };
-
-                        // Run initial check and then every minute
-                        updateBackgroundColor();
-                        setInterval(updateBackgroundColor, 60000);
                     });
-                }
 
-                // Format date for display
-                function formatDateTime(dateTimeStr) {
-                    const date = new Date(dateTimeStr);
-                    return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}<br>${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-                }
-
-                // Function to get icon class based on category
-                function changeIcon(cata) {
-                    const icons = {
-                        1: 'icon-shirt', 2: 'icon-coat', 3: 'icon-dress', 4: 'icon-pants',
-                        5: 'icon-skirt', 6: 'icon-sock', 7: 'icon-shoe', 8: 'icon-hat',
-                        9: 'icon-necklace', 10: 'icon-chair'
-                    };
-                    return icons[cata] || null;
-                }
-
-                getSellerProduct();
-            });
-
-            function showUserDetails(userId) {
-                const user = allUsers.find(u => u.users_id === userId);
-                if (user) {
-                    currentUserId = user.users_id;
-                    updateButtonAppearance(user.user_status);
-
-                    document.getElementById('dataDetailTitle').innerText = `Details for ${user.first_name} ${user.last_name}`;
-                    const modalBody = document.querySelector('#shsellerproduct');
-
-                    const bankDetails = `
-                <div class="center">
-                    <img style="height: 250px;" src="/public/img/${product.profile_img}">
-                </div>
-                <p><span>Product category:${changeIcon(product.product_cate)}</span></p>
-                <p><span>Name:${product.product_name}</span></p>
-                <p><span>Size Type:${product.product_type}</span></p>
-                <p><span>Size:${product.product_clothsize}</span></p>
-                <p><span>Size:${product.product_shoesize}</span></p>
-                <p><span>Caption:${product.product_caption}</span></p>
-                <p><span>Caption:${product.detail}</span></p>
-                <p><span>เวลาที่เปิด:${formatDateTime(product.product_time)}</span></p>`;
+                    showSellerProduct.innerHTML = html;
+                    checkAndUpdateProductTimes(data);
+                } catch (error) {
+                    console.error('Fetch error:', error);
                 }
             }
 
+            // Function to change background color of product time div based on product's time
+            function checkAndUpdateProductTimes(products) {
+                products.forEach(product => {
+                    const productTimeDiv = document.getElementById(`productTimeDisplay_${product.product_id}`);
+                    const productTime = new Date(product.product_time);
 
-        </script>
+                    const updateBackgroundColor = () => {
+                        const currentTime = new Date();
+                        if (currentTime >= productTime) {
+                            productTimeDiv.style.backgroundColor = '#BDE3A7';
+                        } else {
+                            productTimeDiv.style.backgroundColor = '#ffa4a4';
+                        }
+                    };
+
+                    // Run initial check and then every minute
+                    updateBackgroundColor();
+                    setInterval(updateBackgroundColor, 60000);
+                });
+            }
+
+            // Format date for display
+            function formatDateTime(dateTimeStr) {
+                const date = new Date(dateTimeStr);
+                return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}<br>${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+            }
+
+            // Function to get icon class based on category
+            function changeIcon(cata) {
+                const icons = {
+                    1: 'icon-shirt', 2: 'icon-coat', 3: 'icon-dress', 4: 'icon-pants',
+                    5: 'icon-skirt', 6: 'icon-sock', 7: 'icon-shoe', 8: 'icon-hat',
+                    9: 'icon-necklace', 10: 'icon-chair'
+                };
+                return icons[cata] || null;
+            }
+
+            getSellerProduct();
+        });
+        // alert if not fill all input
+        document.querySelector('form[action="/addproduct"]').addEventListener('submit', function (event) {
+            // Select all necessary fields
+            const caption = document.getElementById('caption').value.trim();
+            const category = document.getElementById('category').value;
+            const productOpenTime = document.getElementById('productOpenTime').value;
+            const productTimeDuration = document.getElementById('ProductTimeDuration').value;
+            const productName = document.querySelector('input[name="product_name"]').value.trim();
+            const productDetail = document.getElementById('productDescription').value.trim();
+            const productPrice = document.querySelector('input[name="product_price"]').value.trim();
+            const productImage = document.getElementById('addProductImage').files[0];
+            const productType = document.querySelector('input[name="product_type"]:checked');
+
+            // Initialize an empty array to store missing fields
+            const missingFields = [];
+
+            // Check each field and push to missingFields array if empty
+            if (!caption) missingFields.push("Product Caption");
+            if (!category) missingFields.push("Category");
+            if (!productOpenTime) missingFields.push("Selling Time");
+            if (!productTimeDuration) missingFields.push("Duration");
+            if (!productName) missingFields.push("Product's Name");
+            if (!productDetail) missingFields.push("Description");
+            if (!productPrice) missingFields.push("Price");
+            if (!productImage) missingFields.push("Product Image");
+            if (!productType) missingFields.push("Product Type");
+
+            // If Product Type is cloth or shoes, check for corresponding size selection
+            if (productType && productType.value === 'cloth' && !document.querySelector('select[name="product_clothsize"]').value) {
+                missingFields.push("Cloth Size");
+            }
+            if (productType && productType.value === 'shoes' && !document.querySelector('select[name="product_shoesize"]').value) {
+                missingFields.push("Shoes Size");
+            }
+
+            // If any fields are missing, prevent form submission and alert the user
+            if (missingFields.length > 0) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Please fill out the following fields',
+                    html: "<br> " + missingFields.join("<br> ")
+                });
+                return;
+                // alert("Please fill out the following fields:\n- " + missingFields.join("\n- "));
+            }
+        });
+
+
+        // update seller product
+        async function sellerProductDetail(productId) {
+
+            try {
+                const response = await fetch(`/sellerproduct/${productId}`);
+                const product = await response.json();
+
+                if (product.error) {
+                    console.error(product.error);
+                    return;
+                }
+                let formattedTime = "";
+                if (product.product_time) {
+                    const date = new Date(product.product_time);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    formattedTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                }
+                document.querySelector('.sellerPD').innerHTML = `
+                     <div class="modal-body">
+              <div class="row">
+                  <div style="margin-top: 20px; font-size: 18px;" id="shsellerproduct">
+                      <div style="margin-top: 30px; width: 585px; min-height: 96px; height: auto;">
+                         <label  style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">Caption:</label>
+                          <input id="productCaption" value="${product.product_caption}" style="padding:25px; width:800px; height:120px; border-radius: 25px; border:none;" disabled>
+                      </div>
+                      <div class="row" style="margin-top:20px">
+                          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                              <label>Category:</label>
+                              <select id="productCategory" disabled style="border-radius: 15px; border:none; padding:5px;">
+                                  <option value="1" ${product.product_cate == 1 ? 'selected' : ''}>Shirt</option>
+                                  <option value="2" ${product.product_cate == 2 ? 'selected' : ''}>Coat</option>
+                                  <option value="3" ${product.product_cate == 3 ? 'selected' : ''}>Dress</option>
+                                  <option value="4" ${product.product_cate == 4 ? 'selected' : ''}>Pants</option>
+                                  <option value="5" ${product.product_cate == 5 ? 'selected' : ''}>Skirt</option>
+                                  <option value="6" ${product.product_cate == 6 ? 'selected' : ''}>Socks</option>
+                                  <option value="7" ${product.product_cate == 7 ? 'selected' : ''}>Shoes</option>
+                                  <option value="8" ${product.product_cate == 8 ? 'selected' : ''}>Hat</option>
+                                  <option value="9" ${product.product_cate == 9 ? 'selected' : ''}>Accessories</option>
+                                  <option value="10" ${product.product_cate == 10 ? 'selected' : ''}>Appliance</option>
+                              </select>
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                              <label>Selling Time:</label>
+                              <input type="datetime-local" id="productTime" value="${formattedTime}" disabled style="padding:5px; border-radius: 15px; border:none;">
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                              <label>Duration:</label>
+                              <select id="productDuration" disabled style="border-radius: 15px; border:none; padding:5px;">
+                                  <option value="5" ${product.product_time_duration === '00:05:00' ? 'selected' : ''}>5 minutes</option>
+                                  <option value="10" ${product.product_time_duration === '00:10:00' ? 'selected' : ''}>10 minutes</option>
+                                  <option value="15" ${product.product_time_duration === '00:15:00' ? 'selected' : ''}>15 minutes</option>
+                                  <option value="20" ${product.product_time_duration === '00:20:00' ? 'selected' : ''}>20 minutes</option>
+                                  <option value="30" ${product.product_time_duration === '00:30:00' ? 'selected' : ''}>30 minutes</option>
+                                  <option value="60" ${product.product_time_duration === '01:00:00' ? 'selected' : ''}>60 minutes</option>
+                              </select>
+                          </div>
+                      </div>
+                    <div class="center" style="margin-top: 20px;">
+                        <div class="col">
+                            <div>
+                              <img id="productImage" style="height: 250px; margin-top: 20px;" src="/public/img/${product.product_img}">
+                            </div>
+                            <div>
+                                <input type="file" id="editProductImage" accept="image/*" style="display: none;">
+                                 <!-- Change Image Button, initially hidden -->
+                                 <button type="button" id="changeImageButton" style="display: none; margin-top: 10px; padding: 5px; width: 200px; height: 50px; background-color: black; color: white; border: none; border-radius: 25px; font-size: 20px; font-weight: 700;">
+                                     Change Image
+                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                      <div class="col" style="margin-top: 30px;">
+                          <div class="row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                              <span style="width: 60px;">Name:</span>
+                              <input id="productName" value="${product.product_name}" style="padding:15px; flex-grow: 1; width:100px; border-radius: 25px; border:none;" disabled>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                              <span style="width: 60px;">Price:</span>
+                              <input id="productPrice" value="${product.product_price}" style="padding:15px; flex-grow: 1; width:100px; border-radius: 25px; border:none;" disabled>
+                          </div>
+                          <div class="row" style="display: flex; align-items: center; gap: 10px;">
+                              <span style="width: 60px;">Details:</span>
+                              <textarea id="productDetail" style="margin-left:5px;padding:15px; flex-grow: 1; width:100px; border-radius: 25px; border:none;" disabled>${product.product_detail}</textarea>
+                          </div>
+                      </div>
+                      <div style="margin: 20px; font-size: 25px;">
+                          <label>
+                              <input type="radio" name="eproduct_type" id="eclothSize" value="cloth" ${product.product_type === 'cloth' ? 'checked' : ''} style="transform: scale(1.5);" disabled>
+                              Cloth Size
+                          </label>
+                          <label>
+                              <input type="radio" name="eproduct_type" id="eshoesSize" value="shoes" ${product.product_type === 'shoes' ? 'checked' : ''} style="margin-left: 90px; transform: scale(1.5);" disabled>
+                              Shoes Size
+                          </label>
+                          <label>
+                              <input type="radio" name="eproduct_type" id="eappliance" value="appliance" ${product.product_type === 'appliance' ? 'checked' : ''} style="margin-left: 90px; transform: scale(1.5);" disabled>
+                              Appliance
+                          </label>
+                      </div>
+                      <div id="eclothSizeSelect" class="select-container" style="display: ${product.product_type === 'cloth' ? 'block' : 'none'};">
+                          <select name="eproduct_clothsize" disabled style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;" disabled> 
+                              <option value="" disabled>Select Cloth size</option>
+                              <option value="Freesize" ${product.product_clothsize === 'Freesize' ? 'selected' : ''}>Free size</option>
+                              <option value="XS" ${product.product_clothsize === 'XS' ? 'selected' : ''}>XS</option>
+                              <option value="S" ${product.product_clothsize === 'S' ? 'selected' : ''}>S</option>
+                              <option value="M" ${product.product_clothsize === 'M' ? 'selected' : ''}>M</option>
+                              <option value="L" ${product.product_clothsize === 'L' ? 'selected' : ''}>L</option>
+                              <option value="XL" ${product.product_clothsize === 'XL' ? 'selected' : ''}>XL</option>
+                              <option value="XXL" ${product.product_clothsize === 'XXL' ? 'selected' : ''}>XXL</option>
+                          </select>
+                      </div>
+                      <div id="eshoesSizeSelect" class="select-container" style="display: ${product.product_type === 'shoes' ? 'block' : 'none'};">
+                          <select name="eproduct_shoesize" disabled style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;" disabled>
+                              <option value="" disabled>Select Shoes size</option>
+                              <option value="36" ${product.product_shoesize === 36 ? 'selected' : ''}>36</option>
+                              <option value="37" ${product.product_shoesize === 37 ? 'selected' : ''}>37</option>
+                              <option value="38" ${product.product_shoesize === 38 ? 'selected' : ''}>38</option>
+                              <option value="39" ${product.product_shoesize === 39 ? 'selected' : ''}>39</option>
+                              <option value="40" ${product.product_shoesize === 40 ? 'selected' : ''}>40</option>
+                              <option value="41" ${product.product_shoesize === 41 ? 'selected' : ''}>41</option>
+                              <option value="42" ${product.product_shoesize === 42 ? 'selected' : ''}>42</option>
+                              <option value="43" ${product.product_shoesize === 43 ? 'selected' : ''}>43</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button id="editSaveButton" onclick="toggleEditSave('${product.product_id}')" style="padding:5px; width: 800px; height: 50px; background-color:black; color:white; border: none; border-radius: 25px; font-size: 20px; font-weight: 700;">Edit</button>
+          </div>
+        `;
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+            }
+        }
+
+
+        async function toggleEditSave(productId) {
+            const editSaveButton = document.getElementById('editSaveButton');
+            const isEditing = editSaveButton.innerText === 'Edit';
+            const imagePreview = document.getElementById('productImage');
+            const imageInput = document.getElementById('editProductImage');
+            const changeImageButton = document.getElementById('changeImageButton');
+
+            // Toggle input fields between editable and read-only
+            ['productCaption', 'productCategory', 'productTime', 'productDuration', 'productName', 'productPrice', 'productDetail'].forEach(id => {
+                document.getElementById(id).disabled = !isEditing;
+            });
+
+
+            // Toggle radio buttons and dropdowns
+            document.getElementById('eclothSize').disabled = !isEditing;
+            document.getElementById('eshoesSize').disabled = !isEditing;
+            document.getElementById('eappliance').disabled = !isEditing;
+            document.querySelector('select[name="eproduct_clothsize"]').disabled = !isEditing;
+            document.querySelector('select[name="eproduct_shoesize"]').disabled = !isEditing;
+
+            const clothSizeSelect = document.getElementById('eclothSizeSelect');
+            const shoesSizeSelect = document.getElementById('eshoesSizeSelect');
+
+            if (isEditing) {
+                // Show the correct dropdown based on the initially selected product type
+                if (document.getElementById('eclothSize').checked) {
+                    clothSizeSelect.style.display = 'block';
+                    shoesSizeSelect.style.display = 'none';
+                } else if (document.getElementById('eshoesSize').checked) {
+                    clothSizeSelect.style.display = 'none';
+                    shoesSizeSelect.style.display = 'block';
+                } else {
+                    clothSizeSelect.style.display = 'none';
+                    shoesSizeSelect.style.display = 'none';
+                }
+
+                // Add event listeners for radio buttons to show/hide the dropdowns dynamically
+                document.getElementById('eclothSize').addEventListener('change', () => {
+                    clothSizeSelect.style.display = 'block';
+                    shoesSizeSelect.style.display = 'none';
+                });
+
+                document.getElementById('eshoesSize').addEventListener('change', () => {
+                    clothSizeSelect.style.display = 'none';
+                    shoesSizeSelect.style.display = 'block';
+                });
+
+                document.getElementById('eappliance').addEventListener('change', () => {
+                    clothSizeSelect.style.display = 'none';
+                    shoesSizeSelect.style.display = 'none';
+                });
+            } else {
+                // Hide the dropdowns when not in edit mode
+                clothSizeSelect.style.display = 'none';
+                shoesSizeSelect.style.display = 'none';
+            }
+            // Show the file input in edit mode
+            changeImageButton.style.display = isEditing ? 'block' : 'none';
+
+            if (isEditing) {
+                // Trigger the hidden file input when "Change Image" button is clicked
+                changeImageButton.addEventListener('click', () => imageInput.click());
+
+                // Display the image preview when a new image is selected
+                imageInput.addEventListener('change', function () {
+                    const file = imageInput.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            imagePreview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Toggle button text
+            editSaveButton.innerText = isEditing ? 'Save' : 'Edit';
+            // Toggle button text
+            if (!isEditing) {
+                // Collect updated data and send it to the server
+                const updatedData = {
+                    product_caption: document.getElementById('productCaption').value,
+                    product_cate: document.getElementById('productCategory').value,
+                    product_time: document.getElementById('productTime').value,
+                    product_time_duration: document.getElementById('productDuration').value,
+                    product_name: document.getElementById('productName').value,
+                    product_price: document.getElementById('productPrice').value,
+                    product_detail: document.getElementById('productDetail').value,
+                    product_type: document.querySelector('input[name="eproduct_type"]:checked').value,
+                    product_clothsize: document.querySelector('select[name="eproduct_clothsize"]').value || null,
+                    product_shoesize: document.querySelector('select[name="eproduct_shoesize"]').value || null,
+                };
+
+                const formData = new FormData();
+                Object.keys(updatedData).forEach(key => formData.append(key, updatedData[key]));
+
+                // Append image if a new one is selected
+                if (imageInput.files[0]) {
+                    formData.append('product_img', imageInput.files[0]);
+                }
+
+                // Send updated data to the server
+                try {
+                    const response = await fetch(`/updateProduct/${productId}`, {
+                        method: 'PUT',
+                        body: formData  // Use formData directly for mixed text and file data
+                    });
+
+                    if (response.ok) {
+                        alert('Product updated successfully');
+                    } else {
+                        console.error('Failed to update product');
+                    }
+                } catch (error) {
+                    console.error('Error updating product:', error);
+                }
+            }
+        }
+    </script>
 
 </body>
 
