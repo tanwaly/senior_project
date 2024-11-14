@@ -75,17 +75,27 @@
 
       if (res.ok) {
         const data = await res.text();
-        location.replace(data);
+        location.replace(data);  // Redirect user based on role
       } else if (res.status === 400) {
         const error = await res.text();
-        Swal.fire({
-          icon: 'error',
-          title: error,
-        });
 
+        // Determine the appropriate icon based on the error message
+        let iconType = 'error';
+        if (error.includes("waiting for admin approval")) {
+          iconType = 'warning';
+        }
+
+        Swal.fire({
+          icon: iconType,
+          title: error,  // Display error message returned from backend
+        });
       }
     } catch (err) {
-      alert(err.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'An error occurred',
+        text: err.message,
+      });
     }
   });
 

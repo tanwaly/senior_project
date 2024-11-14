@@ -110,9 +110,50 @@ app.get('/login', function (_req, res) {
     res.sendFile(path.join(__dirname, 'Project/login.html'));
 });
 
+// app.post('/login', (req, res) => {
+//     const { email, password } = req.body;
+//     const sql = "SELECT users_id, password, role FROM users WHERE email = ? AND user_status = 1";
+
+//     con.query(sql, [email], (err, results) => {
+//         if (err) {
+//             console.error(err);
+//             return res.status(500).send("Database error");
+//         }
+
+//         if (results.length === 1) {
+//             bcrypt.compare(password, results[0].password, (err, same) => {
+//                 if (err) return res.status(500).send("Error verifying password");
+
+//                 if (same) {
+//                     req.session.users_id = results[0].users_id; // Set users_id in session
+//                     req.session.role = results[0].role; // Save the role in session too
+
+//                     // Set session to expire in 2 hours
+//                     req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
+//                     // Redirect based on the user's role
+//                     if (results[0].role == 1) {
+//                         res.send('homepage');
+//                     } else if (results[0].role == 2) {
+//                         res.send('sellerhomepage');
+//                     } else if (results[0].role == 3) {
+//                         res.send('adminpage');
+//                     } else {
+//                         res.status(403).send("Unauthorized role");
+//                     }
+
+//                 } else {
+//                     res.status(400).send("Wrong password");
+//                 }
+//             });
+//         } else {
+//             res.status(400).send("Email not found");
+//         }
+//     });
+// });
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    const sql = "SELECT users_id, password, role FROM users WHERE email = ? AND user_status = 1";
+    const sql = "SELECT users_id, password, role, user_status FROM users WHERE email = ?";
 
     con.query(sql, [email], (err, results) => {
         if (err) {
@@ -121,33 +162,44 @@ app.post('/login', (req, res) => {
         }
 
         if (results.length === 1) {
-            bcrypt.compare(password, results[0].password, (err, same) => {
+            const user = results[0];
+
+            // Check user status before verifying password
+            if (user.user_status === 0) {
+                return res.status(400).send("You are banned from the system");
+            } else if (user.user_status === 2) {
+                return res.status(400).send("You are waiting for admin approval");
+            } else if (user.user_status === 4) {
+                return res.status(400).send("You did not pass the verification process");
+            }
+
+            bcrypt.compare(password, user.password, (err, same) => {
                 if (err) return res.status(500).send("Error verifying password");
 
                 if (same) {
-                    req.session.users_id = results[0].users_id; // Set users_id in session
-                    req.session.role = results[0].role; // Save the role in session too
+                    req.session.users_id = user.users_id;  // Set users_id in session
+                    req.session.role = user.role;          // Save the role in session too
 
                     // Set session to expire in 2 hours
                     req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
 
                     // Redirect based on the user's role
-                    if (results[0].role == 1) {
-                        res.send('homepage');
-                    } else if (results[0].role == 2) {
-                        res.send('sellerhomepage');
-                    } else if (results[0].role == 3) {
-                        res.send('adminpage');
+                    if (user.role == 1) {
+                        return res.send('homepage');
+                    } else if (user.role == 2) {
+                        return res.send('sellerhomepage');
+                    } else if (user.role == 3) {
+                        return res.send('adminpage');
                     } else {
-                        res.status(403).send("Unauthorized role");
+                        return res.status(403).send("Unauthorized role");
                     }
 
                 } else {
-                    res.status(400).send("Wrong password");
+                    return res.status(400).send("Wrong password");
                 }
             });
         } else {
-            res.status(400).send("Email not found");
+            return res.status(400).send("Email not found");
         }
     });
 });
