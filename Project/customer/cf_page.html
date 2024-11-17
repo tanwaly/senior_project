@@ -23,12 +23,9 @@
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
                 <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-check2-square"></i> สถานะการจอง
+                    <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-truck"></i> เลขพัสดุ
-                </a>
-                <a href="/Project/customer/cus_info.html" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/customerprofile" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-person"></i> โปรไฟล์
                 </a>
                 <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
@@ -169,20 +166,20 @@
     getLoggedInUserId();
 
     function manageButtonState(button, deadlineTime) {
-            const currentTime = new Date();
+        const currentTime = new Date();
 
-            if (currentTime >= deadlineTime) {
-                button.disabled = true;
-                button.style.backgroundColor = '#cccccc';
-                button.onclick = (e) => e.preventDefault();
-                // clearInterval(interval);
-            } else {
-                button.disabled = false;
-                button.style.backgroundColor = '';
-                button.onclick = null;
-            }
+        if (currentTime >= deadlineTime) {
+            button.disabled = true;
+            button.style.backgroundColor = '#cccccc';
+            button.onclick = (e) => e.preventDefault();
+            // clearInterval(interval);
+        } else {
+            button.disabled = false;
+            button.style.backgroundColor = '';
+            button.onclick = null;
         }
-  
+    }
+
 
 
 
@@ -268,7 +265,7 @@
                     const response = await fetch('/queue', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(queueData) });
 
                     if (response.ok) {
-                        const result = await response.json();  
+                        const result = await response.json();
                         const queueNumber = result.queue_num;
 
                         cfButton.disabled = true;
@@ -345,8 +342,8 @@
         pointer-events: none;
         opacity: 0.5;
     }
-     /* Popup background overlay */
-     .popup-overlay {
+
+    .popup-overlay {
         position: fixed;
         top: 0;
         left: 0;
@@ -358,7 +355,6 @@
         align-items: center;
     }
 
-    /* Popup box */
     .popup-box {
         background-color: #F3F3E3;
         width: 350px;
@@ -368,7 +364,6 @@
         position: relative;
     }
 
-    /* Popup header */
     .contact-header {
         background-color: #a0af7f;
         color: #333;
@@ -378,7 +373,6 @@
         border-top-right-radius: 10px;
     }
 
-    /* Popup content */
     .contact-info {
         padding: 15px;
         color: #333;
@@ -389,7 +383,6 @@
         font-weight: bold;
     }
 
-    /* Close button */
     .close-button {
         position: absolute;
         top: 5px;
@@ -402,7 +395,6 @@
     }
 
 
-    /* Trigger button */
     .open-popup-button {
         padding: 10px 20px;
         background-color: #a0af7f;

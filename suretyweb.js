@@ -3,6 +3,7 @@ const con = require("./config/db");
 const bcrypt = require('bcrypt');
 const path = require('path');
 const multer = require('multer')
+const upload = multer({ dest: 'public/img/' });
 const session = require('express-session');
 const app = express();
 app.use("/public", express.static(path.join(__dirname, "public")));
@@ -109,9 +110,50 @@ app.get('/login', function (_req, res) {
     res.sendFile(path.join(__dirname, 'Project/login.html'));
 });
 
+// app.post('/login', (req, res) => {
+//     const { email, password } = req.body;
+//     const sql = "SELECT users_id, password, role FROM users WHERE email = ? AND user_status = 1";
+
+//     con.query(sql, [email], (err, results) => {
+//         if (err) {
+//             console.error(err);
+//             return res.status(500).send("Database error");
+//         }
+
+//         if (results.length === 1) {
+//             bcrypt.compare(password, results[0].password, (err, same) => {
+//                 if (err) return res.status(500).send("Error verifying password");
+
+//                 if (same) {
+//                     req.session.users_id = results[0].users_id; // Set users_id in session
+//                     req.session.role = results[0].role; // Save the role in session too
+
+//                     // Set session to expire in 2 hours
+//                     req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+
+//                     // Redirect based on the user's role
+//                     if (results[0].role == 1) {
+//                         res.send('homepage');
+//                     } else if (results[0].role == 2) {
+//                         res.send('sellerhomepage');
+//                     } else if (results[0].role == 3) {
+//                         res.send('adminpage');
+//                     } else {
+//                         res.status(403).send("Unauthorized role");
+//                     }
+
+//                 } else {
+//                     res.status(400).send("Wrong password");
+//                 }
+//             });
+//         } else {
+//             res.status(400).send("Email not found");
+//         }
+//     });
+// });
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
-    const sql = "SELECT users_id, password, role FROM users WHERE email = ?";
+    const sql = "SELECT users_id, password, role, user_status FROM users WHERE email = ?";
 
     con.query(sql, [email], (err, results) => {
         if (err) {
@@ -120,33 +162,44 @@ app.post('/login', (req, res) => {
         }
 
         if (results.length === 1) {
-            bcrypt.compare(password, results[0].password, (err, same) => {
+            const user = results[0];
+
+            // Check user status before verifying password
+            if (user.user_status === 0) {
+                return res.status(400).send("You are banned from the system");
+            } else if (user.user_status === 2) {
+                return res.status(400).send("You are waiting for admin approval");
+            } else if (user.user_status === 4) {
+                return res.status(400).send("You did not pass the verification process");
+            }
+
+            bcrypt.compare(password, user.password, (err, same) => {
                 if (err) return res.status(500).send("Error verifying password");
 
                 if (same) {
-                    req.session.users_id = results[0].users_id; // Set users_id in session
-                    req.session.role = results[0].role; // Save the role in session too
+                    req.session.users_id = user.users_id;  // Set users_id in session
+                    req.session.role = user.role;          // Save the role in session too
 
                     // Set session to expire in 2 hours
                     req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
 
                     // Redirect based on the user's role
-                    if (results[0].role == 1) {
-                        res.send('homepage');
-                    } else if (results[0].role == 2) {
-                        res.send('sellerhomepage');
-                    } else if (results[0].role == 3) {
-                        res.send('adminpage');
+                    if (user.role == 1) {
+                        return res.send('homepage');
+                    } else if (user.role == 2) {
+                        return res.send('sellerhomepage');
+                    } else if (user.role == 3) {
+                        return res.send('adminpage');
                     } else {
-                        res.status(403).send("Unauthorized role");
+                        return res.status(403).send("Unauthorized role");
                     }
 
                 } else {
-                    res.status(400).send("Wrong password");
+                    return res.status(400).send("Wrong password");
                 }
             });
         } else {
-            res.status(400).send("Email not found");
+            return res.status(400).send("Email not found");
         }
     });
 });
@@ -505,7 +558,7 @@ app.get('/sellerInfo/:sellerId', (req, res) => {
 app.get('/sellerProducts/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
 
-    const sql = `SELECT product_name, product_img, product_caption, product_price FROM products WHERE seller_id = ?;`;
+    const sql = `SELECT * FROM products WHERE seller_id = ?;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -517,6 +570,15 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
 
 
 //================== seller =====================
+
+app.get('/sellerinfo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
+});
+
+app.get('/sellerinfoedit', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/seller_info_edit.html'));
+});
+
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;
 
@@ -631,6 +693,22 @@ app.get('/sellerproduct', (req, res) => {
         }
     });
 });
+app.get('/sellerproduct/:id', (req, res) => {
+    const productId = req.params.id;
+
+    const sql = `SELECT * FROM products WHERE product_id = ?`;
+    con.query(sql, [productId], (err, results) => {
+        if (err) {
+            console.error('Database Error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        res.json(results[0]);
+    });
+});
+
 
 
 app.get('/addpost', (req, res) => {
@@ -668,6 +746,44 @@ app.post('/addproduct', ProdectUpload, async (req, res) => {
             return res.status(500).send("DB error");
         }
         res.redirect('/sellerhomepage');
+    });
+});
+
+app.put('/updateProduct/:id', upload.single('product_img'), (req, res) => {
+    const productId = req.params.id;
+    const { product_caption, product_cate, product_time, product_time_duration, product_name, product_price, product_detail, product_type, product_clothsize, product_shoesize } = req.body;
+
+    let sqlUpdate = `
+        UPDATE products SET 
+            product_caption = ?, 
+            product_cate = ?, 
+            product_time = ?, 
+            product_time_duration = ?, 
+            product_name = ?, 
+            product_price = ?, 
+            product_detail = ?, 
+            product_type = ?, 
+            product_clothsize = ?, 
+            product_shoesize = ?`;
+
+    const values = [product_caption, product_cate, product_time, product_time_duration, product_name, product_price, product_detail, product_type, product_clothsize, product_shoesize];
+
+    // If a new image is uploaded, include it in the update
+    if (req.file) {
+        sqlUpdate += `, product_img = ?`;
+        values.push(req.file.filename); // Use the uploaded file's name
+    }
+
+    sqlUpdate += ` WHERE product_id = ?`;
+    values.push(productId);
+
+    con.query(sqlUpdate, values, (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            res.status(500).json({ error: 'Failed to update product' });
+        } else {
+            res.status(200).json({ message: 'Product updated successfully' });
+        }
     });
 });
 
@@ -811,7 +927,7 @@ app.get('/sellerVerify-list', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/seller_verifiy_list.html'));
 });
 app.get('/sellerverify', (req, res) => {
-    const sql = 'SELECT * FROM users WHERE users.user_status = 3';
+    const sql = 'SELECT * FROM users WHERE users.user_status = 2';
     con.query(sql, (err, results) => {
         if (err) {
             res.status(500).json({ error: 'Database query failed' });
@@ -820,6 +936,27 @@ app.get('/sellerverify', (req, res) => {
         }
     });
 });
+app.post('/updateSeller/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const { status } = req.body;
+
+    if (![1, 4].includes(status)) {
+        return res.status(400).json({ error: 'Invalid status value' });
+    }
+
+    const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
+    con.query(updateSql, [status, userId], (err, result) => {
+        if (err) {
+            console.error('Error updating user status:', err);
+            return res.status(500).json({ error: 'Error updating user status' });
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json('User status updated successfully');
+    });
+});
+
 
 
 // ----- seller report list
@@ -837,17 +974,29 @@ app.get('/sellerreport', (req, res) => {
     });
 });
 
-app.get('/detail', (req, res) => {
-    const sql = 'SELECT * FROM reports';
-    con.query(sql, (err, results) => {
+
+app.post('/updateReportStatus/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const { status } = req.body;
+
+    // Only allow status 0 (ban) or 5 (deny report)
+    if (![0, 5].includes(status)) {
+        return res.status(400).send('Invalid status value');
+    }
+
+    const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
+    con.query(updateSql, [status, userId], (err, result) => {
         if (err) {
-            res.status(500).json({ error: 'Database query failed' });
-        } else {
-            res.json(results);
+            console.error('Error updating user status:', err);
+            return res.status(500).send('Error updating user status');
         }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('User not found');
+        }
+        res.send(`User status updated to ${status}`);
     });
 });
-app.po
+
 
 
 const PORT = 3000;

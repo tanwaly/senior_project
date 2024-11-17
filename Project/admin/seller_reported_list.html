@@ -20,7 +20,7 @@
             align-items: center;
         }
 
-        .container {
+        .blackbg {
             background-color: #2C2C2C;
             padding: 20px;
             border-radius: 8px;
@@ -127,7 +127,7 @@
 
 <body>
 
-    <div class="container">
+    <div class="blackbg">
         <h2>ผู้ขายที่ถูกรายงาน</h2>
         <div class="controls">
             <div class="search-bar">
@@ -267,16 +267,94 @@
             searchInput.addEventListener('input', filterUsers);
             allList();
         });
+        function banSeller() {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: "Confirm Suspend",
+                text: "",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "cancel",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Suspend!",
+                        text: "Suspend completion",
+                        icon: "success"
+                    });
+                }
+            });
+        }
 
         function denyReport() {
-            console.log('Deny report action');
-            // Implement your deny logic here
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: "btn btn-success",
+                    cancelButton: "btn btn-danger"
+                },
+                buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+                title: "Confirm",
+                text: "",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "cancel",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Repel",
+                        text: "Repel completion",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+        function banSeller() {
+            const userId = document.querySelector('#ban-seller-btn').dataset.userId;
+            updateUserReportStatus(userId, 0);
         }
 
-        function banSeller() {
-            console.log('Ban seller action');
-            // Implement your ban logic here
+        function denyReport() {
+            const userId = document.querySelector('#deny-report-btn').dataset.userId;
+            updateUserReportStatus(userId, 5);
         }
+
+        async function updateUserReportStatus(userId, status) {
+            try {
+                const response = await fetch(`/updateReportStatus/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status })
+                });
+
+                if (response.ok) {
+                    Swal.fire({
+                        title: status === 0 ? "Suspend!" : "Repel",
+                        text: status === 0 ? "Suspend completion" : "Repel completion",
+                        icon: "success"
+                    });
+                    // Optionally reload or update the UI here
+                } else {
+                    console.error('Failed to update status:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+
     </script>
 </body>
 
