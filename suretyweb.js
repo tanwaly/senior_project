@@ -933,6 +933,16 @@ app.get('/sellerreport', (req, res) => {
         }
     });
 });
+app.get('/reportdetail', (req, res) => {
+    const sql = 'SELECT * FROM reports';
+    con.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else {
+            res.json(results);
+        }
+    });
+});
 
 
 app.post('/updateReportStatus/:userId', (req, res) => {
@@ -956,6 +966,63 @@ app.post('/updateReportStatus/:userId', (req, res) => {
         res.send(`User status updated to ${status}`);
     });
 });
+
+//----- order status
+app.get('/orders-status', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/admin/order_status.html'));
+});
+app.get('/allproduct', (req, res) => {
+    const sql = `
+        SELECT 
+            orders.order_id,
+            orders.order_tracknum, 
+            orders.order_status, 
+            products.product_name, 
+            products.product_price, 
+            products.product_img, 
+            users.first_name AS seller_name, 
+            queue.cus_id, 
+            (SELECT u.first_name FROM users u WHERE u.users_id = queue.cus_id) AS customer_name,
+            orders.order_date
+        FROM orders
+        JOIN queue ON orders.queue_id = queue.queue_id
+        JOIN products ON queue.product_id = products.product_id
+        JOIN users ON products.seller_id = users.users_id
+        ORDER BY orders.order_date DESC; -- Ordering by order_date in descending order
+    `;
+    con.query(sql, (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else {
+            res.json(results);
+        }
+    });
+});
+
+app.post('/updateOrderStatus', (req, res) => {
+    const { order_id, order_status } = req.body;
+
+    console.log(`Received data - order_id: ${order_id}, order_status: ${order_status}`); // Debug log
+
+    if (!order_id || order_status === undefined) {
+        return res.status(400).send('Invalid input');
+    }
+
+    const query = 'UPDATE orders SET order_status = ? WHERE order_id = ?';
+    db.execute(query, [order_status, order_id], (err, result) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).send('Database error');
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Order not found');
+        }
+
+        res.send('Order status updated successfully');
+    });
+});
+
 
 
 
