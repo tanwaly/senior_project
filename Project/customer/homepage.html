@@ -31,24 +31,10 @@
                     style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-person"></i> โปรไฟล์
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; "
-                    onclick="openPopup()">
+                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
             </div>
-            <!-- pop up contect store -->
-            <div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
-                <div class="popup-box" onclick="event.stopPropagation()">
-                    <button class="close-button" onclick="closePopup(event)">✖</button>
-                    <div class="contact-header">ช่องทางการติดต่อ</div>
-                    <div class="contact-info">
-                        <p>ID LINE: qwqwefs</p>
-                        <p>IG: dasldkakd</p>
-                        <p>Fackbook: klsdadj</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
@@ -113,16 +99,6 @@
     </div>
 </body>
 <script>
-
-    function openPopup() {
-        document.getElementById('popupOverlay').style.display = 'flex';
-    }
-
-    // Function to close the popup
-    function closePopup(event) {
-        document.getElementById('popupOverlay').style.display = 'none';
-    }
-
     function changeIcon(cata) {
         const icons = {
             1: 'icon-shirt',
@@ -188,17 +164,16 @@
                                 <img src="/public/img/${product.profile_img}" alt="Profile Image" width="120px" style="border-radius: 50%; margin: 10px;">
                             </a>
                         </button>
-            <div>
-        <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit;">
-                            <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
-                            <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
+                        <div>
+                            <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit;">
+                                <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name} ${product.last_name}</span>
+                            </a>
                             <div class="row" style="padding: 15px;">
                                 <div class="category-sh">
                                     <span class="${changeIcon(product.product_cate)}"></span>
                                 </div>
                             </div>
-        </a>
-    </div>
+                        </div>
                         <div style="width: 100%; display: flex; justify-content: end;">
                             <div id="productTimeDisplay_${product.product_id}" style="width: 150px; height: 80px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
                                 <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
@@ -349,75 +324,6 @@
         display: flex;
         flex-direction: column;
     }
-
-    /* Popup background overlay */
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Popup box */
-    .popup-box {
-        background-color: #F3F3E3;
-        width: 350px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        position: relative;
-    }
-
-    /* Popup header */
-    .contact-header {
-        background-color: #a0af7f;
-        color: #333;
-        padding: 10px;
-        font-weight: bold;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    /* Popup content */
-    .contact-info {
-        padding: 15px;
-        color: #333;
-    }
-
-    .contact-info p {
-        margin: 8px 0;
-        font-weight: bold;
-    }
-
-    /* Close button */
-    .close-button {
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        background: none;
-        border: none;
-        color: #333;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-
-    /* Trigger button */
-    .open-popup-button {
-        padding: 10px 20px;
-        background-color: #a0af7f;
-        color: #333;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
 </style>
 
 </html>
