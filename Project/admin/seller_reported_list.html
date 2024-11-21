@@ -4,144 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Seller Reports</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <title>Seller Reports</title>
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2b2b2b;
-            color: #FFF;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
 
-        .blackbg {
-            background-color: #2C2C2C;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 100vw;
-            height: 100vh;
-            max-width: none;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            flex: 1;
-            margin-right: 10px;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 30px;
-            border: 1px solid #FFF;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .search-bar i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-            font-size: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #F3F3E3;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-            color: #000;
-        }
-
-        th {
-            background-color: #F3F3E3;
-            font-weight: bold;
-        }
-
-        .btn-details {
-            background-color: #B2B2B2;
-            color: #FFFFFF;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border-radius: 10px;
-            border: 1px solid #999;
-            cursor: pointer;
-            font-weight: bold;
-            width: 60%;
-        }
-
-        .btn-details:hover {
-            background-color: #bbb;
-        }
-
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .row {
-            display: flex;
-            flex-direction: row;
-        }
-
-        .col {
-            display: flex;
-            flex-direction: column;
-        }
-    </style>
 </head>
 
-<body>
+<body style=" background-color: #2C2C2C;">
 
-    <div class="blackbg">
-        <h2>ผู้ขายที่ถูกรายงาน</h2>
-        <div class="controls">
+    <div style="margin: 20px;">
+        <h2 style=" text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ถูกรายงาน</h2>
+        <div style=" display: flex; justify-content: space-between; margin-bottom: 20px;">
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="ค้นหา...">
                 <i class="fa fa-search"></i>
             </div>
         </div>
 
-        <div id="showUsersList">
+        <div id="showUsersList" class="center">
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>ชื่อ-นามสกุล</th>
+                        <th>ชื่อ-นามสกุลของผู้ถูกรายงาน</th>
                         <th>Role</th>
                         <th></th>
                     </tr>
@@ -159,203 +45,284 @@
                     style="background-color:  #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
                     <div class="modal-header" style="background-color:  #272727;">
                         <h5 class="modal-title" id="reportDetailTitle" style="color: white; font-size: 22px;">
-                            เหตุผลที่ถูกรายงาน
+                            รายละเอียดการรายงาน
                         </h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
                             style="background-color: transparent; border: none; color: white; font-size: 40px;">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <div class="container" style="font-size: 20px; margin-top: 30px;">
-                            <div class="col">
-                                <div
-                                    style="background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px; margin-bottom: 20px;">
-                                    <p>ชื่อ: testttttttttt testtttttttttttttttt</p>
-                                    <p>ID: testttttttttttt</p>
-                                </div>
-
-                                <div
-                                    style="background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px;">
-                                    <p>เหตุผล: testtttt</p>
-                                    <p style="word-wrap: break-word;">
-                                        รายละเอียด:
-                                        testtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-                                    </p>
-                                </div>
-                            </div>
-                            <div style="margin-top: 20px; border-radius: 20px;">
-                                <u style="font-size: 25px; color: rgb(0, 0, 0);">หลักฐาน</u>
-                                <div class="row center"
-                                    style="margin-top: 20px; display: flex; justify-content: space-evenly;">
-                                    <img src="/public/img/test.jpg" alt="" style="max-width: 500px; width: auto;">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row center" style="display: flex; justify-content: space-around; margin-top: 20px;">
-                            <button id="deny-report-btn" onclick="denyReport()"
-                                style="background: #FFE48C; border: none; border-radius: 10px;width: 200px; height: 65px;">ปฎิเสธการรายงาน</button>
-                            <button id="ban-seller-btn" onclick="banSeller()"
-                                style="background: #b72323; color: white;border: none; border-radius: 10px;width: 200px; height: 65px;">ระงับบัญชีผู้ใช้</button>
-                        </div>
+                    <div class="mreportDetails">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        function changeRole(role) {
-            const icons = {
-                1: 'Customer',
-                2: 'Seller',
-                3: 'Admin'
-            };
-            return icons[role] || null;
-        }
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const userTableBody = document.getElementById('userTableBody');
+                const searchInput = document.getElementById('search-input');
+                const reportDetailsContainer = document.querySelector('.mreportDetails');
+                let allUsers = [];
 
-        function formatUserId(userId) {
-            return userId.toString().padStart(11, '0');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const userTableBody = document.getElementById('userTableBody');
-            const searchInput = document.getElementById('search-input');
-
-            let allUsers = [];
-
-            async function allList() {
-                try {
-                    const response = await fetch('/sellerreport');
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log('Fetched data:', data);
-
-                        allUsers = data;
-                        filterUsers();
-                    } else {
-                        console.error('Failed to fetch data:', response.status, response.statusText);
+                async function allList() {
+                    try {
+                        const response = await fetch('/sellerreport');
+                        if (response.ok) {
+                            const data = await response.json();
+                            allUsers = data;
+                            filterUsers();
+                        } else {
+                            console.error('Failed to fetch data:', response.status, response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Fetch error:', error);
                     }
-                } catch (error) {
-                    console.error('Fetch error:', error);
                 }
-            }
 
-            function filterUsers() {
-                const searchQuery = searchInput.value.toLowerCase();
+                function formatUserId(userId) {
+                    return userId.toString().padStart(11, '0');
+                }
 
-                const filteredUsers = allUsers.filter(user => {
-                    const matchesSearch =
-                        user.users_id.toString().includes(searchQuery) ||
-                        `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchQuery);
-                    return matchesSearch;
-                });
+                function changeRole(role) {
+                    const roles = { 1: 'Customer', 2: 'Seller', 3: 'Admin' };
+                    return roles[role] || null;
+                }
 
-                let rows = '';
-                filteredUsers.forEach(user => {
-                    rows += `
-                    <tr>
-                        <td>${formatUserId(user.users_id)}</td>
-                        <td>ชื่อ:${user.first_name} ${user.last_name}</td>
-                        <td>${changeRole(user.role_id)}</td>
-                        <td><button class="btn-details" data-user-id="${user.users_id}" data-bs-toggle="modal" data-bs-target="#reportDetail">รายละเอียด</button></td>
-                    </tr>`;
-                });
+                function filterUsers() {
+                    const searchQuery = searchInput.value.toLowerCase();
+                    const filteredUsers = allUsers.filter(user => {
+                        const matchesSearch =
+                            user.seller_id.toString().includes(searchQuery) ||
+                            `${user.first_name} ${user.last_name}`.toLowerCase().includes(searchQuery);
+                        return matchesSearch;
+                    });
 
-                userTableBody.innerHTML = rows;
-            }
+                    let rows = '';
+                    filteredUsers.forEach(user => {
+                        const isGrey = user.report_status === 0;
+                        const rowClass = isGrey ? 'grey-row' : '';
+                        rows += `
+                        <tr class="${rowClass}">
+                            <td>${formatUserId(user.seller_id)}</td>
+                            <td>${user.first_name} ${user.last_name}</td>
+                            <td>${changeRole(user.role)}</td>
+                            <td>
+                                <button class="btn-details" data-bs-toggle="modal" data-bs-target="#reportDetail" data-user-id="${user.seller_id}">
+                                    รายละเอียด
+                                </button>
+                            </td>
+                        </tr>`;
+                    });
 
-            searchInput.addEventListener('input', filterUsers);
-            allList();
-        });
-        function banSeller() {
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: "btn btn-success",
-                    cancelButton: "btn btn-danger"
-                },
-                buttonsStyling: false
-            });
-            swalWithBootstrapButtons.fire({
-                title: "Confirm Suspend",
-                text: "",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "cancel",
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swalWithBootstrapButtons.fire({
-                        title: "Suspend!",
-                        text: "Suspend completion",
-                        icon: "success"
+                    userTableBody.innerHTML = rows;
+                    addDetailEventListeners();
+                }
+
+                function addDetailEventListeners() {
+                    const detailButtons = document.querySelectorAll('.btn-details');
+                    detailButtons.forEach(button => {
+                        button.addEventListener('click', async () => {
+                            const userId = button.getAttribute('data-user-id');
+                            await loadReportDetails(userId);
+                        });
                     });
                 }
-            });
-        }
 
-        function denyReport() {
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: "btn btn-success",
-                    cancelButton: "btn btn-danger"
-                },
-                buttonsStyling: false
-            });
-            swalWithBootstrapButtons.fire({
-                title: "Confirm",
-                text: "",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "cancel",
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    swalWithBootstrapButtons.fire({
-                        title: "Repel",
-                        text: "Repel completion",
-                        icon: "success"
-                    });
+                async function loadReportDetails(userId) {
+                    try {
+                        const response = await fetch(`/reportdetail/${userId}`);
+                        if (response.ok) {
+                            const report = await response.json();
+                            populateReportDetails(report);
+                        } else {
+                            console.error('Failed to fetch report details:', response.status, response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error fetching report details:', error);
+                    }
                 }
-            });
-        }
-        function banSeller() {
-            const userId = document.querySelector('#ban-seller-btn').dataset.userId;
-            updateUserReportStatus(userId, 0);
-        }
 
-        function denyReport() {
-            const userId = document.querySelector('#deny-report-btn').dataset.userId;
-            updateUserReportStatus(userId, 5);
-        }
-
-        async function updateUserReportStatus(userId, status) {
-            try {
-                const response = await fetch(`/updateReportStatus/${userId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ status })
-                });
-
-                if (response.ok) {
-                    Swal.fire({
-                        title: status === 0 ? "Suspend!" : "Repel",
-                        text: status === 0 ? "Suspend completion" : "Repel completion",
-                        icon: "success"
-                    });
-                    // Optionally reload or update the UI here
-                } else {
-                    console.error('Failed to update status:', response.statusText);
+                function populateReportDetails(report) {
+                    reportDetailsContainer.innerHTML = `
+                    <div class="modal-body">
+                <div class="container" style="font-size: 20px; margin-top: 30px;">
+                    <div class="col">
+                        <div class="col" style="color:black; background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px; margin-bottom: 20px;">
+                            <span class="name-p">ชื่อ: <span class="name-p2">${report.first_name} ${report.last_name}</span></span>
+                            <span class="name-p">เบอร์โทร: <span class="name-p2">${report.phonenum}</span></span>
+                            <span class="name-p">ชื่อบัญชีธนาคาร: <span class="name-p2">${report.bank_ac_name}</span></span>
+                            <span class="name-p">เลขบัญชีธนาคาร: <span class="name-p2">${report.bank_ac_num}</span></span>
+                        </div>
+                        <u class="name-p" style="color: black; margin-bottom: 20px;">เหตุผลในการรายงานผู้ใช้</u>
+                        <div class="col" style="color: black; background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px;">
+                            <span class="name-p">เหตุผล: <span class="name-p2">${report.report_reason}</span></span>
+                            <span class="name-p">รายละเอียด: <span class="name-p2">${report.report_detail}</span></span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; border-radius: 20px;">
+                        <u class="name-p" style="color: black;">หลักฐาน</u>
+                        <div class="row center" style="margin-top: 20px; display: flex; justify-content: space-evenly;">
+                            <img src="/public/img/${report.report_img}" alt="" style="width: 600px; object-fit: contain;">
+                        </div>
+                    </div>
+                </div>
+                 <div class="row center" style="display: flex; justify-content: space-around; margin-top: 20px;">
+                            <button id="deny-report-btn" data-user-id="${report.seller_id}" style="background: #FFE48C; border: none; border-radius: 10px;width: 200px; height: 65px;">ปฎิเสธการรายงาน</button>
+                            <button id="ban-seller-btn" data-user-id="${report.seller_id}"  style="background: #b72323; color: white;border: none; border-radius: 10px;width: 200px; height: 65px;">ระงับบัญชีผู้ใช้</button>
+                        </div>
+                    </div>`;
+                    attachModalButtonListeners();
                 }
-            } catch (error) {
-                console.error('Error updating status:', error);
-            }
-        }
 
-    </script>
+                function attachModalButtonListeners() {
+                    const denyButton = document.getElementById('deny-report-btn');
+                    const banButton = document.getElementById('ban-seller-btn');
+
+                    if (denyButton) {
+                        denyButton.addEventListener('click', () => {
+                            const userId = denyButton.getAttribute('data-user-id');
+                            updateUserReportStatus(userId, 1);
+                        });
+                    }
+
+                    if (banButton) {
+                        banButton.addEventListener('click', () => {
+                            const userId = banButton.getAttribute('data-user-id');
+                            updateUserReportStatus(userId, 0);
+                        });
+                    }
+                }
+
+                async function updateUserReportStatus(userId, userStatus) {
+                    try {
+                        const response = await fetch(`/updateReportStatus/${userId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ userStatus }),
+                        });
+
+                        if (response.ok) {
+                            Swal.fire({
+                                title: userStatus === 0 ? 'Account Suspended!' : 'Report Rejected!',
+                                text: userStatus === 0
+                                    ? 'The account has been suspended successfully.'
+                                    : 'The report has been rejected successfully.',
+                                icon: 'success',
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            console.error('Failed to update status:', response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error updating status:', error);
+                    }
+                }
+
+                searchInput.addEventListener('input', filterUsers);
+                allList();
+            });
+        </script>
+
 </body>
+<style>
+    .search-bar {
+        flex: 1;
+        margin-right: 10px;
+        position: relative;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 30px;
+        border: 1px solid #FFF;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .search-bar i {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        font-size: 20px;
+    }
+
+    table {
+        width: 1800px;
+        border-collapse: collapse;
+        background-color: #F3F3E3;
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #F3F3E3;
+        font-weight: bold;
+    }
+
+    .btn-details {
+        background-color: #B2B2B2;
+        color: #FFFFFF;
+        padding: 10px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 10px;
+        border: 1px solid #999;
+        cursor: pointer;
+        font-weight: bold;
+        width: 60%;
+    }
+
+    .btn-details:hover {
+        background-color: #bbb;
+    }
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .name-p {
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .name-p2 {
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 400;
+        word-wrap: break-word;
+        margin-bottom: 8px;
+    }
+
+    .grey-row {
+        background-color: #d3d3d3;
+        color:gray;
+    }
+</style>
 
 </html>

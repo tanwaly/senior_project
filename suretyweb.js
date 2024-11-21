@@ -655,7 +655,7 @@ app.put('/updateSellerInfo/:sellerId', (req, res) => {
     const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num } = req.body;
 
     const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ?, bank_ac_name = ?, bank_ac_num = ? WHERE users_id = ?;`;
-    const params = [first_name, last_name, phonenum, email,, bank_ac_name, bank_ac_num, sellerId];
+    const params = [first_name, last_name, phonenum, email, , bank_ac_name, bank_ac_num, sellerId];
 
     con.query(sql, params, (err, results) => {
         if (err) {
@@ -963,18 +963,22 @@ app.post('/updateSeller/:userId', (req, res) => {
 app.get('/sellerReport-list', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/seller_reported_list.html'));
 });
+
 app.get('/sellerreport', (req, res) => {
-    const sql = 'SELECT * FROM users WHERE users.user_status = 3';
-    con.query(sql, (err, results) => {
-        if (err) {
-            res.status(500).json({ error: 'Database query failed' });
-        } else {
-            res.json(results);
-        }
-    });
-});
-app.get('/reportdetail', (req, res) => {
-    const sql = 'SELECT * FROM reports';
+    const sql = `
+    SELECT 
+        reports.report_id, 
+        reports.seller_id, 
+        reports.report_reason, 
+        reports.report_detail, 
+        reports.report_status, 
+        users.first_name, 
+        users.last_name, 
+        users.role 
+    FROM reports
+    JOIN users ON reports.seller_id = users.users_id
+    ORDER BY reports.report_status DESC;
+    `;
     con.query(sql, (err, results) => {
         if (err) {
             res.status(500).json({ error: 'Database query failed' });
@@ -985,27 +989,63 @@ app.get('/reportdetail', (req, res) => {
 });
 
 
+app.get('/reportdetail/:userId', (req, res) => {
+    const userId = req.params.userId;
+    const sql = `
+        SELECT 
+            reports.*, 
+            users.first_name, 
+            users.last_name, 
+            users.phonenum, 
+            users.bank_ac_name, 
+            users.bank_ac_num 
+        FROM reports 
+        JOIN users ON reports.seller_id = users.users_id 
+        WHERE reports.seller_id = ?
+    `;
+    con.query(sql, [userId], (err, results) => {
+        if (err) {
+            res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            res.status(404).json({ error: 'Report not found' });
+        } else {
+            res.json(results[0]);
+        }
+    });
+});
 app.post('/updateReportStatus/:userId', (req, res) => {
     const userId = req.params.userId;
-    const { status } = req.body;
+    const { userStatus } = req.body;
 
-    // Only allow status 0 (ban) or 5 (deny report)
-    if (![0, 5].includes(status)) {
-        return res.status(400).send('Invalid status value');
-    }
+    const updateUserSql = `
+        UPDATE users 
+        SET user_status = ? 
+        WHERE users_id = ?`;
+    const updateReportSql = `
+        UPDATE reports 
+        SET report_status = 0 
+        WHERE seller_id = ?`;
 
-    const updateSql = 'UPDATE users SET user_status = ? WHERE users_id = ?';
-    con.query(updateSql, [status, userId], (err, result) => {
+    con.query(updateUserSql, [userStatus, userId], (err, userResult) => {
         if (err) {
-            console.error('Error updating user status:', err);
-            return res.status(500).send('Error updating user status');
+            res.status(500).json({ error: 'Failed to update user status' });
+        } else if (userResult.affectedRows === 0) {
+            res.status(404).json({ error: 'User not found' });
+        } else {
+            con.query(updateReportSql, [userId], (err, reportResult) => {
+                if (err) {
+                    res.status(500).json({ error: 'Failed to update report status' });
+                } else {
+                    res.json({
+                        success: true,
+                        message: 'User status and report status updated successfully'
+                    });
+                }
+            });
         }
-        if (result.affectedRows === 0) {
-            return res.status(404).send('User not found');
-        }
-        res.send(`User status updated to ${status}`);
     });
 });
+
 
 //----- order status
 app.get('/orders-status', (req, res) => {
