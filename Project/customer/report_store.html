@@ -1,77 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    />
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
             crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
-    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
-    <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Report Store</title>
-  </head>
+  <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
+  <script src="/public/js/bootstrap.bundle.min.js"></script>
+  <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Store</title>
+</head>
 
-  <body style="background-color: #f1f1f1 ">
-    <div style="background-color:#f5eecc;" class="d-flex">
-      <div class="d-flex align-items-center"
-          style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
-          <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-          <div class="d-flex justify-content-between" style="margin-left: 65px;">
-              <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                  <i class="bi bi-house-door"></i> Homepage
-              </a>
-              <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                  <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
-              </a>
-              <a href="/customerprofile" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                  <i class="bi bi-person"></i> โปรไฟล์
-              </a>
-              <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;" onclick="openPopup()">
-                  <i class="bi bi-chat-dots"></i> Help
-              </a>
-          </div>
-           <!-- pop up contect store -->
-           <div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
-            <div class="popup-box" onclick="event.stopPropagation()">
-                <button class="close-button" onclick="closePopup(event)">✖</button>
-                <div class="contact-header">ช่องทางการติดต่อ</div>
-                <div class="contact-info">
-                    <p>ID LINE: qwqwefs</p>
-                    <p>IG: dasldkakd</p>
-                    <p>Fackbook: klsdadj</p>
-                </div>
+<body style="background-color: #f1f1f1 ">
+  <div style="background-color:#f5eecc;" class="d-flex">
+    <div class="d-flex align-items-center"
+      style="background:#4b2f7b; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+      <img src="/public/img/logo-w.png" width="100px" alt="Logo">
+      <div class="d-flex justify-content-between" style="margin-left: 65px;">
+        <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+          <i class="bi bi-house-door"></i> Homepage
+        </a>
+        <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+          <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
+        </a>
+        <a href="/customerprofile" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+          <i class="bi bi-person"></i> โปรไฟล์
+        </a>
+        <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;" data-bs-toggle="modal"
+          data-bs-target="#helpModal">
+          <i class="bi bi-chat-dots"></i> Help
+        </a>
+      </div>
+      <!-- pop up contect store -->
+      <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="background-color: #F3F3E3;">
+            <div class="modal-header" style="background-color:#A9B489;">
+              <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+              <p><strong>ID LINE:</strong> qwqwefs</p>
+              <p><strong>IG:</strong> surety_sp</p>
+              <p><strong>Facebook:</strong> klsdadj</p>
+            </div>
+          </div>
         </div>
-
       </div>
-      <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-          <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-          height: 46px; color: white;" onclick="location.replace('/login');">
-              Log out
-              <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
-          </button>
-      </div>
+    </div>
+    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+      <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
+    height: 46px; color: white;" onclick="location.replace('/login');">
+        Log out
+        <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+      </button>
+    </div>
   </div>
-
-    <div class="container mt-5">
-      <div class="white-border">
-        <h2
-          class="text-black d-flex justify-content-center align-items-center"
-          style="font-weight: bold"
-        >
-          เหตุผลในการรายงาน
-        </h2>
-        <!-- ข้อความสีขาว -->
-        <div class="mt-3">เหตุผลหลัก</div>
-        <select
-          name="year"
-          id="year"
-          style="
+  <div class="container mt-5">
+    <div class="white-border">
+      <h2 class="text-black d-flex justify-content-center align-items-center" style="font-weight: bold">
+        เหตุผลในการรายงาน
+      </h2>
+      <!-- ข้อความสีขาว -->
+      <div class="mt-3">เหตุผลหลัก</div>
+      <select name="year" id="year" style="
             width: 600px;
             height: 30px;
             margin-left: 25px;
@@ -80,45 +75,37 @@
             border-radius: 8px;
             border: none;
             color: #515050;
-          "
-        >
-          <option value="1">สินค้าไม่ตรงปก/ชำรุด</option>
-          <option value="2">ผู้ขายพูดไม่สุภาพ</option>
-          <option value="3">อื่นๆ</option>
-        </select>
-        <div class="mt-3">คำอธิบาย</div>
-        <textarea
-          class="form-control mb-2 mr-sm-2"
-          rows="3"
-          id="txtAddress"
-          style="
+          ">
+        <option value="1">สินค้าไม่ตรงปก/ชำรุด</option>
+        <option value="2">ผู้ขายพูดไม่สุภาพ</option>
+        <option value="3">อื่นๆ</option>
+      </select>
+      <div class="mt-3">คำอธิบาย</div>
+      <textarea class="form-control mb-2 mr-sm-2" rows="3" id="txtAddress" style="
             width: 1100px;
             border-color: #d9d9d9;
             background-color: #d9d9d9;
             margin-left: 25px;
             border-radius: 15px;
-          "
-        ></textarea>
-        <u style="font-size: 20px">หลักฐาน</u><br />
+          "></textarea>
+      <u style="font-size: 20px">หลักฐาน</u><br />
 
-        <div class="row mt-3 center" style="justify-content: space-between; width: 1100px; margin-left: 50px;">
-         
-            <div class="photo center">
-              <i class="bi bi-plus-lg" style="font-size: 50px;"></i>
-            </div>
-            <div class="photo">
+      <div class="row mt-3 center" style="justify-content: space-between; width: 1100px; margin-left: 50px;">
 
-            </div>
-            <div class="photo">
+        <div class="photo center">
+          <i class="bi bi-plus-lg" style="font-size: 50px;"></i>
+        </div>
+        <div class="photo">
 
-            </div>
-          
+        </div>
+        <div class="photo">
+
         </div>
 
-        <div class="center mt-4" >
-         <button
-          id="btnlogout"
-          style="
+      </div>
+
+      <div class="center mt-4">
+        <button id="btnlogout" style="
             background: #bde3a7;
             border-radius: 15px;
             border-color: transparent;
@@ -129,14 +116,11 @@
             font-size: 20px;
             margin-right: 200px;
             
-          "
-        >
-          ยืนยัน<i class="bi" ></i>
+          ">
+          ยืนยัน<i class="bi"></i>
         </button>
 
-        <button
-          id="btnlogout"
-          style="
+        <button id="btnlogout" style="
             background: #b72323;
             border-radius: 15px;
             border-color: transparent;
@@ -145,127 +129,52 @@
             color: white;
             font-weight: bold;
             font-size: 20px;
-          "
-        >
-          ยกเลิก<i class="bi" ></i>
-        </button>  
-        </div>
-       
-
+          ">
+          ยกเลิก<i class="bi"></i>
+        </button>
       </div>
+
+
     </div>
-  </body>
+  </div>
+</body>
 
-  <style>
-    .center {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+<style>
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .row {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-    }
+  .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 
-    .col {
-      display: flex;
-      flex-direction: column;
-    }
+  .col {
+    display: flex;
+    flex-direction: column;
+  }
 
-    .white-border {
-      border: 0px solid white; /* กำหนดขอบสีขาว */
-      padding: 50px; /* กำหนดการเว้นระยะภายใน */
-      background-color: white;
-    }
+  .white-border {
+    border: 0px solid white;
+    /* กำหนดขอบสีขาว */
+    padding: 50px;
+    /* กำหนดการเว้นระยะภายใน */
+    background-color: white;
+  }
 
-    .photo {
-      background-color: #d9d9d9;
-      width: 320px;
-      height: 200px;
-      border-radius: 15px;
-      
-       /* Popup background overlay */
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Popup box */
-    .popup-box {
-        background-color: #F3F3E3;
-        width: 350px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        position: relative;
-    }
-
-    /* Popup header */
-    .contact-header {
-        background-color: #a0af7f;
-        color: #333;
-        padding: 10px;
-        font-weight: bold;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    /* Popup content */
-    .contact-info {
-        padding: 15px;
-        color: #333;
-    }
-
-    .contact-info p {
-        margin: 8px 0;
-        font-weight: bold;
-    }
-
-    /* Close button */
-    .close-button {
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        background: none;
-        border: none;
-        color: #333;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-
-    /* Trigger button */
-    .open-popup-button {
-        padding: 10px 20px;
-        background-color: #a0af7f;
-        color: #333;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-    }
-  </style>
+  .photo {
+    background-color: #d9d9d9;
+    width: 320px;
+    height: 200px;
+    border-radius: 15px;
+  }
+</style>
 
 <script>
-  
-  function openPopup() {
-        document.getElementById('popupOverlay').style.display = 'flex';
-    }
-
-    // Function to close the popup
-    function closePopup(event) {
-        document.getElementById('popupOverlay').style.display = 'none';
-    }
 
 </script>
+
 </html>

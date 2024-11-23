@@ -25,15 +25,17 @@
                 <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a href="/customerprofile" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/customerprofile"
+                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-person"></i> โปรไฟล์
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;" onclick="openPopup()">
+                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                    onclick="openPopup()">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
             </div>
-             <!-- pop up contect store -->
-             <div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
+            <!-- pop up contect store -->
+            <div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
                 <div class="popup-box" onclick="event.stopPropagation()">
                     <button class="close-button" onclick="closePopup(event)">✖</button>
                     <div class="contact-header">ช่องทางการติดต่อ</div>
@@ -78,11 +80,12 @@
 
         <p style="font-weight: bold; font-size: 20px;">QR code</p>
         <div class="text-center">
-            <div class="col d-flex justify-content-center align-items-center"
+            <!-- <div class="col d-flex justify-content-center align-items-center"
                 style="background:white; width: 300px; height: 250px; margin: 0 auto;">
                 <img src="/public/img/My_Gallery.png" alt="QR code" style="width: 200px; height: 180px;">
                 <p style="font-weight: bold;">15:00</p>
-            </div>
+            </div> -->
+            <div id="qrCodeContainer"></div>
         </div>
         <div id="confirmbtn" style="margin-top: 20px">
 
@@ -90,15 +93,29 @@
     </div>
 
     <script>
-        
-    function openPopup() {
-        document.getElementById('popupOverlay').style.display = 'flex';
-    }
+        async function loadQRCode(account, amount) {
+            try {
+                const response = await fetch(`/generate-qr/${account}/${amount}`);
+                const qrCodeHTML = await response.text();
+                document.getElementById('qrCodeContainer').innerHTML = qrCodeHTML;
+            } catch (error) {
+                console.error('Error loading QR Code:', error);
+            }
+        }
 
-    // Function to close the popup
-    function closePopup(event) {
-        document.getElementById('popupOverlay').style.display = 'none';
-    }
+        document.addEventListener('DOMContentLoaded', () => {
+            const account = '0812345678'; // Replace with dynamic PromptPay account
+            const amount = 100.00;       // Replace with dynamic amount
+            loadQRCode(account, amount);
+        });
+        function openPopup() {
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        // Function to close the popup
+        function closePopup(event) {
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const showProduct = document.getElementById('showProduct');
@@ -155,10 +172,10 @@
         });
 
         async function confirmPayment() {
-            const orderAddress = document.getElementById("orderAddress").value.trim(); 
+            const orderAddress = document.getElementById("orderAddress").value.trim();
             const orderAddName = document.getElementById("orderAddName").value.trim();
             const queueId = document.getElementById('payButton').dataset.queueId;
-            const productId = new URLSearchParams(window.location.search).get('productId'); 
+            const productId = new URLSearchParams(window.location.search).get('productId');
 
             // Validate input
             if (!orderAddName || !orderAddress) {
@@ -241,73 +258,72 @@
             text-align: center;
         }
 
-         /* Popup background overlay */
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-    }
+        /* Popup background overlay */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
 
-    /* Popup box */
-    .popup-box {
-        background-color: #F3F3E3;
-        width: 350px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        position: relative;
-    }
+        /* Popup box */
+        .popup-box {
+            background-color: #F3F3E3;
+            width: 350px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
 
-    /* Popup header */
-    .contact-header {
-        background-color: #a0af7f;
-        color: #333;
-        padding: 10px;
-        font-weight: bold;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
+        /* Popup header */
+        .contact-header {
+            background-color: #a0af7f;
+            color: #333;
+            padding: 10px;
+            font-weight: bold;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
 
-    /* Popup content */
-    .contact-info {
-        padding: 15px;
-        color: #333;
-    }
+        /* Popup content */
+        .contact-info {
+            padding: 15px;
+            color: #333;
+        }
 
-    .contact-info p {
-        margin: 8px 0;
-        font-weight: bold;
-    }
+        .contact-info p {
+            margin: 8px 0;
+            font-weight: bold;
+        }
 
-    /* Close button */
-    .close-button {
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        background: none;
-        border: none;
-        color: #333;
-        font-size: 16px;
-        cursor: pointer;
-    }
+        /* Close button */
+        .close-button {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-
-    /* Trigger button */
-    .open-popup-button {
-        padding: 10px 20px;
-        background-color: #a0af7f;
-        color: #333;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+        /* Trigger button */
+        .open-popup-button {
+            padding: 10px 20px;
+            background-color: #a0af7f;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 
 </body>

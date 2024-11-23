@@ -15,74 +15,6 @@
             display: flex;
             flex-direction: row;
         }
-
-         /* Popup background overlay */
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Popup box */
-    .popup-box {
-        background-color: #F3F3E3;
-        width: 350px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        position: relative;
-    }
-
-    /* Popup header */
-    .contact-header {
-        background-color: #a0af7f;
-        color: #333;
-        padding: 10px;
-        font-weight: bold;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    /* Popup content */
-    .contact-info {
-        padding: 15px;
-        color: #333;
-    }
-
-    .contact-info p {
-        margin: 8px 0;
-        font-weight: bold;
-    }
-
-    /* Close button */
-    .close-button {
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        background: none;
-        border: none;
-        color: #333;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-
-    /* Trigger button */
-    .open-popup-button {
-        padding: 10px 20px;
-        background-color: #a0af7f;
-        color: #333;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
     </style>
 
 </head>
@@ -90,35 +22,40 @@
 <body style="background-color: #f1f1f1;">
     <div style="background-color:#f5eecc;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            style="background:#4b2f7b; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
                 <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
-                <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a href="/customerprofile" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/customerprofile"
+                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-person"></i> โปรไฟล์
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;" onclick="openPopup()">
+                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                    data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
             </div>
-             <!-- pop up contect store -->
-             <div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
-                <div class="popup-box" onclick="event.stopPropagation()">
-                    <button class="close-button" onclick="closePopup(event)">✖</button>
-                    <div class="contact-header">ช่องทางการติดต่อ</div>
-                    <div class="contact-info">
-                        <p>ID LINE: qwqwefs</p>
-                        <p>IG: dasldkakd</p>
-                        <p>Fackbook: klsdadj</p>
+            <!-- pop up contect store -->
+            <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="background-color: #F3F3E3;">
+                        <div class="modal-header" style="background-color:#A9B489;">
+                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>ID LINE:</strong> qwqwefs</p>
+                            <p><strong>IG:</strong> surety_sp</p>
+                            <p><strong>Facebook:</strong> klsdadj</p>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
@@ -128,244 +65,234 @@
             </button>
         </div>
     </div>
-    <div>
-        <div class="flex">
-            <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
-                class="rounded-circle m-4" style="height: 120px;">
-            <div class="flex" style="gap: 870px;">
-                <div class="column mt-4">
-                    <h2 style="font-size: 40px; font-weight: bold; margin-top: 10px;">Sweety Kung</h2>
-                    <i class="bi bi-heart-fill mt-3" style="color: firebrick; font-size: 35px;"></i>
-                    <span style="font-size: 30px; margin-left: 10px;">สิ่งที่ฉันถูกใจ</span>
-                </div>
-                <div style="display: flex; flex-direction: column; margin-top: 15px;">
-                    <button
-                        style="border: none; background-color: #d2d2d2; width: 200px; height: 50px; text-align: center; border-radius: 15px; font-weight: bold; font-size: 20px;"
-                        class="mt-3 shadow">ประวัติการซื้อ</button>
-                    <button
-                        style="border: none; background-color: #d2d2d2; width: 200px; height: 50px; text-align: center; border-radius: 15px; font-weight: bold; font-size: 20px;"
-                        class="mt-3 shadow">ประวัติส่วนตัว</button>
-                </div>
+    <div class="flex">
+        <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+            class="rounded-circle m-4" style="height: 120px;">
+        <div class="flex" style="gap: 870px;">
+            <div class="column mt-4">
+                <h2 style="font-size: 40px; font-weight: bold; margin-top: 10px;">Sweety Kung</h2>
+                <i class="bi bi-heart-fill mt-3" style="color: firebrick; font-size: 35px;"></i>
+                <span style="font-size: 30px; margin-left: 10px;">สิ่งที่ฉันถูกใจ</span>
             </div>
-
-        </div>
-
-        <div class="flex" style="justify-content: center;">
-            <!-- post ขาย -->
-            <div class="m-5">
-                <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
-                    <div class="flex">
-                        <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
-                            class="rounded-circle m-3" style="height: 90px;">
-                        <div>
-                            <h2 class="mt-2">Eiei shop</h2>
-                            <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="mt-3"
-                            style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
-                            เริ่ม 17.00</div>
-                    </div>
-                </div>
-                <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
-                    <div class="row mb-3" style="justify-content: center; position: relative;">
-
-                        <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
-                            style="height: 240px; width: 250px;">
-                        <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
-                    </div>
-
-                    <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
-                </div>
-            </div>
-            <div class="m-5">
-                <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
-                    <div class="flex">
-                        <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
-                            class="rounded-circle m-3" style="height: 90px;">
-                        <div>
-                            <h2 class="mt-2">N shop</h2>
-                            <p style="font-size: 20px;">มีSkullpanda ปล่อยค่ะ</p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="mt-3"
-                            style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
-                            เริ่ม 17.00</div>
-                    </div>
-                </div>
-                <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
-                    <div class="row mb-3" style="justify-content: center; position: relative;">
-
-                        <img src="https://i.etsystatic.com/41919123/r/il/b6803b/4955202895/il_570xN.4955202895_3lsc.jpg"
-                            alt="skullpanda" style="height: 240px; width: 250px;">
-                        <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
-                    </div>
-
-                    <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
-                </div>
+            <div style="display: flex; flex-direction: column; margin-top: 15px;">
+                <button
+                    style="border: none; background-color: #d2d2d2; width: 200px; height: 50px; text-align: center; border-radius: 15px; font-weight: bold; font-size: 20px;"
+                    class="mt-3 shadow">ประวัติการซื้อ</button>
+                <button
+                    style="border: none; background-color: #d2d2d2; width: 200px; height: 50px; text-align: center; border-radius: 15px; font-weight: bold; font-size: 20px;"
+                    class="mt-3 shadow">ประวัติส่วนตัว</button>
             </div>
         </div>
-        <div class="flex" style="justify-content: center;">
-            <!-- post ขาย -->
-            <div class="m-5">
-                <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
-                    <div class="flex">
-                        <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
-                            class="rounded-circle m-3" style="height: 90px;">
-                        <div>
-                            <h2 class="mt-2">Eiei shop</h2>
-                            <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="mt-3"
-                            style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
-                            เริ่ม 17.00</div>
+
+    </div>
+
+    <div class="flex" style="justify-content: center;">
+        <!-- post ขาย -->
+        <div class="m-5">
+            <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
+                <div class="flex">
+                    <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+                        class="rounded-circle m-3" style="height: 90px;">
+                    <div>
+                        <h2 class="mt-2">Eiei shop</h2>
+                        <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
                     </div>
                 </div>
-                <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
-                    <div class="row mb-3" style="justify-content: center; position: relative;">
-
-                        <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
-                            style="height: 240px; width: 250px;">
-                        <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
-                    </div>
-
-                    <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
+                <div class="column">
+                    <div class="mt-3"
+                        style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
+                        เริ่ม 17.00</div>
                 </div>
             </div>
-            <div class="m-5">
-                <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
-                    <div class="flex">
-                        <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
-                            class="rounded-circle m-3" style="height: 90px;">
-                        <div>
-                            <h2 class="mt-2">Eiei shop</h2>
-                            <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="mt-3"
-                            style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
-                            เริ่ม 17.00</div>
-                    </div>
-                </div>
-                <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
-                    <div class="row mb-3" style="justify-content: center; position: relative;">
+            <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
+                <div class="row mb-3" style="justify-content: center; position: relative;">
 
-                        <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
-                            style="height: 240px; width: 250px;">
-                        <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
+                    <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
+                        style="height: 240px; width: 250px;">
+                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
                             style="height: 180px; width: 190px;">
                         <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
                             alt="กางเกงช้าง" style="height: 180px; width: 190px;">
                         <i class="bi bi-plus-lg"
                             style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
-                    </div>
-
-                    <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
                 </div>
+
+                <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
             </div>
         </div>
-        <div class="flex" style="justify-content: center;">
-            <!-- post ขาย -->
-            <div class="m-5">
-                <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
-                    <div class="flex">
-                        <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
-                            class="rounded-circle m-3" style="height: 90px;">
-                        <div>
-                            <h2 class="mt-2">Eiei shop</h2>
-                            <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="mt-3"
-                            style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
-                            เริ่ม 17.00</div>
+        <div class="m-5">
+            <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
+                <div class="flex">
+                    <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+                        class="rounded-circle m-3" style="height: 90px;">
+                    <div>
+                        <h2 class="mt-2">N shop</h2>
+                        <p style="font-size: 20px;">มีSkullpanda ปล่อยค่ะ</p>
                     </div>
                 </div>
-                <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
-                    <div class="row mb-3" style="justify-content: center; position: relative;">
-
-                        <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
-                            style="height: 240px; width: 250px;">
-                        <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                            style="height: 180px; width: 190px;">
-                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
-                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
-                        <i class="bi bi-plus-lg"
-                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
-                    </div>
-
-                    <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
+                <div class="column">
+                    <div class="mt-3"
+                        style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
+                        เริ่ม 17.00</div>
                 </div>
             </div>
-            <div class="m-5">
-                <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
-                    <div class="flex">
-                        <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
-                            class="rounded-circle m-3" style="height: 90px;">
-                        <div>
-                            <h2 class="mt-2">Eiei shop</h2>
-                            <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div class="mt-3"
-                            style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
-                            เริ่ม 17.00</div>
-                    </div>
-                </div>
-                <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
-                    <div class="row mb-3" style="justify-content: center; position: relative;">
+            <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
+                <div class="row mb-3" style="justify-content: center; position: relative;">
 
-                        <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
-                            style="height: 240px; width: 250px;">
-                        <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
+                    <img src="https://i.etsystatic.com/41919123/r/il/b6803b/4955202895/il_570xN.4955202895_3lsc.jpg"
+                        alt="skullpanda" style="height: 240px; width: 250px;">
+                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
                             style="height: 180px; width: 190px;">
                         <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
                             alt="กางเกงช้าง" style="height: 180px; width: 190px;">
                         <i class="bi bi-plus-lg"
                             style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
-                    </div>
-
-                    <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
                 </div>
+
+                <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
             </div>
         </div>
+    </div>
+    <div class="flex" style="justify-content: center;">
+        <!-- post ขาย -->
+        <div class="m-5">
+            <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
+                <div class="flex">
+                    <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+                        class="rounded-circle m-3" style="height: 90px;">
+                    <div>
+                        <h2 class="mt-2">Eiei shop</h2>
+                        <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="mt-3"
+                        style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
+                        เริ่ม 17.00</div>
+                </div>
+            </div>
+            <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
+                <div class="row mb-3" style="justify-content: center; position: relative;">
+
+                    <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
+                        style="height: 240px; width: 250px;">
+                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
+                            style="height: 180px; width: 190px;">
+                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
+                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
+                        <i class="bi bi-plus-lg"
+                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
+                </div>
+
+                <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
+            </div>
+        </div>
+        <div class="m-5">
+            <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
+                <div class="flex">
+                    <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+                        class="rounded-circle m-3" style="height: 90px;">
+                    <div>
+                        <h2 class="mt-2">Eiei shop</h2>
+                        <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="mt-3"
+                        style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
+                        เริ่ม 17.00</div>
+                </div>
+            </div>
+            <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
+                <div class="row mb-3" style="justify-content: center; position: relative;">
+
+                    <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
+                        style="height: 240px; width: 250px;">
+                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
+                            style="height: 180px; width: 190px;">
+                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
+                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
+                        <i class="bi bi-plus-lg"
+                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
+                </div>
+
+                <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
+            </div>
+        </div>
+    </div>
+    <div class="flex" style="justify-content: center;">
+        <!-- post ขาย -->
+        <div class="m-5">
+            <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
+                <div class="flex">
+                    <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+                        class="rounded-circle m-3" style="height: 90px;">
+                    <div>
+                        <h2 class="mt-2">Eiei shop</h2>
+                        <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="mt-3"
+                        style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
+                        เริ่ม 17.00</div>
+                </div>
+            </div>
+            <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
+                <div class="row mb-3" style="justify-content: center; position: relative;">
+
+                    <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
+                        style="height: 240px; width: 250px;">
+                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
+                            style="height: 180px; width: 190px;">
+                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
+                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
+                        <i class="bi bi-plus-lg"
+                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
+                </div>
+
+                <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
+            </div>
+        </div>
+        <div class="m-5">
+            <div class="flex bg-white" style="height: 120px; width: 600px;gap: 180px;">
+                <div class="flex">
+                    <img src="https://i.pinimg.com/236x/13/0f/96/130f9601ce0b948996e13bc2b1d88a66.jpg" alt="pfp"
+                        class="rounded-circle m-3" style="height: 90px;">
+                    <div>
+                        <h2 class="mt-2">Eiei shop</h2>
+                        <p style="font-size: 20px;">hehehehe สวัสดีคร้าบ</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="mt-3"
+                        style="background-color: #ffa4a4; border-radius: 10px; width: 100px; height: 30px; font-weight: bold; place-content: center; text-align: center;">
+                        เริ่ม 17.00</div>
+                </div>
+            </div>
+            <div class="p-3" style="background-color: #A9B489; width: 600px; height: 350px; margin-left: 0;">
+                <div class="row mb-3" style="justify-content: center; position: relative;">
+
+                    <img src="https://inwfile.com/s-dk/lx3vhu.jpg" alt="กางเกงช้าง"
+                        style="height: 240px; width: 250px;">
+                    <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
+                            style="height: 180px; width: 190px;">
+                        <img src="https://i.etsystatic.com/11561311/r/il/08f054/4915431238/il_fullxfull.4915431238_ipyj.jpg"
+                            alt="กางเกงช้าง" style="height: 180px; width: 190px;">
+                        <i class="bi bi-plus-lg"
+                            style="color: white; font-size: 40px; position: absolute; bottom: 60px; right: -450px;"></i> -->
+                </div>
+
+                <i class="bi bi-heart-fill m-3" style="color: firebrick; font-size: 30px; float: right;"></i>
+            </div>
+        </div>
+    </div>
     </div>
 
     </div>
 
 </body>
 <script>
-    
-    function openPopup() {
-        document.getElementById('popupOverlay').style.display = 'flex';
-    }
-
-    // Function to close the popup
-    function closePopup(event) {
-        document.getElementById('popupOverlay').style.display = 'none';
-    }
 
 </script>
 
