@@ -13,7 +13,7 @@
     <title>Homepage</title>
 </head>
 
-<body style="background-color:#f1f1f1;">
+<body style="background-color:#fbfbfb;">
     <div style="background-color:#f5eecc;" class="d-flex">
         <div class="d-flex align-items-center"
             style="background:#4b2f7b; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
@@ -24,10 +24,6 @@
                 </a>
                 <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
-                </a>
-                <a href="/customerprofile"
-                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-person"></i> โปรไฟล์
                 </a>
                 <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
                     data-bs-toggle="modal" data-bs-target="#helpModal">
@@ -62,7 +58,7 @@
     <div class="container" style="margin-top: 20px;">
         <div class="search-box">
             <input type="text" placeholder="Search..."
-                style="background: #EFF7FF; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 23px; width: 1384px; height: 67px; border-color: transparent; padding: 30px;">
+                style="background:white; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 23px; width: 1384px; height: 67px; border-color: transparent; padding: 30px;">
             <button
                 style="background-color: transparent; font-size: 20px; border-color: transparent; margin-left: -50px;">
                 <i class="bi bi-search"></i>
@@ -179,8 +175,8 @@
                             </a>
                         </button>
                         <div>
-                            <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit;">
-                                <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name} ${product.last_name}</span>
+                            <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit; ">
+                                <span style="font-size: 25px; font-weight: 700; ">${product.first_name} ${product.last_name}</span>
                             </a>
                             <div class="row" style="padding: 15px;">
                                 <div class="category-sh">
@@ -201,12 +197,7 @@
                             <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; width: auto; height: auto; object-fit: contain;">
                         </button>
                     </div>
-                    <div class="row" style="justify-content: end;">
-                        <button style="width: 30px; height: 30px; background-color: transparent; border: none; margin-bottom: 25px;">
-                            <i class="bi bi-heart m-3" style="color: white; font-size: 30px; float: right;"></i>
-                        </button>
-                    </div>
-                    <div class="col">
+                    <div class="col" style="margin-top:30px;">
                         <span style="width: 300px; font-size: 26px; font-weight: 600; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
                          <span style="font-size: 18px; font-weight: 500; margin-left: 20px; color:#4b2f7b;">฿<span style =" font-size: 28px; font-weight: 800;">${product.product_price}</span></span>
                         <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
@@ -302,7 +293,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.019);
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.019); */
     }
 
     .category-sh {
