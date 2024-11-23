@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  
+
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <meta charset="UTF-8">
@@ -24,17 +24,39 @@
             style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/sellerhomepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/sellerhomepage"
+                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
-                <a href="/add-trackingnum" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/add-trackingnum"
+                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
                 </a>
+                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                    data-bs-toggle="modal" data-bs-target="#helpModal">
+                    <i class="bi bi-chat-dots"></i> Help
+                </a>
+            </div>
+            <!-- pop up contect store -->
+            <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="background-color: #F3F3E3;">
+                        <div class="modal-header" style="background-color:#A9B489;">
+                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>ID LINE:</strong> qwqwefs</p>
+                            <p><strong>IG:</strong> surety_sp</p>
+                            <p><strong>Facebook:</strong> klsdadj</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;"  onclick="location.replace('/login');">
+            height: 46px; color: white;" onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
