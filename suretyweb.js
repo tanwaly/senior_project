@@ -5,6 +5,8 @@ const path = require('path');
 const multer = require('multer')
 const upload = multer({ dest: 'public/img/' });
 const session = require('express-session');
+const QRCode = require('qrcode');
+const { crc16xmodem } = require('crc');
 const app = express();
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -22,6 +24,22 @@ const storage = multer.diskStorage({
 const Idupload = multer({ storage: storage }).single('id_img');
 const ProdectUpload = multer({ storage: storage }).single('product_img');
 
+const promptPayAccount = '1212312121';
+
+function generatePromptPayQR(account, amount) {
+    const payloadFormat = '000201';
+    const applicationID = '010211';
+    const promptPayPrefix = '2937';
+    const countryCode = '5802TH';
+    const currency = '5303764';
+    const promptPayID = account.replace(/[^0-9]/g, ''); // Clean the account number
+    const amountFormatted = amount ? `54${String(amount.toFixed(2)).replace('.', '').padStart(12, '0')}` : '';
+
+    const data = `${payloadFormat}${applicationID}${promptPayPrefix}0016A000000677010111${promptPayID}${countryCode}${currency}${amountFormatted}`;
+    const checksum = crc16xmodem(`${data}6304`).toString(16).toUpperCase().padStart(4, '0');
+    return `${data}6304${checksum}`;
+}
+
 app.use(session({
     secret: 'key1212312121',
     resave: false,
@@ -31,29 +49,6 @@ app.use(session({
         maxAge: 2 * 60 * 60 * 1000
     }
 }));
-// function isAuthenticated(req, res, next) {
-//     if (req.session && req.session.userId) {
-//         next();
-//     } else {
-//         res.status(401).send("Unauthorized");
-//     }
-// }
-
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, './public/img/');
-//     },
-//     filename: function (req, file, cb) {
-//         //cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-//         cb(null, Date.now() + "_" + file.originalname);
-//     }
-// });
-// const Idupload = multer({ storage: storage }).single('');
-
-// app.get("/", (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Project/customer/c-homepage.html'));
-// });
-
 
 //--------- register ---------
 app.get('/register', (req, res) => {
@@ -104,53 +99,11 @@ app.post('/register', Idupload, async (req, res) => {
     });
 });
 
-
 //--------- login ---------
 app.get('/login', function (_req, res) {
     res.sendFile(path.join(__dirname, 'Project/login.html'));
 });
 
-// app.post('/login', (req, res) => {
-//     const { email, password } = req.body;
-//     const sql = "SELECT users_id, password, role FROM users WHERE email = ? AND user_status = 1";
-
-//     con.query(sql, [email], (err, results) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).send("Database error");
-//         }
-
-//         if (results.length === 1) {
-//             bcrypt.compare(password, results[0].password, (err, same) => {
-//                 if (err) return res.status(500).send("Error verifying password");
-
-//                 if (same) {
-//                     req.session.users_id = results[0].users_id; // Set users_id in session
-//                     req.session.role = results[0].role; // Save the role in session too
-
-//                     // Set session to expire in 2 hours
-//                     req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
-
-//                     // Redirect based on the user's role
-//                     if (results[0].role == 1) {
-//                         res.send('homepage');
-//                     } else if (results[0].role == 2) {
-//                         res.send('sellerhomepage');
-//                     } else if (results[0].role == 3) {
-//                         res.send('adminpage');
-//                     } else {
-//                         res.status(403).send("Unauthorized role");
-//                     }
-
-//                 } else {
-//                     res.status(400).send("Wrong password");
-//                 }
-//             });
-//         } else {
-//             res.status(400).send("Email not found");
-//         }
-//     });
-// });
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     const sql = "SELECT users_id, password, role, user_status FROM users WHERE email = ?";
@@ -259,11 +212,11 @@ app.get('/cfproduct/:productId', (req, res) => {
         WHEN products.product_type = 'cloth' THEN products.product_clothsize
         WHEN products.product_type = 'shoes' THEN products.product_shoesize
         ELSE NULL
-    END as product_size
-FROM products
-JOIN users ON products.seller_id = users.users_id
-WHERE products.product_id =?`;
-
+        END as product_size
+    FROM products
+    JOIN users ON products.seller_id = users.users_id
+    WHERE products.product_id =?`;
+    
     con.query(sql, [productId], (error, results) => {
         if (error) {
             return res.status(500).json({ error: 'Database error' });
@@ -281,10 +234,10 @@ app.get('/queue/:productId', (req, res) => {
     const { productId } = req.params;
     const sql = `
         SELECT queue.*, users.first_name, users.last_name, products.product_time_duration, 
-    DATE_ADD(queue.queue_time, INTERVAL TIME_TO_SEC(products.product_time_duration) SECOND) AS estimated_time FROM queue 
-JOIN users ON queue.cus_id = users.users_id 
-JOIN products ON queue.product_id = products.product_id 
-WHERE queue.product_id = ?;`;
+            DATE_ADD(queue.queue_time, INTERVAL TIME_TO_SEC(products.product_time_duration) SECOND) AS estimated_time FROM queue 
+        JOIN users ON queue.cus_id = users.users_id 
+        JOIN products ON queue.product_id = products.product_id 
+        WHERE queue.product_id = ?;`;
 
     con.query(sql, [productId], (err, results) => {
         if (err) {
@@ -296,7 +249,6 @@ WHERE queue.product_id = ?;`;
         res.json(results);
     });
 });
-
 
 app.get('/isUserInQueue/:product_id/:cus_id', (req, res) => {
     const { product_id, cus_id } = req.params;
@@ -316,8 +268,6 @@ app.get('/isUserInQueue/:product_id/:cus_id', (req, res) => {
         }
     });
 });
-
-
 
 app.post('/queue', (req, res) => {
     const { product_id, cus_id, queue_status } = req.body;
@@ -343,7 +293,6 @@ app.post('/queue', (req, res) => {
         });
     });
 });
-
 
 //payment
 app.get('/payment', (req, res) => {
@@ -439,7 +388,33 @@ app.post('/addorder', async (req, res) => {
         res.status(500).send("DB error");
     }
 });
+app.get('/generate-qr/:amount', async (req, res) => {
+    const amount = parseFloat(req.params.amount); // Amount passed from the frontend
+    try {
+        const qrData = generatePromptPayQR(promptPayAccount, amount);
+        const qrImage = await QRCode.toDataURL(qrData);
+        res.send(`<img src="${qrImage}" alt="PromptPay QR Code" />`);
+    } catch (error) {
+        console.error('QR Code generation error:', error);
+        res.status(500).send('Failed to generate QR Code');
+    }
+});
+app.post('/payment-webhook', (req, res) => {
+    const { transaction_id, status, amount } = req.body;
+    
+    if (status === 'success') {
+        const sql = 'UPDATE orders SET payment_status = 1 WHERE transaction_id = ?';
+        con.query(sql, [transaction_id], (err) => {
+            if (err) return res.status(500).send('Database update failed');
+            res.status(200).send('Payment status updated');
+        });
+    } else {
+        res.status(400).send('Invalid payment status');
+    }
+});
 
+
+//-------- cf status
 app.get('/cf-status', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/cf_status.html'));
 });
@@ -567,7 +542,6 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
         }
     });
 });
-
 
 //================== seller =====================
 
@@ -709,8 +683,6 @@ app.get('/sellerproduct/:id', (req, res) => {
     });
 });
 
-
-
 app.get('/addpost', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/add_post.html'));
 });
@@ -787,7 +759,6 @@ app.put('/updateProduct/:id', upload.single('product_img'), (req, res) => {
     });
 });
 
-
 app.get('/add-trackingnum', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/add_tracking.html'));
 });
@@ -856,8 +827,6 @@ cron.schedule('0 0 * * *', () => {
 });
 
 
-
-
 // ================== admin =====================
 // ----- user list
 app.get('/userslist', (req, res) => {
@@ -920,8 +889,6 @@ async function getCurrentUserStatus(userId) {
     });
 }
 
-
-
 // ----- verify seller list
 app.get('/sellerVerify-list', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/seller_verifiy_list.html'));
@@ -957,8 +924,6 @@ app.post('/updateSeller/:userId', (req, res) => {
     });
 });
 
-
-
 // ----- seller report list
 app.get('/sellerReport-list', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/seller_reported_list.html'));
@@ -987,7 +952,6 @@ app.get('/sellerreport', (req, res) => {
         }
     });
 });
-
 
 app.get('/reportdetail/:userId', (req, res) => {
     const userId = req.params.userId;
@@ -1046,7 +1010,6 @@ app.post('/updateReportStatus/:userId', (req, res) => {
     });
 });
 
-
 //----- order status
 app.get('/orders-status', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/order_status.html'));
@@ -1102,9 +1065,6 @@ app.post('/updateOrderStatus', (req, res) => {
         res.send('Order status updated successfully');
     });
 });
-
-
-
 
 const PORT = 3000;
 app.listen(PORT, () => {
