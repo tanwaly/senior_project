@@ -74,7 +74,7 @@
             transform: scale(1.1);
         }
 
-        /* .modal {
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -92,7 +92,7 @@
             border-radius: 5px;
             width: 300px;
             text-align: center;
-        } */
+        }
 
         .button {
             padding: 8px 16px;
@@ -165,10 +165,11 @@
                 <div class="column" style="margin-left: 50px;">
                     <div class="flex mt-4">
                         <span style="font-size: 40px; font-weight: bold;">Eiei</span>
+                        
 
                     </div>
                     <div class="flex mt-4">
-                        <p style="font-size: 18px; font-weight: bold;"><span id="line-id-display"></span>
+                        <p style="font-size: 18px; font-weight: bold;"><span id="line-id-display">กรุณากรอกช่องทางการติดต่อเพิ่มเติม</span>
                         </p>
                     </div>
                     <div class="button">
@@ -399,6 +400,7 @@
     </div>
 
     <script>
+        
         //edit contact part
         // ฟังก์ชันเปิดโมดอล
         function openModal() {
@@ -417,12 +419,13 @@
 
             // อัปเดต ID Line ที่แสดงถ้ามีการกรอกข้อมูล
             if (newLineID) {
-                document.getElementById("line-id-display").textContent = "@" + newLineID;
+                document.getElementById("line-id-display").textContent = "ID Line: " + newLineID;
             }
 
             // ปิดโมดอล
             closeModal();
         }
+        
 
         // Add post part
 
