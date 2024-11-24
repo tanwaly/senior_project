@@ -668,7 +668,6 @@ app.get('/sellerproduct', (req, res) => {
     });
 });
 
-
 app.get('/sellerproduct/:id', (req, res) => {
     const productId = req.params.id;
 
