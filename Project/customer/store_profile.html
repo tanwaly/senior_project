@@ -338,6 +338,42 @@
             productsContainer.appendChild(productDiv);
         });
     });
+    // document.addEventListener('DOMContentLoaded', async () => {
+    //     const sellerId = window.location.pathname.split('/').pop(); // Extract sellerId from the URL
+
+    //     // Fetch seller information
+    //     const response = await fetch(`/sellerInfo/${sellerId}`);
+    //     const sellerData = await response.json();
+
+    //     if (!response.ok || sellerData.error) {
+    //         console.error(sellerData.error || 'Failed to fetch seller data');
+    //         return;
+    //     }
+
+    //     document.getElementById('profileImg').src = `/public/img/${sellerData.profile_img}`;
+    //     document.getElementById('sellerName').textContent = `${sellerData.first_name} ${sellerData.last_name}`;
+    //     document.getElementById('storeDescription').textContent = sellerData.store_description || 'No description available.';
+
+    //     // Fetch seller products
+    //     const productsResponse = await fetch(`/sellerProducts/${sellerId}`);
+    //     const products = await productsResponse.json();
+
+    //     const productsContainer = document.getElementById('sellerProducts');
+    //     productsContainer.innerHTML = ''; // Clear any existing content
+
+    //     products.forEach(product => {
+    //         const productCard = `
+    //         <div style="margin: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; background: #fff;">
+    //             <img src="/public/img/${product.product_img}" alt="${product.product_name}" style="width: 100%; height: auto; border-radius: 8px;">
+    //             <h3>${product.product_name}</h3>
+    //             <p>${product.product_caption}</p>
+    //             <p>฿${product.product_price}</p>
+    //         </div>
+    //     `;
+    //         productsContainer.innerHTML += productCard;
+    //     });
+    // });
+
 </script>
 
 </html>
@@ -348,5 +384,4 @@
         justify-content: center;
         align-items: center;
     }
-
 </style>
