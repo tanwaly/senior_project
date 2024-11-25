@@ -142,7 +142,7 @@ app.post('/login', (req, res) => {
                     } else if (user.role == 2) {
                         return res.send('sellerhomepage');
                     } else if (user.role == 3) {
-                        return res.send('adminpage');
+                        return res.send('selectpage');
                     } else {
                         return res.status(403).send("Unauthorized role");
                     }
