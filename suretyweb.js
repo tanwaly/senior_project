@@ -815,7 +815,7 @@ cron.schedule('0 0 * * *', () => {
     const sqlCheckStatus = `
         UPDATE orders
         SET order_status = 3
-        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 1;
+        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 14;
     `;
 
     con.query(sqlCheckStatus, (err, result) => {
