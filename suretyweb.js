@@ -142,7 +142,7 @@ app.post('/login', (req, res) => {
                     } else if (user.role == 2) {
                         return res.send('sellerhomepage');
                     } else if (user.role == 3) {
-                        return res.send('adminpage');
+                        return res.send('selectpage');
                     } else {
                         return res.status(403).send("Unauthorized role");
                     }
@@ -531,7 +531,7 @@ app.get('/sellerInfo/:sellerId', (req, res) => {
 
 app.get('/sellerProducts/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-    const sql = `SELECT * FROM products WHERE seller_id = ?;`;
+    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE products.seller_id = ? ORDER BY products.product_id DESC;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -548,7 +548,7 @@ app.get('/reportstore', (req, res) => {
 
 
 
-//================== seller =====================
+//================== sellers =====================
 
 app.get('/sellerinfo', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
@@ -838,7 +838,7 @@ cron.schedule('0 0 * * *', () => {
     const sqlCheckStatus = `
         UPDATE orders
         SET order_status = 3
-        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 1;
+        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 14;
     `;
 
     con.query(sqlCheckStatus, (err, result) => {
@@ -852,6 +852,11 @@ cron.schedule('0 0 * * *', () => {
 
 
 // ================== admin =====================
+//----------Select
+app.get('/selectpage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
+});
+    
 // ----- user list
 app.get('/userslist', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/user_db_list.html'));
