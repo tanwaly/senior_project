@@ -216,7 +216,7 @@ app.get('/cfproduct/:productId', (req, res) => {
     FROM products
     JOIN users ON products.seller_id = users.users_id
     WHERE products.product_id =?`;
-    
+
     con.query(sql, [productId], (error, results) => {
         if (error) {
             return res.status(500).json({ error: 'Database error' });
@@ -401,7 +401,7 @@ app.get('/generate-qr/:amount', async (req, res) => {
 });
 app.post('/payment-webhook', (req, res) => {
     const { transaction_id, status, amount } = req.body;
-    
+
     if (status === 'success') {
         const sql = 'UPDATE orders SET payment_status = 1 WHERE transaction_id = ?';
         con.query(sql, [transaction_id], (err) => {
@@ -531,7 +531,7 @@ app.get('/sellerInfo/:sellerId', (req, res) => {
 
 app.get('/sellerProducts/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-    const sql = `SELECT * FROM products WHERE seller_id = ?;`;
+    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE products.seller_id = ? ORDER BY products.product_id DESC;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -833,7 +833,7 @@ cron.schedule('0 0 * * *', () => {
 app.get('/selectpage', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
 });
-    
+
 // ----- user list
 app.get('/userslist', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/user_db_list.html'));
