@@ -815,7 +815,7 @@ cron.schedule('0 0 * * *', () => {
     const sqlCheckStatus = `
         UPDATE orders
         SET order_status = 3
-        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 1;
+        WHERE order_status = 1 AND DATEDIFF(NOW(), order_date) >= 14;
     `;
 
     con.query(sqlCheckStatus, (err, result) => {
@@ -829,6 +829,11 @@ cron.schedule('0 0 * * *', () => {
 
 
 // ================== admin =====================
+//----------Select
+app.get('/selectpage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
+});
+    
 // ----- user list
 app.get('/userslist', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/user_db_list.html'));
