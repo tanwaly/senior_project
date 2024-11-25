@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,30 +10,30 @@
 
 <body style="background-color: #8472AC;">
     <div class="container">
-        <div class="row" style="margin-top: 100px; ">
+        <div class="row" style="margin-top: 100px;">
             <div class="col" style="margin-right: 200px;">
-                <button style="background-color: #FFEEB5; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; width: 250px; height: 250px;">
-                    <img src="/public/img/dashborad.png" alt="dashborad">
-                     <p>Dashboard</p>
+                <button class="animated-button">
+                    <img src="/public/img/dashborad.png" alt="dashboard">
+                    <p>Dashboard</p>
                 </button>
             </div>
-            <div class="col" >
-                <button style="background-color: #FFEEB5; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; width: 250px; height: 250px;">
-                    <img src="/public/img/image 2.png" alt="dashborad">
+            <div class="col">
+                <button class="animated-button">
+                    <img src="/public/img/image 2.png" alt="dashboard">
                     <p>ยืนยันผู้ใช้</p>
                 </button>
             </div>
         </div>
         <div class="row" style="margin-top: 100px;">
-            <div class="col" style="margin-right: 200px;  ">
-                <button style="background-color: #FFEEB5; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; width: 250px; height: 250px;">
-                    <img src="/public/img/image 3.png" alt="dashborad">
+            <div class="col" style="margin-right: 200px;">
+                <button class="animated-button">
+                    <img src="/public/img/image 3.png" alt="dashboard">
                     <p>รายงานผู้ใช้</p>
                 </button>
             </div>
-            <div class="col" >
-                <button style="background-color: #FFEEB5; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; width: 250px; height: 250px;">
-                    <img src="/public/img/image 4.png" alt="dashborad" style="height: 100px;">
+            <div class="col">
+                <button class="animated-button">
+                    <img src="/public/img/image 4.png" alt="dashboard" style="height: 100px;">
                     <p>ฐานข้อมูลผู้ใช้</p>
                 </button>
             </div>
@@ -41,19 +42,35 @@
 </body>
 
 <style>
-    
-   .row {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      
+    .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
     }
 
     .col {
-      display: flex;
-      flex-direction: column;
-      
+        display: flex;
+        flex-direction: column;
     }
 
+    .animated-button {
+        background-color: #FFEEB5;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 10px;
+        border: none;
+        width: 250px;
+        height: 250px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .animated-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 </style>
+
+
+</style>
+
 </html>
