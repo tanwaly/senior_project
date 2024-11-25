@@ -531,7 +531,7 @@ app.get('/sellerInfo/:sellerId', (req, res) => {
 
 app.get('/sellerProducts/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-    const sql = `SELECT * FROM products WHERE seller_id = ?;`;
+    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE products.seller_id = ? ORDER BY products.product_id DESC;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
