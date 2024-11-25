@@ -541,6 +541,12 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
     });
 });
 
+app.get('/reportstore', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
+});
+
+
+
 
 //================== seller =====================
 
@@ -665,6 +671,24 @@ app.get('/sellerproduct', (req, res) => {
             }
         }
     });
+});
+
+app.post('/updateLineID', async (req, res) => {
+    const { lineID, userId } = req.body;
+
+    if (!lineID || !userId) {
+        return res.status(400).json({ success: false, message: 'Line ID and User ID are required.' });
+    }
+
+    try {
+        const query = 'UPDATE users SET line_id = ? WHERE users_id = ?';
+
+        await db.query(query, [lineID, userId]);
+        res.json({ success: true, message: 'Line ID updated successfully.' });
+    } catch (error) {
+        console.error('Database update failed:', error);
+        res.status(500).json({ success: false, message: 'Database error.' });
+    }
 });
 
 app.get('/sellerproduct/:id', (req, res) => {
