@@ -830,6 +830,11 @@ cron.schedule('0 0 * * *', () => {
 
 
 // ================== admin =====================
+//----------Select
+app.get('/selectpage', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
+});
+    
 // ----- user list
 app.get('/userslist', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/user_db_list.html'));
