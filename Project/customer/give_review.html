@@ -77,23 +77,74 @@
         </div>
         <div class="shadow m-4" style="background-color: white; width: 1000px;border-radius: 10px; padding: 30px;">
             <h1 style="font-weight: bold; ">ให้คะแนนร้าน</h1>
-            <div>
-                <i class="bi bi-star-fill" style="color: darkorange; font-size: 50px; margin-right: 5px;"></i>
-                <i class="bi bi-star-fill" style="color: darkorange; font-size: 50px; margin-right: 5px;"></i>
-                <i class="bi bi-star-fill" style="color: darkorange; font-size: 50px; margin-right: 5px;"></i>
-                <i class="bi bi-star-fill" style="color: darkorange; font-size: 50px; margin-right: 5px;"></i>
-                <i class="bi bi-star-fill" style="color: darkorange; font-size: 50px; margin-right: 5px;"></i>
+            <div id="rating-stars">
+                <i class="bi bi-star" data-value="1" style="color: gray; font-size: 35px; cursor: pointer;"></i>
+                <i class="bi bi-star" data-value="2" style="color: gray; font-size: 35px; cursor: pointer;"></i>
+                <i class="bi bi-star" data-value="3" style="color: gray; font-size: 35px; cursor: pointer;"></i>
+                <i class="bi bi-star" data-value="4" style="color: gray; font-size: 35px; cursor: pointer;"></i>
+                <i class="bi bi-star" data-value="5" style="color: gray; font-size: 35px; cursor: pointer;"></i>
             </div>
             <h2 style="font-weight: bold; margin-left: -500px;">ความคิดเห็น</h2>
             <input type="text" class="form-control" style="background-color: #d9d9d9; width: 700px; height: 150px;">
-            <button
+            <button id="submit-rating"
                 style="border: none; background-color: #BDE3A7; width: 180px; height: 60px; border-radius: 25px; font-weight: bold; font-size: 25px; margin-top: 20px;">ยืนยัน</button>
         </div>
     </center>
 
 </body>
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const stars = document.querySelectorAll('#rating-stars .bi');
+        let selectedRating = 0;
 
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'));
+                updateStars(selectedRating);
+            });
+        });
+
+        function updateStars(rating) {
+            stars.forEach(star => {
+                const value = parseInt(star.getAttribute('data-value'));
+                if (value <= rating) {
+                    star.classList.remove('bi-star');
+                    star.classList.add('bi-star-fill');
+                    star.style.color = 'darkorange';
+                } else {
+                    star.classList.remove('bi-star-fill');
+                    star.classList.add('bi-star');
+                    star.style.color = 'gray';
+                }
+            });
+        }
+
+        document.getElementById('submit-rating').addEventListener('click', async () => {
+            if (selectedRating === 0) {
+                alert('Please select a rating.');
+                return;
+            }
+
+            const sellerId = window.location.pathname.split('/').pop(); // Get sellerId from URL
+            const response = await fetch('/submitReview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sellerId: sellerId,
+                    rating: selectedRating,
+                }),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert('Thank you for your rating!');
+            } else {
+                alert('Failed to submit rating.');
+            }
+        });
+    });
 </script>
 
 </html>
