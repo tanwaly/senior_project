@@ -73,6 +73,27 @@
         .category-btn:hover {
             transform: scale(1.1);
         }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+
         .button {
             padding: 8px 16px;
             cursor: pointer;
@@ -161,8 +182,8 @@
                     <div id="editProfileModal" class="modal">
                         <div style="border-radius: 15px;" class="modal-content">
                             <h3>แก้ไขโปรไฟล์</h3>
-                            <div style="border-radius: 5px; border: none;" type="text" id="line-id-input"
-                                placeholder="   กรอก ID Line ใหม่"></div>
+                            <input style="border-radius: 5px; border: none;" type="text" id="line-id-input"
+                                placeholder="   กรอก ID Line ใหม่">
                             <br>
                             <button style="border-radius: 5px;" class="button save-button"
                                 onclick="saveLineID()">บันทึก</button>
@@ -391,20 +412,35 @@
             document.getElementById("editProfileModal").style.display = "none";
         }
 
-        // ฟังก์ชันบันทึก ID Line
-        function saveLineID() {
-            // รับค่าจากช่องกรอกข้อมูล
-            const newLineID = document.getElementById("line-id-input").value.trim();
+       function saveLineID() {
+    const newLineID = document.getElementById("line-id-input").value.trim();
 
-            // อัปเดต ID Line ที่แสดงถ้ามีการกรอกข้อมูล
-            if (newLineID) {
-                document.getElementById("line-id-display").textContent = "ID Line: " + newLineID;
+
+    if (newLineID) {
+        document.getElementById("line-id-display").textContent = "ID Line: " + newLineID;
+
+        // ส่ง Line ID ไปยัง backend
+        fetch('/updateLineID', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ lineID: newLineID }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Line ID updated successfully.');
+            } else {
+                alert('Error updating Line ID.');
             }
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
-            // ปิดโมดอล
-            closeModal();
-        }
-        
+    closeModal();
+}
+
 
         // Add post part
 
