@@ -584,6 +584,9 @@ app.get('/sellerhomepage', (req, res) => {
     });
 });
 
+// Update ID line
+
+
 app.get('/getSellerData', (req, res) => {
     const sellerId = req.session.users_id;
 
@@ -856,6 +859,12 @@ cron.schedule('0 0 * * *', () => {
 app.get('/selectpage', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
 });
+
+//----------Dashboard
+app.get('/Dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/admin/Dashboard.html'));
+});
+
     
 // ----- user list
 app.get('/userslist', (req, res) => {
