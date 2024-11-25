@@ -319,7 +319,6 @@
         } else {
             document.getElementById('profileImg').src = `/public/img/${sellerData.profile_img}`;
             document.getElementById('sellerName').textContent = `${sellerData.first_name} ${sellerData.last_name}`;
-            document.getElementById('storeDescription').textContent = sellerData.store_description;
         }
 
         // Fetch and display seller's products
@@ -330,14 +329,76 @@
         products.forEach(product => {
             const productDiv = document.createElement('div');
             productDiv.innerHTML = `
-                    <h3>${product.product_name}</h3>
-                    <img src="/public/img/${product.product_img}" alt="${product.product_name}" style="width: 100px; height: 100px;">
-                    <p>${product.product_caption}</p>
-                    <p>Price: ${product.product_price} Baht</p>
+                    <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
+                <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
+                    <div style="display: flex; align-items: center;">
+                        <button style="background-color: transparent; border: none;">
+                            <a href="/seller/${product.seller_id}">
+                                <img src="/public/img/${sellerData.profile_img}" alt="Profile Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                            </a>
+                        </button>
+                        <div>
+                            <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit; ">
+                                <span style="font-size: 25px; font-weight: 700; ">${sellerData.first_name} ${sellerData.last_name}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
+                    <div class="center">
+                        <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
+                            <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; width: auto; height: auto; object-fit: contain;">
+                        </button>
+                    </div>
+                    <div class="col" style="margin-top:30px;">
+                        <span style="width: 300px; font-size: 26px; font-weight: 600; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
+                        <br>
+                        <span style="font-size: 18px; font-weight: 500; margin-left: 20px; color:#4b2f7b;">฿<span style =" font-size: 28px; font-weight: 800;">${product.product_price}</span></span>
+                        <br>
+                        <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
+                </div>
+                </div>
+            </div>
                 `;
             productsContainer.appendChild(productDiv);
         });
     });
+    // document.addEventListener('DOMContentLoaded', async () => {
+    //     const sellerId = window.location.pathname.split('/').pop(); // Extract sellerId from the URL
+
+    //     // Fetch seller information
+    //     const response = await fetch(`/sellerInfo/${sellerId}`);
+    //     const sellerData = await response.json();
+
+    //     if (!response.ok || sellerData.error) {
+    //         console.error(sellerData.error || 'Failed to fetch seller data');
+    //         return;
+    //     }
+
+    //     document.getElementById('profileImg').src = `/public/img/${sellerData.profile_img}`;
+    //     document.getElementById('sellerName').textContent = `${sellerData.first_name} ${sellerData.last_name}`;
+    //     document.getElementById('storeDescription').textContent = sellerData.store_description || 'No description available.';
+
+    //     // Fetch seller products
+    //     const productsResponse = await fetch(`/sellerProducts/${sellerId}`);
+    //     const products = await productsResponse.json();
+
+    //     const productsContainer = document.getElementById('sellerProducts');
+    //     productsContainer.innerHTML = ''; // Clear any existing content
+
+    //     products.forEach(product => {
+    //         const productCard = `
+    //         <div style="margin: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px; background: #fff;">
+    //             <img src="/public/img/${product.product_img}" alt="${product.product_name}" style="width: 100%; height: auto; border-radius: 8px;">
+    //             <h3>${product.product_name}</h3>
+    //             <p>${product.product_caption}</p>
+    //             <p>฿${product.product_price}</p>
+    //         </div>
+    //     `;
+    //         productsContainer.innerHTML += productCard;
+    //     });
+    // });
+
 </script>
 
 </html>
@@ -348,5 +409,4 @@
         justify-content: center;
         align-items: center;
     }
-
 </style>

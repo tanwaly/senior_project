@@ -512,13 +512,12 @@ app.put('/updateCustomerInfo', (req, res) => {
 
 // click on seller; store info
 app.get('/seller/:sellerId', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
+    res.sendFile(path.join(__dirname, 'Project/customer/store_profile.html'));
 });
 
 app.get('/sellerInfo/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-
-    const sql = `SELECT first_name, last_name, profile_img, store_description FROM users WHERE users_id = ? AND role = 2;`;
+    const sql = `SELECT first_name, last_name, profile_img FROM users WHERE users_id = ? AND role = 2;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -532,18 +531,18 @@ app.get('/sellerInfo/:sellerId', (req, res) => {
 
 app.get('/sellerProducts/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-
     const sql = `SELECT * FROM products WHERE seller_id = ?;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
         } else {
-            res.json(results);  // Send products as JSON
+            res.json(results);
         }
     });
 });
 
-//================== seller =====================
+
+//================== sellers =====================
 
 app.get('/sellerinfo', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
