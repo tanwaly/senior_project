@@ -542,7 +542,7 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
 });
 
 
-//================== seller =====================
+//================== sellers =====================
 
 app.get('/sellerinfo', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
