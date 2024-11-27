@@ -4,120 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>manegseller1(list)</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <title>Seller Verification</title>
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2b2b2b;
-            color: #FFF;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            flex: 1;
-            margin-right: 10px;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 30px;
-            border: 1px solid #FFF;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        .search-bar i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aaa;
-            font-size: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #F3F3E3;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-            color: #000;
-        }
-
-        th {
-            background-color: #F3F3E3;
-            font-weight: bold;
-        }
-
-        .btn-sdetails {
-            background-color: #B2B2B2;
-            color: #FFFFFF;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border-radius: 10px;
-            border: 1px solid #999;
-            cursor: pointer;
-            font-weight: bold;
-            width: 60%;
-        }
-
-        .btn-sdetails:hover {
-            background-color: #bbb;
-        }
-
-        .approve-btn {
-            border-radius: 8px;
-            border: none;
-            background-color: #BDE3A7;
-            height: 50px;
-            width: 150px;
-        }
-
-        .disapprove-btn {
-            border-radius: 8px;
-            border: none;
-            background-color: #FFA4A4;
-            height: 50px;
-            width: 150px;
-            margin-left: 30px;
-        }
-    </style>
 </head>
 
-<body>
+<body style="background-color: #2C2C2C;">
 
-    <div style="background-color: #2C2C2C; padding-top: 20px;">
-        <h2 style="text-align: center; margin-bottom: 20px;">ผู้ขายที่ต้องการการตรวจสอบ</h2>
-        <div class="controls">
+    <div style="margin: 20px;">
+        <h2 style="text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ต้องการการตรวจสอบ</h2>
+        <div style=" display: flex; justify-content: space-between; margin-bottom: 20px;">
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="ค้นหา...">
                 <i class="fa fa-search"></i>
             </div>
         </div>
 
-        <div id="showUsersList" style="width: 1800px;">
+        <div id="showUsersList" class="center">
             <table>
                 <thead>
                     <tr>
@@ -132,17 +36,22 @@
                 </tbody>
             </table>
         </div>
-    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content" style="width: 550px;">
-                <div class="modal-header" style="background-color:#5b477d;">
-                    <h5 class="modal-title" id="svdModalLabel">รายละเอียด</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="background-color:#F3F3E3; padding: 50px;">
+        <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
+            <div class="modal-dialog center" role="document">
+                <div class="modal-content"
+                    style="background-color:  #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
+                    <div class="modal-header" style="background-color: #272727;">
+                        <h5 class="modal-title" id="svdModalLabel" style="color: white; font-size: 22px;">รายละเอียด
+                        </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="padding: 50px;">
+                        <!-- Dynamic details content will go here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -180,7 +89,7 @@
                     <tr>
                         <td>${formatUserId(user.users_id)}</td>
                         <td>ชื่อ: ${user.first_name} ${user.last_name}</td>
-                        <td><button data-bs-toggle="modal" data-bs-target="#svdModal" class="btn-sdetails" data-user-id="${user.users_id}">รายละเอียด</button></td>
+                        <td><button data-bs-toggle="modal" data-bs-target="#svdModal" class="btn-details" data-user-id="${user.users_id}">รายละเอียด</button></td>
                         <td>
                             <button class="approve-btn" onclick="updateUserStatus(${user.users_id}, 1)">อนุมัติ</button>
                             <button class="disapprove-btn" onclick="updateUserStatus(${user.users_id}, 4)">ไม่อนุมัติ</button>
@@ -257,5 +166,81 @@
 
 
 </body>
+<style>
+    .search-bar {
+        flex: 1;
+        margin-right: 10px;
+        position: relative;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 30px;
+        border: 1px solid #FFF;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .search-bar i {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #aaa;
+        font-size: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #F3F3E3;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #F3F3E3;
+        font-weight: bold;
+    }
+
+    .btn-details {
+        background-color: #B2B2B2;
+        color: #FFFFFF;
+        padding: 10px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 10px;
+        border: 1px solid #999;
+        cursor: pointer;
+        font-weight: bold;
+        width: 60%;
+    }
+
+    .btn-details:hover {
+        background-color: #bbb;
+    }
+
+    .approve-btn,
+    .disapprove-btn {
+        border-radius: 8px;
+        padding: 10px 20px;
+        border: none;
+    }
+
+    .approve-btn {
+        background-color: #BDE3A7;
+    }
+
+    .disapprove-btn {
+        background-color: #FFA4A4;
+    }
+</style>
 
 </html>
