@@ -216,7 +216,7 @@ app.get('/cfproduct/:productId', (req, res) => {
     FROM products
     JOIN users ON products.seller_id = users.users_id
     WHERE products.product_id =?`;
-    
+
     con.query(sql, [productId], (error, results) => {
         if (error) {
             return res.status(500).json({ error: 'Database error' });
@@ -401,7 +401,7 @@ app.get('/generate-qr/:amount', async (req, res) => {
 });
 app.post('/payment-webhook', (req, res) => {
     const { transaction_id, status, amount } = req.body;
-    
+
     if (status === 'success') {
         const sql = 'UPDATE orders SET payment_status = 1 WHERE transaction_id = ?';
         con.query(sql, [transaction_id], (err) => {
@@ -586,6 +586,24 @@ app.get('/sellerhomepage', (req, res) => {
 });
 
 // Update ID line
+
+app.post('/updateLineID', async (req, res) => {
+    const { lineID, userId } = req.body;
+
+    if (!lineID || !userId) {
+        return res.status(400).json({ success: false, message: 'Line ID and User ID are required.' });
+    }
+
+    try {
+        const query = 'UPDATE users SET sacc_contact = ? WHERE users_id = ?';
+
+        await db.query(query, [lineID, userId]);
+        res.json({ success: true, message: 'Line ID updated successfully.' });
+    } catch (error) {
+        console.error('Database update failed:', error);
+        res.status(500).json({ success: false, message: 'Database error.' });
+    }
+});
 
 
 app.get('/getSellerData', (req, res) => {
@@ -866,7 +884,7 @@ app.get('/Dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/Dashboard.html'));
 });
 
-    
+
 // ----- user list
 app.get('/userslist', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/user_db_list.html'));

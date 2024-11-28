@@ -169,7 +169,7 @@
 
                     </div>
                     <div class="flex mt-4">
-                        <p style="font-size: 18px; font-weight: bold;"><span id="line-id-display">กรุณากรอกช่องทางการติดต่อเพิ่มเติม</span>
+                        <p style="font-size: 14px; font-weight: bold; color: #8D8D8D;"><span id="line-id-display">กรุณากรอกช่องทางการติดต่อเพิ่มเติม</span>
                         </p>
                     </div>
                     <div class="button">
@@ -183,7 +183,7 @@
                         <div style="border-radius: 15px;" class="modal-content">
                             <h3>แก้ไขโปรไฟล์</h3>
                             <input style="border-radius: 5px; border: none;" type="text" id="line-id-input"
-                                placeholder="   กรอก ID Line ใหม่">
+                                placeholder="   กรุณากรอกช่องทางการติดต่อ">
                             <br>
                             <button style="border-radius: 5px;" class="button save-button"
                                 onclick="saveLineID()">บันทึก</button>
@@ -417,7 +417,7 @@
 
 
     if (newLineID) {
-        document.getElementById("line-id-display").textContent = "ID Line: " + newLineID;
+        document.getElementById("line-id-display").textContent =  newLineID;
 
         // ส่ง Line ID ไปยัง backend
         fetch('/updateLineID', {
