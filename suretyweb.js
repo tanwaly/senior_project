@@ -425,7 +425,7 @@ app.get('/orderStatus', (req, res) => {
             orders.order_id, 
             orders.order_status, 
             orders.order_tracknum, 
-            orders.order_shipname, 
+            orders.order_shipname,
             products.product_name, 
             products.product_price, 
             products.product_img,        
@@ -470,7 +470,7 @@ app.put('/updateOrderStatus/:orderId', (req, res) => {
     });
 });
 
-// customer information
+// customer information & edit
 app.get('/customerprofile', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/cus_info.html'));
 });
@@ -531,7 +531,11 @@ app.get('/sellerInfo/:sellerId', (req, res) => {
 
 app.get('/sellerProducts/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img FROM products JOIN users ON products.seller_id = users.users_id WHERE products.seller_id = ? ORDER BY products.product_id DESC;`;
+    const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img
+    FROM products
+    JOIN users ON products.seller_id = users.users_id
+    WHERE products.seller_id = ?
+    ORDER BY products.product_id DESC;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -540,14 +544,97 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
         }
     });
 });
-// --- give review ---
 
-app.get('/reportstore', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
+// --- give review ---
+app.get('/give_review.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/give_review.html'));
 });
 
 
+app.post('/submitReview', (req, res) => {
+    const { sellerId, productId, rating, comment } = req.body;
+    const customerId = req.session.users_id; // Ensure the user is logged in
 
+    console.log('Submitting review:', { sellerId, productId, rating, comment, customerId });
+
+    if (!customerId) {
+        console.warn('User not logged in');
+        return res.status(401).json({ success: false, message: 'Not logged in' });
+    }
+
+    const sql = `
+        INSERT INTO reviews (customer_id, seller_id, product_id, rating, comment) 
+        VALUES (?, ?, ?, ?, ?);
+    `;
+
+    con.query(sql, [customerId, sellerId, productId, rating, comment], (err) => {
+        if (err) {
+            console.error('Database error:', err); // Log database errors
+            return res.status(500).json({ success: false, message: 'Database error' });
+        }
+
+        res.json({ success: true, message: 'Review submitted successfully' });
+    });
+});
+
+app.get('/reviews/:sellerId', (req, res) => {
+    const { sellerId } = req.params;
+
+    const sql = `
+        SELECT review.score, review.comment, review.created_at, 
+               users.first_name, users.last_name 
+        FROM review 
+        JOIN users ON reviews.customer_id = users.users_id 
+        WHERE review.seller_id = ? 
+        ORDER BY review.created_at DESC;
+    `;
+
+    con.query(sql, [sellerId], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        res.json(results);
+    });
+});
+
+// displaying product
+app.get('/reviewProduct/:productId', (req, res) => {
+    const { productId } = req.params;
+
+    if (!productId || isNaN(productId)) {
+        console.warn('Invalid Product ID:', productId);
+        return res.status(400).json({ error: 'Invalid Product ID' });
+    }
+
+    const sql = `
+        SELECT products.product_name, products.product_img, orders.order_tracknum, 
+               orders.order_shipname 
+        FROM products 
+        JOIN orders ON products.product_id = orders.order_id 
+        WHERE products.product_id = ?;
+    `;
+
+    con.query(sql, [productId], (err, results) => {
+        if (err) {
+            console.error('Database query error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        if (results.length === 0) {
+            console.warn('No product found for ID:', productId);
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        res.json(results[0]);
+    });
+});
+
+// --- report store ---
+app.get('/reportstore', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
+});
 
 //================== sellers =====================
 
