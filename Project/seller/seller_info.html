@@ -114,6 +114,7 @@
 </body>
 
 <script>
+    // Function to toggle to edit mode
     document.addEventListener('DOMContentLoaded', async () => {
         const sellerId = window.location.pathname.split('/').pop();
 
@@ -214,8 +215,12 @@
             } catch (error) {
                 console.error('Error saving seller information:', error);
             }
+            
+
         };
     });
+
+    
 </script>
 
 </html>
