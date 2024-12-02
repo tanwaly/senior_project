@@ -110,6 +110,8 @@
                                 </button>
                             </div>`,
                         4: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">การจัดส่งไม่สำเร็จ</span>',
+                        5: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #A49A89;">รอตรวจสอบการโอนเงิน</span>',
+                        6: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ชำระเงินไม่สำเร็จ</span>',
                     };
                     return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';  // Default message for unknown status
                 }
@@ -140,9 +142,8 @@
                 const productHTML = `
                             <div class="row">
                                <img src="public/img/${item.product_img}" alt="${item.product_name}" style="border-radius: 15px; margin-left: 25px; max-width: 150px; max-height: 150px; width: auto; height: auto; object-fit: contain;">
-
                                 <div class="col" style="margin-left: 50PX;">
-                                    <span style="font-size: 20px;">ชื่อร้าน: ${item.first_name} ${item.last_name}</span>
+                                    <span style="font-size: 20px;">ผู้ขาย: ${item.seller_first_name} ${item.seller_last_name}</span>
                                     <span>ชื่อสินค้า: ${item.product_name}</span>
                                     <span>ราคา: ${item.product_price} บาท</span>
                                     <span>คิวที่: ${item.queue_num} เวลา: ${formatDateTime(item.queue_time)}</span>

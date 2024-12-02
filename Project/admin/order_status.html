@@ -19,7 +19,7 @@
         <div class="d-flex align-items-center">
             <h5 style="font-weight: bold; margin-right: 10px;">สถานะสินค้า</h5>
             <div>
-                <select name="orderStatus" id="orderStatus" style="border: none; border-radius: 15px; height: 40px;">
+                <select name="orderStatus" id="orderStatus" style="border: none; border-radius: 15px; height: 40px; padding: 5px;">
                     <option value="">All</option>
                     <option value="0">กำลังเตรียมสินค้า</option>
                     <option value="1">กำลังจัดส่ง</option>
@@ -28,6 +28,18 @@
                     <option value="4">จัดส่งไม่สำเร็จ</option>
                 </select>
             </div>
+            <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+                <button
+                    style="margin-right: 20px; border-radius: 10px; height: 46px; width: 250px; border: none; font-weight: bold; font-size: 18px; background-color: #ffc02c; color: rgb(0, 0, 0);"
+                    onclick="location.href = '/payment-verify-list'">ตรวจสอบการโอนเงิน</button>
+                <button id="btnlogout"
+                    style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: white;"
+                    onclick="location.replace('/login');">
+                    Log out
+                    <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                </button>
+            </div>
+
         </div>
         <div style="margin-top: 10px;">
             <input type="search" name="" id="" placeholder="search tracking number" class="form-control"
@@ -74,7 +86,9 @@
             case 2: return '<span style="font-size: 18px; font-weight: bold; background:#fbedf1 ; padding:5px 10px 5px 10px; border-radius: 50px; color: red;">ยกเลิกการสั่งซื้อ</span>';
             case 3: return '<span style="font-size: 18px; font-weight: bold; background:#e2fee2 ; padding:5px 10px 5px 10px; border-radius: 50px; color: green;">จัดส่งสำเร็จ</span>';
             case 4: return '<span style="font-size: 18px; font-weight: bold; background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">จัดส่งไม่สำเร็จ</span>';
-            default: return '<span style="font-size: 18px; font-weight: bold; background:white ; padding:5px 10px 5px 10px; border-radius: 50px;">ไม่ทราบสถานะ</span>';
+            case 5: return '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #A49A89;">รอตรวจสอบการโอนเงิน</span>';
+            case 6: return '<span style="font-size: 18px; font-weight: bold; background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">จัดส่งไม่สำเร็จ</span>';
+            default: return '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ชำระเงินไม่สำเร็จ</span>';
         }
     }
     function formatDateTime(dateTimeStr) {
