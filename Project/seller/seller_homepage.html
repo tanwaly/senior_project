@@ -191,6 +191,7 @@
                             <button style="border-radius: 5px;" class="button close-button" onclick="closeModal()">ยกเลิก</button>
                         </div>
                     </div>
+                   
                 </div>
                 <div style="display: flex; flex-direction: column; margin-top: 15px;">
                     <button
@@ -399,49 +400,48 @@
     </div>
 
     <script>
-        
-// ฟังก์ชันเปิดโมดอล
-function openModal() {
-        document.getElementById("editProfileModal").style.display = "flex";
-    }
 
-    // ฟังก์ชันปิดโมดอล
-    function closeModal() {
-        document.getElementById("editProfileModal").style.display = "none";
-    }
-
-    // ฟังก์ชันบันทึก Line ID
-    function saveLineID() {
-        const newLineID = document.getElementById("line-id-input").value.trim();
-        const userId = document.getElementById("user-id").value; // Get userId from hidden input
-
-        if (newLineID) {
-            document.getElementById("line-id-display").textContent = newLineID;
-
-            // ส่ง Line ID และ userId ไปยัง Backend
-            fetch('/updateLineID', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ lineID: newLineID, userId: userId }),
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Line ID updated successfully.');
-                    } else {
-                        alert('Error updating Line ID: ' + data.message);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        } else {
-            alert('กรุณากรอก Line ID ก่อนบันทึก');
+        // ฟังก์ชันเปิดโมดอล
+        function openModal() {
+            document.getElementById("editProfileModal").style.display = "flex";
         }
 
-        closeModal();
-    }
+        // ฟังก์ชันปิดโมดอล
+        function closeModal() {
+            document.getElementById("editProfileModal").style.display = "none";
+        }
 
+        // ฟังก์ชันบันทึก Line ID
+        function saveLineID() {
+            const newLineID = document.getElementById("line-id-input").value.trim();
+            const userId = document.getElementById("user-id").value; // Get userId from hidden input
+
+            if (newLineID) {
+                document.getElementById("line-id-display").textContent = newLineID;
+
+                // ส่ง Line ID และ userId ไปยัง Backend
+                fetch('/updateLineID', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ lineID: newLineID, userId: userId }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Line ID updated successfully.');
+                        } else {
+                            alert('Error updating Line ID: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                alert('กรุณากรอก Line ID ก่อนบันทึก');
+            }
+
+            closeModal();
+        }
 
         // Add post part
 

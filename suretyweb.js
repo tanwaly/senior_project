@@ -510,6 +510,17 @@ app.put('/updateCustomerInfo', (req, res) => {
     });
 });
 
+
+// --- give review ---
+
+app.get('/reportstore', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
+});
+
+
+
+
+//================== sellers =====================
 // click on seller; store info
 app.get('/seller/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/store_profile.html'));
@@ -540,24 +551,12 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
         }
     });
 });
-// --- give review ---
-
-app.get('/reportstore', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
-});
-
-
-
-
-//================== sellers =====================
 
 app.get('/sellerinfo', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
 });
 
-app.get('/sellerinfoedit', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/seller/seller_info_edit.html'));
-});
+
 
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;
@@ -587,6 +586,7 @@ app.get('/sellerhomepage', (req, res) => {
 
 
 // Update ID line
+// ฟังก์ชันดึงข้อมูล User
 app.get('/getUserData', (req, res) => {
     const loggedInUserId = req.session?.users_id;
 
@@ -613,49 +613,10 @@ app.get('/getUserData', (req, res) => {
     });
 });
 
-
-
-// Route for updating sacc_contact in the User table
-app.put('/updateLineID', (req, res) => {
-    console.log('Request Body:', req.body);
-    const { line_id } = req.body;
-    const loggedInUserId = req.session?.users_id;
-
-    if (!line_id || !loggedInUserId) {
-        console.error('Invalid input or user not logged in');
-        return res.status(400).json({ success: false, message: 'Invalid input data' });
-    }
-
-    // Escape line_id เพื่อป้องกัน SQL Injection
-    const sanitizedLineId = con.escape(line_id.trim());
-
-    const sqlUpdate = `UPDATE User SET sacc_contact = ? WHERE users_id = ?`;
-
-    con.query(sqlUpdate, [sanitizedLineId, loggedInUserId], (err, result) => {
-        if (err) {
-            console.error('Database error in /updateLineID:', err);
-            return res.status(500).json({ success: false, message: 'Database update failed' });
-        }
-
-        if (result.affectedRows > 0) {
-            console.log('Line ID updated for user ID:', loggedInUserId);
-            return res.json({ success: true, message: 'Line ID updated successfully' });
-        } else {
-            console.warn('No rows updated for user ID:', loggedInUserId);
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-    });
-});
-
-
-
 // Route for updating Line ID
 app.post('/updateLineID', (req, res) => {
     const { lineID } = req.body;
     const loggedInUserId = req.session?.users_id;
-
-    console.log('Line ID:', lineID);  // Debug lineID
-    console.log('Logged in User ID:', loggedInUserId);  // Debug users_id
 
     if (!lineID || !loggedInUserId) {
         console.error('Invalid input or user not logged in');
@@ -679,6 +640,7 @@ app.post('/updateLineID', (req, res) => {
         }
     });
 });
+
 
 
 app.get('/getSellerData', (req, res) => {
