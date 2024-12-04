@@ -63,7 +63,7 @@ app.post('/register', Idupload, async (req, res) => {
         const bcryptPass = await bcrypt.hash(req.body.password, 10);
 
         // Prepare the INSERT query
-        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status, profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img,bank_ac_type, bank_ac_name, bank_ac_num, user_status, profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)';
         const insertParams = [
             req.body.first_name,
             req.body.last_name,
@@ -72,6 +72,7 @@ app.post('/register', Idupload, async (req, res) => {
             req.body.phonenum,
             req.body.role,
             req.file ? req.file.filename : null,
+            req.body.bank_ac_type || null,
             req.body.bank_ac_name || null,
             req.body.bank_ac_num || null,
             req.body.user_status,
@@ -468,46 +469,6 @@ app.put('/updateOrderStatus/:orderId', (req, res) => {
     });
 });
 
-// customer information & edit
-app.get('/customerprofile', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/cus_info.html'));
-});
-
-app.get('/customerinfo', (req, res) => {
-    const customerId = req.session.users_id;
-
-    if (!customerId) {
-        return res.status(401).json({ error: 'Not logged in or session expired' });
-    }
-
-    const sql = `SELECT first_name, last_name, phonenum, email FROM users WHERE users_id = ?;`;
-
-    con.query(sql, [customerId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
-        } else if (results.length === 0) {
-            return res.status(404).json({ error: 'Customer not found' });
-        } else {
-            res.json(results[0]);  // Send customer info as JSON
-        }
-    });
-});
-
-app.put('/updateCustomerInfo', (req, res) => {
-    const customerId = req.session.users_id;  // Use session ID for security
-    const { first_name, last_name, phonenum, email } = req.body;
-
-    const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ? WHERE users_id = ?;`;
-    const params = [first_name, last_name, phonenum, email, customerId];
-
-    con.query(sql, params, (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database update failed' });
-        }
-        res.status(200).json({ message: 'Information updated successfully' });
-    });
-});
-
 // click on seller; store info
 app.get('/seller/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/store_profile.html'));
@@ -636,13 +597,8 @@ app.get('/reportstore', (req, res) => {
 
 //================== sellers =====================
 
-app.get('/sellerinfo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
-});
 
-app.get('/sellerinfoedit', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/seller/seller_info_edit.html'));
-});
+
 
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;
@@ -671,160 +627,201 @@ app.get('/sellerhomepage', (req, res) => {
 });
 
 
-// Update ID line
-app.get('/getUserData', (req, res) => {
-    const loggedInUserId = req.session?.users_id;
+// // Update ID line
+// app.get('/getUserData', (req, res) => {
+//     const loggedInUserId = req.session?.users_id;
 
-    if (!loggedInUserId) {
-        console.warn('Unauthorized access attempt to /getUserData');
-        return res.status(401).json({ success: false, message: 'User not logged in' });
-    }
+//     if (!loggedInUserId) {
+//         console.warn('Unauthorized access attempt to /getUserData');
+//         return res.status(401).json({ success: false, message: 'User not logged in' });
+//     }
 
-    const sql = `SELECT sacc_contact FROM User WHERE users_id = ?`;
+//     const sql = `SELECT sacc_contact FROM User WHERE users_id = ?`;
 
-    con.query(sql, [loggedInUserId], (err, result) => {
-        if (err) {
-            console.error('Database error in /getUserData:', err);
-            return res.status(500).json({ success: false, message: 'Database query failed' });
-        }
+//     con.query(sql, [loggedInUserId], (err, result) => {
+//         if (err) {
+//             console.error('Database error in /getUserData:', err);
+//             return res.status(500).json({ success: false, message: 'Database query failed' });
+//         }
 
-        if (result.length > 0) {
-            const contact = result[0].sacc_contact || ''; // ป้องกัน null
-            return res.json({ success: true, line_id: contact });
-        } else {
-            console.warn('User not found for ID:', loggedInUserId);
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-    });
-});
-
-
-
-// Route for updating sacc_contact in the User table
-app.put('/updateLineID', (req, res) => {
-    console.log('Request Body:', req.body);
-    const { line_id } = req.body;
-    const loggedInUserId = req.session?.users_id;
-
-    if (!line_id || !loggedInUserId) {
-        console.error('Invalid input or user not logged in');
-        return res.status(400).json({ success: false, message: 'Invalid input data' });
-    }
-
-    // Escape line_id เพื่อป้องกัน SQL Injection
-    const sanitizedLineId = con.escape(line_id.trim());
-
-    const sqlUpdate = `UPDATE User SET sacc_contact = ? WHERE users_id = ?`;
-
-    con.query(sqlUpdate, [sanitizedLineId, loggedInUserId], (err, result) => {
-        if (err) {
-            console.error('Database error in /updateLineID:', err);
-            return res.status(500).json({ success: false, message: 'Database update failed' });
-        }
-
-        if (result.affectedRows > 0) {
-            console.log('Line ID updated for user ID:', loggedInUserId);
-            return res.json({ success: true, message: 'Line ID updated successfully' });
-        } else {
-            console.warn('No rows updated for user ID:', loggedInUserId);
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-    });
-});
+//         if (result.length > 0) {
+//             const contact = result[0].sacc_contact || ''; // ป้องกัน null
+//             return res.json({ success: true, line_id: contact });
+//         } else {
+//             console.warn('User not found for ID:', loggedInUserId);
+//             return res.status(404).json({ success: false, message: 'User not found' });
+//         }
+//     });
+// });
 
 
 
-// Route for updating Line ID
-app.post('/updateLineID', (req, res) => {
-    const { lineID } = req.body;
-    const loggedInUserId = req.session?.users_id;
+// // Route for updating sacc_contact in the User table
+// app.put('/updateLineID', (req, res) => {
+//     console.log('Request Body:', req.body);
+//     const { line_id } = req.body;
+//     const loggedInUserId = req.session?.users_id;
 
-    console.log('Line ID:', lineID);  // Debug lineID
-    console.log('Logged in User ID:', loggedInUserId);  // Debug users_id
+//     if (!line_id || !loggedInUserId) {
+//         console.error('Invalid input or user not logged in');
+//         return res.status(400).json({ success: false, message: 'Invalid input data' });
+//     }
 
-    if (!lineID || !loggedInUserId) {
-        console.error('Invalid input or user not logged in');
-        return res.status(400).json({ success: false, message: 'Invalid input or user not logged in.' });
-    }
+//     // Escape line_id เพื่อป้องกัน SQL Injection
+//     const sanitizedLineId = con.escape(line_id.trim());
 
-    const sqlUpdate = `UPDATE users SET sacc_contact = ? WHERE users_id = ?`;
+//     const sqlUpdate = `UPDATE User SET sacc_contact = ? WHERE users_id = ?`;
 
-    con.query(sqlUpdate, [lineID.trim(), loggedInUserId], (err, result) => {
-        if (err) {
-            console.error('Database error in /updateLineID:', err);
-            return res.status(500).json({ success: false, message: 'Database error.' });
-        }
+//     con.query(sqlUpdate, [sanitizedLineId, loggedInUserId], (err, result) => {
+//         if (err) {
+//             console.error('Database error in /updateLineID:', err);
+//             return res.status(500).json({ success: false, message: 'Database update failed' });
+//         }
 
-        if (result.affectedRows > 0) {
-            console.log('Line ID updated successfully');
-            return res.json({ success: true, message: 'Line ID updated successfully.' });
-        } else {
-            console.warn('No user found for ID:', loggedInUserId);
-            return res.status(404).json({ success: false, message: 'User not found.' });
-        }
-    });
-});
+//         if (result.affectedRows > 0) {
+//             console.log('Line ID updated for user ID:', loggedInUserId);
+//             return res.json({ success: true, message: 'Line ID updated successfully' });
+//         } else {
+//             console.warn('No rows updated for user ID:', loggedInUserId);
+//             return res.status(404).json({ success: false, message: 'User not found' });
+//         }
+//     });
+// });
 
 
-app.get('/getSellerData', (req, res) => {
-    const sellerId = req.session.users_id;
 
-    if (!sellerId) {
-        return res.status(401).json({ error: 'Not logged in or session expired' });
-    }
+// // Route for updating Line ID
+// app.post('/updateLineID', (req, res) => {
+//     const { lineID } = req.body;
+//     const loggedInUserId = req.session?.users_id;
 
-    const sql = `SELECT first_name, profile_img FROM users WHERE users_id = ?;`;
+//     console.log('Line ID:', lineID);  // Debug lineID
+//     console.log('Logged in User ID:', loggedInUserId);  // Debug users_id
 
-    con.query(sql, [sellerId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
-        } else if (results.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        } else {
-            res.json(results[0]);  // Return the first_name and profile_img as JSON
-        }
-    });
-});
+//     if (!lineID || !loggedInUserId) {
+//         console.error('Invalid input or user not logged in');
+//         return res.status(400).json({ success: false, message: 'Invalid input or user not logged in.' });
+//     }
 
-// seller information
-app.get('/sellerprofile', (req, res) => {
+//     const sqlUpdate = `UPDATE users SET sacc_contact = ? WHERE users_id = ?`;
+
+//     con.query(sqlUpdate, [lineID.trim(), loggedInUserId], (err, result) => {
+//         if (err) {
+//             console.error('Database error in /updateLineID:', err);
+//             return res.status(500).json({ success: false, message: 'Database error.' });
+//         }
+
+//         if (result.affectedRows > 0) {
+//             console.log('Line ID updated successfully');
+//             return res.json({ success: true, message: 'Line ID updated successfully.' });
+//         } else {
+//             console.warn('No user found for ID:', loggedInUserId);
+//             return res.status(404).json({ success: false, message: 'User not found.' });
+//         }
+//     });
+// });
+
+// Serve the HTML page
+app.get('/sellerData', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
 });
 
-app.get('/sellerinfo/:sellerId', (req, res) => {
-    const sellerId = req.session.users_id;
-
-    if (!sellerId) {
-        return res.status(401).json({ error: 'Not logged in or session expired' });
-    }
-
-    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num FROM users WHERE users_id = ?;`;
-
-    con.query(sql, [sellerId], (err, results) => {
+// Fetch user data
+app.get('/sellerPersonalData/:id', (req, res) => {
+    const userId = req.params.userId;
+    const sql = `
+        SELECT *
+        FROM users WHERE users_id = ?;
+    `;
+    con.query(sql, [userId], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
+            res.status(500).json({ error: 'Database query failed' });
         } else if (results.length === 0) {
-            return res.status(404).json({ error: 'Seller not found' });
+            res.status(404).json({ error: 'Report not found' });
         } else {
-            res.json(results[0]);  // Send seller info as JSON
+            res.json(results[0]);
         }
     });
 });
 
-app.put('/updateSellerInfo/:sellerId', (req, res) => {
-    const sellerId = req.session.users_id;  // Use session ID for security
-    const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num } = req.body;
-
-    const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ?, bank_ac_name = ?, bank_ac_num = ? WHERE users_id = ?;`;
-    const params = [first_name, last_name, phonenum, email, , bank_ac_name, bank_ac_num, sellerId];
-
-    con.query(sql, params, (err, results) => {
+// Update user data
+app.put('/sellerPersonalData/:id', (req, res) => {
+    const userId = req.params.id; // Corrected from req.params.userId
+    const sql = `
+        SELECT *
+        FROM users WHERE users_id = ?;
+    `;
+    con.query(sql, [userId], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Database update failed' });
+            res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            res.status(404).json({ error: 'Report not found' });
+        } else {
+            res.json(results[0]);
         }
-        res.status(200).json({ message: 'Information updated successfully' });
     });
 });
+
+
+// app.get('/getSellerData', (req, res) => {
+//     const sellerId = req.session.users_id;
+
+//     if (!sellerId) {
+//         return res.status(401).json({ error: 'Not logged in or session expired' });
+//     }
+
+//     const sql = `SELECT first_name, profile_img FROM users WHERE users_id = ?;`;
+
+//     con.query(sql, [sellerId], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Database query failed' });
+//         } else if (results.length === 0) {
+//             return res.status(404).json({ error: 'User not found' });
+//         } else {
+//             res.json(results[0]);  // Return the first_name and profile_img as JSON
+//         }
+//     });
+// });
+
+// // seller information
+// app.get('/sellerprofile', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
+// });
+
+// app.get('/sellerinfo/:sellerId', (req, res) => {
+//     const sellerId = req.session.users_id;
+
+//     if (!sellerId) {
+//         return res.status(401).json({ error: 'Not logged in or session expired' });
+//     }
+
+//     const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num FROM users WHERE users_id = ?;`;
+
+//     con.query(sql, [sellerId], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Database query failed' });
+//         } else if (results.length === 0) {
+//             return res.status(404).json({ error: 'Seller not found' });
+//         } else {
+//             res.json(results[0]);  // Send seller info as JSON
+//         }
+//     });
+// });
+
+// app.put('/updateSellerInfo/:sellerId', (req, res) => {
+//     const sellerId = req.session.users_id;  // Use session ID for security
+//     const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num } = req.body;
+
+//     const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ?, bank_ac_name = ?, bank_ac_num = ? WHERE users_id = ?;`;
+//     const params = [first_name, last_name, phonenum, email, , bank_ac_name, bank_ac_num, sellerId];
+
+//     con.query(sql, params, (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Database update failed' });
+//         }
+//         res.status(200).json({ message: 'Information updated successfully' });
+//     });
+// });
 
 app.get('/sellerproduct', (req, res) => {
     const sellerId = req.session.users_id;
@@ -1156,12 +1153,16 @@ app.get('/sellerverify', (req, res) => {
     const sql = 'SELECT * FROM users WHERE users.user_status = 2';
     con.query(sql, (err, results) => {
         if (err) {
+            console.error('Database error:', err);
             res.status(500).json({ error: 'Database query failed' });
         } else {
+            console.log('Query results:', results);
             res.json(results);
         }
     });
 });
+
+
 app.post('/updateSeller/:userId', (req, res) => {
     const userId = req.params.userId;
     const { status } = req.body;
