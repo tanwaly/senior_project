@@ -551,7 +551,7 @@ app.get('/seller/:sellerId', (req, res) => {
 
 app.get('/sellerInfo/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-    const sql = `SELECT first_name, last_name, profile_img FROM users WHERE users_id = ? AND role = 2;`;
+    const sql = `SELECT * FROM users WHERE users_id = ?`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -796,7 +796,23 @@ app.post('/updateLineID', (req, res) => {
         }
     });
 });
+app.post('/updateLineID', async (req, res) => {
+    const { lineID, userId } = req.body;
 
+    if (!lineID || !userId) {
+        return res.status(400).json({ success: false, message: 'Line ID and User ID are required.' });
+    }
+
+    try {
+        const query = 'UPDATE users SET sacc_contact = ? WHERE users_id = ?';
+
+        await db.query(query, [lineID, userId]);
+        res.json({ success: true, message: 'Line ID updated successfully.' });
+    } catch (error) {
+        console.error('Database update failed:', error);
+        res.status(500).json({ success: false, message: 'Database error.' });
+    }
+});
 
 app.get('/getSellerData', (req, res) => {
     const sellerId = req.session.users_id;
@@ -823,40 +839,95 @@ app.get('/sellerprofile', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
 });
 
-app.get('/sellerinfo/:sellerId', (req, res) => {
+function getSellerInfo(sellerId, callback) {
+    const sql = `SELECT * FROM users WHERE users_id = ?;`;
+    
+    con.query(sql, [sellerId], (err, results) => {
+        if (err) {
+            return callback(err, null);
+        } else if (results.length === 0) {
+            return callback(new Error('Seller not found'), null);
+        } else {
+            return callback(null, results[0]);
+        }
+    });
+}
+
+app.get('/sellerprofile/:sellerId', (req, res) => {
+    const sellerId = req.params.sellerId; // ดึง sellerId จาก URL
+    res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html')); // ส่งไฟล์ HTML
+});
+
+
+// Route สำหรับดึงข้อมูลผู้ขาย
+app.get('/sellerInfo1/:sellerId', (req, res) => {
     const sellerId = req.session.users_id;
 
     if (!sellerId) {
         return res.status(401).json({ error: 'Not logged in or session expired' });
     }
 
-    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num FROM users WHERE users_id = ?;`;
-
-    con.query(sql, [sellerId], (err, results) => {
+    getSellerInfo(sellerId, (err, sellerInfo) => {
         if (err) {
+            if (err.message === 'Seller not found') {
+                return res.status(404).json({ error: err.message });
+            }
             return res.status(500).json({ error: 'Database query failed' });
-        } else if (results.length === 0) {
-            return res.status(404).json({ error: 'Seller not found' });
-        } else {
-            res.json(results[0]);  // Send seller info as JSON
         }
+        res.json(sellerInfo);
     });
 });
 
-app.put('/updateSellerInfo/:sellerId', (req, res) => {
-    const sellerId = req.session.users_id;  // Use session ID for security
-    const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num } = req.body;
+// สร้างฟังก์ชันอัปเดตข้อมูลผู้ขาย
+function updateSellerInfo(sellerId, updatedData, callback) {
+    const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num } = updatedData;
 
     const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ?, bank_ac_name = ?, bank_ac_num = ? WHERE users_id = ?;`;
-    const params = [first_name, last_name, phonenum, email, , bank_ac_name, bank_ac_num, sellerId];
+    const params = [first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sellerId];
 
     con.query(sql, params, (err, results) => {
+        if (err) {
+            return callback(err, null);
+        }
+        return callback(null, results);
+    });
+}
+
+
+// Route สำหรับอัปเดตข้อมูลผู้ขาย
+app.put('/updateSellerInfo/:sellerId', (req, res) => {
+    const sellerId = req.session.users_id;
+    const updatedData = req.body;
+
+    if (!sellerId) {
+        return res.status(401).json({ error: 'Not logged in or session expired' });
+    }
+
+    updateSellerInfo(sellerId, updatedData, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database update failed' });
         }
         res.status(200).json({ message: 'Information updated successfully' });
     });
 });
+
+
+
+app.get('/sellerInfo1/:sellerId', (req, res) => {
+    const sellerId = req.params.sellerId; 
+
+    getSellerInfo(sellerId, (err, sellerInfo) => {
+        if (err) {
+            if (err.message === 'Seller not found') {
+                return res.status(404).json({ error: err.message });
+            }
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.json(sellerInfo);
+    });
+});
+
+
 
 app.get('/sellerproduct', (req, res) => {
     const sellerId = req.session.users_id;
