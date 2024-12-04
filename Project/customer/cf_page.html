@@ -121,6 +121,12 @@
 
                 manageButtonState(payButton, estimatedTime);
             }
+            // else {
+            //     // If not in queue, ensure the button is enabled
+            //     cfButton.disabled = false;
+            //     cfButton.style.backgroundColor = '';
+            //     paymentSection.style.display = 'none'; // Hide payment section if not in queue
+            // }
         } catch (error) {
             console.error('Error checking if user is in queue:', error);
         }

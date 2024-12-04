@@ -132,9 +132,9 @@ app.post('/login', (req, res) => {
                     } else if (user.role == 2) {
                         return res.send('sellerhomepage');
                     } else if (user.role == 3) {
-                        return res.send('selectpage');
+                        return res.send('dashboard');
                     } else {
-                        return res.status(403).send("Unauthorized role");
+                        return res.send('login');
                     }
 
                 } else {
@@ -323,10 +323,6 @@ app.get('/payment/:productId', (req, res) => {
     });
 });
 
-// app.get('/payment-test', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Project/customer/payment_test.html'));
-// });
-
 app.post('/generateQR', (req, res) => {
     const amount = parseFloat(_.get(req, ["body", "amount"]));
     const mobileNumber = '0882451914';
@@ -355,38 +351,6 @@ app.post('/generateQR', (req, res) => {
 
     })
 })
-// app.get('/update-payment-status', (req, res) => {
-//     const { orderId } = req.params;
-
-//     const sql = 'SELECT order_status FROM orders WHERE order_id = ?';
-
-//     con.query(sql, [orderId], (err, results) => {
-//         if (err) {
-//             console.error('Database error:', err);
-//             return res.status(500).send('Database query failed');
-//         }
-
-//         if (results.length === 0) {
-//             return res.status(404).send('Order not found');
-//         }
-
-//         res.json(results[0]); // Return the order status
-//     });
-// });
-
-// app.post('/update-payment-status', (req, res) => {
-//     const { orderId, status } = req.body;
-//     const sql = 'UPDATE orders SET order_status = ? WHERE order_id = ?';
-
-//     con.query(sql, [status, orderId], (err) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).send('Error updating payment status');
-//         }
-//         res.send('Order status updated successfully');
-//     });
-// });
-
 
 //---------add order after pay
 
@@ -1056,13 +1020,70 @@ cron.schedule('0 0 * * *', () => {
 
 // ================== admin =====================
 //----------Select
-app.get('/selectpage', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
-});
+// app.get('/selectpage', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
+// });
 
 //----------Dashboard
 app.get('/Dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/Dashboard.html'));
+});
+
+app.get('/orderStatusSummary', (req, res) => {
+    const sql = `
+        SELECT 
+        COUNT(*) AS total_orders,
+            SUM(order_status = 0) AS preparing_count,
+            SUM(order_status = 1) AS shipping_count,
+            SUM(order_status = 2) AS canceled_count,
+            SUM(order_status = 3) AS delivered_count,
+            SUM(order_status = 4) AS failed_count,
+            SUM(order_status = 5) AS awaiting_payment_count,
+            SUM(order_status = 6) AS payment_success_count,
+            SUM(order_status = 7) AS payment_failed_count
+        FROM orders;
+    `;
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.json(results[0]);
+    });
+});
+
+app.get('/getIncomeData/:year', (req, res) => {
+    const year = req.params.year;
+    const sql = `
+        SELECT DATE_FORMAT(o.order_date, '%Y-%m') AS month, SUM(p.product_price) AS total_income
+        FROM orders o 
+        JOIN queue q ON o.queue_id = q.queue_id 
+        JOIN products p ON q.product_id = p.product_id 
+        WHERE o.order_status = 3 AND DATE_FORMAT(o.order_date, '%Y') = ?
+        GROUP BY DATE_FORMAT(o.order_date, '%Y-%m')
+        ORDER BY month;
+    `;
+    con.query(sql, [year], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.json(results);
+    });
+});
+app.get('/getAvailableYears', (req, res) => {
+    const sql = `
+        SELECT DISTINCT DATE_FORMAT(order_date, '%Y') AS year
+        FROM orders
+        ORDER BY year DESC;
+    `;
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.json(results.map(row => row.year));
+    });
 });
 
 

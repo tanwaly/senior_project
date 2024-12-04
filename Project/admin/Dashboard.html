@@ -8,111 +8,227 @@
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
     <style>
-        #pie-chart {
+        /* #pie-chart {
             background: radial-gradient(circle closest-side, transparent 100%, #D6D0E4 0),
                 conic-gradient(from 180deg, #7BB4B7 0, #7BB4B7 55%, #FF6B6B 0, #FF6B6B 64%, #FFEA7D 0, #FFEA7D 100%);
             min-width: 230px;
             min-height: 230px;
-        }
+        } */
     </style>
 </head>
 
 <body style="background-color: #8472AC;">
-    <h1 style="text-align: center; color: white;" class="m-3">Dashboard</h1>
-    <hr style="color: white;">
-    <div style="display: flex; align-items: center; justify-content: center;">
+    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px; background-color: #584d70;">
+        <h1 style="text-align: center; color: white;" class="m-3">Dashboard</h1>
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
+            height: 46px; color: white;" onclick="location.replace('/login');">
+                Log out
+                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+            </button>
+        </div>
+        <hr style="color: white;">
+    </div>
+
+    <div class="center">
         <div style="flex-direction: column;">
             <div style="background-color: #fffff7; height: 350px; width: 520px; border-radius: 15px;" class="m-5">
-                <h3 class="m-4" style="font-weight: bold;">รายได้สุทธิ</h3>
+                <h3 class="m-4" style="font-weight: bold; padding: 10px;">รายได้สุทธิ</h3>
                 <canvas id="incomeChart" style="width:100%;max-width:700px"></canvas>
             </div>
             <div class="col">
-                <select name="year" id="year"
-                    style="width: 520px; margin-left: 50px; background-color: #d9d9d9; font-weight: bold; border-radius: 8px; padding: 15px;">
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
+                <select id="yearSelector" class="form-select" style=" width: 520px; margin-left: 50px; background-color:
+                    #d9d9d9; font-weight: bold; border-radius: 8px; padding: 15px;">
+                    <!-- Years will be populated dynamically -->
                 </select>
                 <button
                     style="font-weight: bold; font-size: 20px; border: none; background-color: #EFF7FF; width: 200px; height: 50px; text-align: center; margin-left: 50px; border-radius: 10px; margin-top: 30px;"
                     onclick="location.href = '/orders-status'">สถานะสินค้า</button>
+                <div class="row" style=" justify-content: space-evenly; margin: 50px 0px 50px 0px;">
+                    <button class="animated-button" onclick="location.href = '/sellerVerify-list'">
+                        <img src="/public/img/image 2.png" alt="dashboard" style="width: 50px; height: 50px;">
+                        <p>ยืนยันผู้ใช้</p>
+                    </button>
+                    <button class="animated-button" onclick="location.href = '/sellerReport-list'">
+                        <img src="/public/img/image 3.png" alt="dashboard" style="width: 80px; height: 80px;">
+                        <p>รายงานผู้ใช้</p>
+                    </button>
+                    <button class="animated-button" onclick="location.href = '/userslist'">
+                        <img src="/public/img/image 4.png" alt="dashboard" style="width: 60px; height: 60px;">
+                        <p>ฐานข้อมูลผู้ใช้</p>
+                    </button>
+                </div>
             </div>
         </div>
         <div style="background-color: #D6D0E4; min-height: 550px; height: auto; width: 600px; border-radius: 15px; padding-bottom: 25px;"
             class="m-5">
-            <h3 class="m-4" style="text-align: end; font-weight: bold;">สรุปรายการการโอนเงิน</h3>
-            <h1 class="m-4" style="text-align: end; font-weight: bold; font-size: 70px;">190</h1>
-            <div id="chart-warp d-flex justify-content-around">
-                <div id="pie-chart"></div>
-                <br>
-                <div>
-                    <div style="display: flex;">
-                        <div style="width: 15px; height: 15px; background-color:#7BB4B7; margin-top: 10px;"
-                            class="mx-2"></div>
-                        <span style="font-size: 20px; font-weight: bold;">รายการที่โอนเงินเสร็จสิ้น 104 รายการ</span>
-                    </div>
-                    <div style="display: flex;">
-                        <div style="width: 15px; height: 15px; background-color:#FFEA7D; margin-top: 10px;"
-                            class="mx-2"></div>
-                        <span style="font-size: 20px; font-weight: bold;">รายการที่รอการโอนเงิน 69 รายการ</span>
-                    </div>
-                    <div style="display: flex;">
-                        <div style="width: 15px; height: 15px; background-color:#FF6B6B; margin-top: 10px;"
-                            class="mx-2"></div>
-                        <span style="font-size: 20px; font-weight: bold;">รายการที่คืนเงิน 17 รายการ</span>
-                    </div>
+            <h3 class="m-4" style="text-align: end; font-weight: bold;">สรุปรายการการส่งสินค้า</h3>
+            <h1 class="m-4" style="text-align: end; font-weight: bold; font-size: 70px;" id="totalOrder"></h1>
+            <div class="row">
+                <div id="statusSummary"
+                    style="display: flex; justify-content: space-around; flex-wrap: wrap; padding: 10px;"></div>
+                <!-- <div id="chart-warp d-flex justify-content-around"> -->
+                <div class="center">
+                    <canvas id="orderPieChart" style="max-width: 500px; padding-top: 20px;"></canvas>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="row" style="display: flex; align-items: center; justify-content: center;">>
-        <div style="background-color: #FFEAA1; height: 200px; width: 400px; border-radius: 15px;" class="m-5">
-            <h3 class="m-4" style="text-align: center; font-weight: bold;">รายการที่กำลังจัดส่งสินค้า</h3>
-            <h1 style="text-align: center; font-size: 70px;">50</h1>
-        </div>
-        <div style="background-color: #C8D5A2; height: 200px; width: 400px; border-radius: 15px;" class="m-5">
-            <h3 class="m-4" style="text-align: center; font-weight: bold;">จัดส่งสำเร็จ</h3>
-            <h1 style="text-align: center; font-size: 70px;">123</h1>
-        </div>
-        <div style="background-color: #EA9B9B; height: 200px; width: 400px; border-radius: 15px;" class="m-5">
-            <h3 class="m-4" style="text-align: center; font-weight: bold;">จัดส่งไม่สำเร็จ</h3>
-            <h1 style="text-align: center; font-size: 70px;">17</h1>
-        </div>
-    </div>
-    <script>
-        const incomeData = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [{
-                label: 'Net Income',
-                data: [1200, 1500, 1700, 1400, 1800, 2200, 2000],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        };
+            <!-- <div class="d-flex align-items-center ms-auto" style="margin-right: 50px;">
+                <div id="statusSummary" class="col" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+                </div>
+            </div> -->
 
-        const config = {
-            type: 'line',
-            data: incomeData,
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const yearSelector = document.getElementById('yearSelector');
+            const incomeChartCtx = document.getElementById('incomeChart').getContext('2d');
+            let chartInstance;
+            let pieChart;
+
+            function MonthoName(month) {
+                const monthNames = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                const parts = month.split('-'); // Assuming month is in format 'YYYY-MM'
+                const monthIndex = parseInt(parts[1], 10) - 1; // Get zero-based month index
+                return monthNames[monthIndex] || 'Invalid Month'; // Return month name or fallback
+            }
+
+            async function fetchOrderStatusSummary() {
+                try {
+                    const response = await fetch('/orderStatusSummary');
+                    const data = await response.json();
+
+                    const statusMap = [
+                        { label: 'รอตรวจสอบการโอนเงิน', textColor: '#5D4037', bgColor: '#EFEBE9', pieColor: '#8D6E63', count: data.awaiting_payment_count || 0 },
+                        { label: 'กำลังเตรียมสินค้า', textColor: '#1E88E5', bgColor: '#E3F2FD', pieColor: '#81D4FA', count: data.preparing_count || 0 },
+                        { label: 'ชำระเงินสำเร็จ', textColor: '#1B5E20', bgColor: '#E0F2F1', pieColor: '#26A69A', count: data.payment_success_count || 0 },
+                        { label: 'กำลังจัดส่งสินค้า', textColor: '#FBC02D', bgColor: '#FFF8E1', pieColor: '#FFEB3B', count: data.shipping_count || 0 },
+                        { label: 'ชำระเงินไม่สำเร็จ', textColor: '#D32F2F', bgColor: '#FFEBEE', pieColor: '#F48FB1', count: data.payment_failed_count || 0 },
+                        { label: 'จัดส่งสำเร็จ', textColor: '#43A047', bgColor: '#E8F5E9', pieColor: '#81C784', count: data.delivered_count || 0 },
+                        { label: 'จัดส่งไม่สำเร็จ', textColor: '#757575', bgColor: '#F5F5F5', pieColor: '#BDBDBD', count: data.failed_count || 0 },
+                        { label: 'ถูกยกเลิก', textColor: '#E53935', bgColor: '#FFEBEE', pieColor: '#FF8A65', count: data.canceled_count || 0 },
+                    ];
+
+                    document.querySelector('#totalOrder').innerHTML = data.total_orders;
+
+                    const summaryDiv = document.getElementById('statusSummary');
+                    summaryDiv.innerHTML = statusMap.map(status => `
+                        <div style="background-color: ${status.bgColor}; height: 60px; width: 200px; border-radius: 10px; margin: 5px; text-align: center; padding-top: 10px;">
+                            <strong style="color: ${status.textColor};">${status.label}</strong>
+                            <h4 style="font-size: 18px; color: ${status.textColor};">${status.count}</h4>
+                        </div>
+                    `).join('');
+
+                    const chartData = statusMap.map(status => status.count);
+                    const chartColors = statusMap.map(status => status.pieColor);
+                    updatePieChart(chartData, statusMap.map(status => status.label), chartColors);
+                } catch (error) {
+                    console.error('Error fetching order status summary:', error);
                 }
             }
-        };
 
-        const incomeChart = new Chart(
-            document.getElementById('incomeChart'),
-            config
-        );
+            function updatePieChart(data, labels, colors) {
+                const ctx = document.getElementById('orderPieChart').getContext('2d');
+                if (pieChart) {
+                    pieChart.data.datasets[0].data = data;
+                    pieChart.data.datasets[0].backgroundColor = colors;
+                    pieChart.data.labels = labels;
+                    pieChart.update();
+                } else {
+                    pieChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: data,
+                                backgroundColor: colors,
+                            }],
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                            },
+                        },
+                    });
+                }
+            }
+
+            async function populateYears() {
+                try {
+                    const response = await fetch('/getAvailableYears');
+                    const years = await response.json();
+                    yearSelector.innerHTML = years.map(year => `<option value="${year}">${year}</option>`).join('');
+
+                    if (years.length > 0) {
+                        fetchIncomeData(years[0]);
+                    }
+                } catch (error) {
+                    console.error('Error fetching available years:', error);
+                }
+            }
+
+            async function fetchIncomeData(selectedYear) {
+                try {
+                    const response = await fetch(`/getIncomeData/${selectedYear}`);
+                    const incomeData = await response.json();
+
+                    const months = incomeData.map(data => data.month);
+                    const income = incomeData.map(data => data.total_income);
+                    const monthNames = months.map(month => MonthoName(month));
+
+                    updateChart(monthNames, income);
+                } catch (error) {
+                    console.error('Error fetching income data:', error);
+                }
+            }
+
+            function updateChart(labels, data) {
+                if (chartInstance) {
+                    chartInstance.destroy();
+                }
+
+                chartInstance = new Chart(incomeChartCtx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Income',
+                            data: data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            yearSelector.addEventListener('change', (e) => {
+                fetchIncomeData(e.target.value);
+            });
+
+            populateYears();
+            fetchOrderStatusSummary();
+        });
     </script>
+
 </body>
 <style>
     .center {
@@ -129,6 +245,23 @@
     .col {
         display: flex;
         flex-direction: column;
+
+    }
+
+    .animated-button {
+        background-color: #e8e3d5;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 10px;
+        border: none;
+        width: 150px;
+        height: 150px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .animated-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 </style>
 
