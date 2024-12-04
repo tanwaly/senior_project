@@ -584,84 +584,80 @@ app.get('/give_review.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/give_review.html'));
 });
 
-
 app.post('/submitReview', (req, res) => {
-    const { sellerId, productId, rating, comment } = req.body;
-    const customerId = req.session.users_id; // Ensure the user is logged in
-
-    console.log('Submitting review:', { sellerId, productId, rating, comment, customerId });
-
-    if (!customerId) {
-        console.warn('User not logged in');
-        return res.status(401).json({ success: false, message: 'Not logged in' });
-    }
+    const { orderId, score, comment, reviewImg1, reviewImg2, reviewImg3 } = req.body;
 
     const sql = `
-        INSERT INTO reviews (customer_id, seller_id, product_id, rating, comment) 
-        VALUES (?, ?, ?, ?, ?);
+        INSERT INTO review (order_id, score, comment, review_date, review_img1, review_img2, review_img3)
+        VALUES (?, ?, ?, NOW(), ?, ?, ?);
     `;
 
-    con.query(sql, [customerId, sellerId, productId, rating, comment], (err) => {
+    con.query(sql, [orderId, score, comment, reviewImg1 || null, reviewImg2 || null, reviewImg3 || null], (err) => {
         if (err) {
-            console.error('Database error:', err); // Log database errors
-            return res.status(500).json({ success: false, message: 'Database error' });
+            console.error('Error inserting review:', err);
+            return res.status(500).json({ error: 'Failed to submit review' });
         }
-
-        res.json({ success: true, message: 'Review submitted successfully' });
-    });
-});
-
-app.get('/reviews/:sellerId', (req, res) => {
-    const { sellerId } = req.params;
-
-    const sql = `
-        SELECT review.score, review.comment, review.created_at, 
-               users.first_name, users.last_name 
-        FROM review 
-        JOIN users ON reviews.customer_id = users.users_id 
-        WHERE review.seller_id = ? 
-        ORDER BY review.created_at DESC;
-    `;
-
-    con.query(sql, [sellerId], (err, results) => {
-        if (err) {
-            console.error('Database error:', err);
-            return res.status(500).json({ error: 'Database error' });
-        }
-
-        res.json(results);
+        res.json({ success: true, message: 'Review submitted successfully.' });
     });
 });
 
 // displaying product
-app.get('/reviewProduct/:productId', (req, res) => {
-    const { productId } = req.params;
-
-    if (!productId || isNaN(productId)) {
-        console.warn('Invalid Product ID:', productId);
-        return res.status(400).json({ error: 'Invalid Product ID' });
-    }
-
+app.get('/orderDetails/:orderId', (req, res) => {
+    const { orderId } = req.params;
     const sql = `
-        SELECT products.product_name, products.product_img, orders.order_tracknum, 
-               orders.order_shipname 
-        FROM products 
-        JOIN orders ON products.product_id = orders.order_id 
-        WHERE products.product_id = ?;
+        SELECT orders.order_id, orders.order_tracknum, orders.order_shipname, 
+               products.product_id, products.product_name, products.product_img,
+               users.users_id AS seller_id, users.first_name, users.last_name
+        FROM orders
+        JOIN queue ON orders.order_id = queue.queue_id
+        JOIN products ON queue.queue_id = products.product_id
+        JOIN users ON products.seller_id = users.users_id
+        WHERE orders.order_id = ?;
     `;
 
-    con.query(sql, [productId], (err, results) => {
+    con.query(sql, [orderId], (err, results) => {
+        if (err) {
+            console.error('Database query error:', err);
+            return res.status(500).json({ error: 'Failed to fetch order details' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+        res.json(results[0]);
+    });
+});
+
+// view reviews
+app.get('/view_review.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/view_review.html'));
+});
+
+app.get('/reviews/:sellerId', (req, res) => {
+    const { sellerId } = req.params;
+    const sql = `
+        SELECT review.review_id, review.score, review.comment, review.review_date, 
+               review.review_img1, review.review_img2, review.review_img3, 
+               products.product_name, products.product_img, 
+               orders.order_tracknum, orders.order_shipname
+        FROM review
+        JOIN orders ON review.order_id = orders.order_id
+        JOIN queue ON orders.order_id = queue.queue_id
+        JOIN products ON queue.queue_id = products.product_id
+        WHERE products.seller_id = ?;
+    `;
+
+    con.query(sql, [sellerId], (err, results) => {
         if (err) {
             console.error('Database query error:', err);
             return res.status(500).json({ error: 'Database query failed' });
         }
 
         if (results.length === 0) {
-            console.warn('No product found for ID:', productId);
-            return res.status(404).json({ error: 'Product not found' });
+            return res.status(404).json({ message: 'No reviews found for this seller.' });
         }
 
-        res.json(results[0]);
+        res.json(results);
     });
 });
 

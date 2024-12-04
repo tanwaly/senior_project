@@ -219,25 +219,45 @@
     <div id="reviewsList" style="margin-top: 20px;"></div>
 </body>
 <script>
-    document.getElementById('viewReviews').addEventListener('click', async () => {
-        const sellerId = window.location.pathname.split('/').pop();
-        const response = await fetch(`/review/${sellerId}`);
+    document.addEventListener('DOMContentLoaded', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sellerId = urlParams.get('sellerId'); // Extract sellerId
+
+    if (!sellerId) {
+        alert('Seller ID is missing from the URL.');
+        console.error('Seller ID is missing.');
+        return;
+    }
+
+    console.log('Fetched Seller ID:', sellerId); // Debugging
+
+    try {
+        // Fetch reviews for the seller
+        const response = await fetch(`/reviews/${sellerId}`);
         const reviews = await response.json();
 
-        const reviewsContainer = document.getElementById('reviewsList');
-        reviewsContainer.innerHTML = ''; // Clear any existing content
+        if (!response.ok || reviews.length === 0) {
+            throw new Error('No reviews found.');
+        }
 
+        const reviewsContainer = document.getElementById('reviewsList');
         reviews.forEach(review => {
-            const reviewDiv = `
-            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px;">
-                <strong>${review.first_name} ${review.last_name}</strong>
-                <p>Rating: ${'⭐'.repeat(review.score)}</p>
-                <p>${review.comment}</p>
-            </div>
-        `;
-            reviewsContainer.innerHTML += reviewDiv;
+            const reviewHTML = `
+                <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px;">
+                    <img src="/public/img/${review.product_img}" alt="${review.product_name}" style="width: 100px; height: auto;">
+                    <h3>${review.product_name}</h3>
+                    <p>Rating: ${'⭐'.repeat(review.score)}</p>
+                    <p>${review.comment}</p>
+                    <small>Reviewed on: ${new Date(review.review_date).toLocaleString()}</small>
+                </div>
+            `;
+            reviewsContainer.innerHTML += reviewHTML;
         });
-    });
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        alert('Failed to load reviews.');
+    }
+});
 
 </script>
 
