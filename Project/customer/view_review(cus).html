@@ -129,8 +129,7 @@
             </button>
         </div>
     </div>
-    <div class="flex" style="margin: 20px 120px;">
-        <!-- 1 review -->
+    <!-- <div class="flex" style="margin: 20px 120px;">
         <div>
             <div class="flex">
                 <img src="https://mrwallpaper.com/images/hd/in-space-cute-among-us-in-the-space-rl5tzlp7ktw6i2lv.jpg"
@@ -153,7 +152,6 @@
     </div>
     <hr>
     <div class="flex" style="margin: 20px 120px;">
-        <!-- 1 review -->
         <div>
             <div class="flex">
                 <img src="https://images.assetsdelivery.com/compings_v2/gennadiikorchuganov/gennadiikorchuganov1606/gennadiikorchuganov160600007.jpg"
@@ -176,7 +174,6 @@
     </div>
     <hr>
     <div class="flex" style="margin: 20px 120px;">
-        <!-- 1 review -->
         <div>
             <div class="flex">
                 <img src="https://64.media.tumblr.com/57e3805190d3494260ff3a72160fe53d/8500c2bc01525970-90/s250x250_c1/30846865089b6356f5ed71b7af85f495b1ba0a9e.jpg"
@@ -199,7 +196,6 @@
     </div>
     <hr>
     <div class="flex" style="margin: 20px 120px;">
-        <!-- 1 review -->
         <div>
             <div class="flex">
                 <img src="https://garden.spoonflower.com/c/14654339/p/f/l/mbVT71wXgWM5ehVb-1crtw3fFmcWcxtjAkvCzBvM0WJ-v1fgIcrLsEA/Nut%20Brown%20Printed%20Solid%20%23563D2B.jpg"
@@ -219,9 +215,29 @@
                 <span style="font-size: 25px; margin-left: 10px;">เสื้อเท่มาก</span>
             </div>
         </div>
-    </div>
+    </div> -->
+    <div id="reviewsList" style="margin-top: 20px;"></div>
 </body>
 <script>
+    document.getElementById('viewReviews').addEventListener('click', async () => {
+        const sellerId = window.location.pathname.split('/').pop();
+        const response = await fetch(`/review/${sellerId}`);
+        const reviews = await response.json();
+
+        const reviewsContainer = document.getElementById('reviewsList');
+        reviewsContainer.innerHTML = ''; // Clear any existing content
+
+        reviews.forEach(review => {
+            const reviewDiv = `
+            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px;">
+                <strong>${review.first_name} ${review.last_name}</strong>
+                <p>Rating: ${'⭐'.repeat(review.score)}</p>
+                <p>${review.comment}</p>
+            </div>
+        `;
+            reviewsContainer.innerHTML += reviewDiv;
+        });
+    });
 
 </script>
 

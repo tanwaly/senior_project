@@ -48,7 +48,7 @@
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-        height: 46px; color: white;" onclick="location.replace('/login');">
+            height: 46px; color: white;" onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
@@ -86,32 +86,39 @@
         .then(response => response.json())
         .then(data => {
             const productContainer = document.getElementById('product-container');
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('productId');
+            console.log('Product ID from URL:', productId);
+
             data.forEach(item => {
                 let trackingHTML = '';
                 function changeStatus(sta) {
                     const status = {
                         0: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: skyblue">กำลังเตรียมสินค้า</span>',
                         1: `<div class="col center">
-                                <span style="background:white; padding:0px 10px 0px 10px; border-radius: 50px; color: #FFC226; margin-bottom:10px;">กำลังจัดส่งสินค้า</span>
-                                <button id="btnaccept" data-order-id="${item.order_id}" style="margin-bottom: 10px; color:white; font-size: 18px; font-weight: bold; background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">
-                                 ยืนยัน
-                                </button>
-                                <button id="btncancel" data-order-id="${item.order_id}" style="font-size: 18px; font-weight: bold; background: #B72323; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: white;">
-                                 ยกเลิก
-                                </button>
-                            </div>`,
-
+                            <span style="background:white; padding:0px 10px 0px 10px; border-radius: 50px; color: #FFC226; margin-bottom:10px;">กำลังจัดส่งสินค้า</span>
+                            <button id="btnaccept" data-order-id="${item.order_id}" style="margin-bottom: 10px; color:white; font-size: 18px; font-weight: bold; background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">
+                                ยืนยัน
+                            </button>
+                            <button id="btncancel" data-order-id="${item.order_id}" style="font-size: 18px; font-weight: bold; background: #B72323; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: white;">
+                                ยกเลิก
+                            </button>
+                        </div>`,
                         2: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: red;">ถูกยกเลิก</span>',
                         3: `<div class="col center">
-                             <span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color:green;  margin-bottom:10px; ">การจัดส่งสำเร็จ</span> 
-                                <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า
+                         <span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color:green; margin-bottom:10px;">การจัดส่งสำเร็จ</span> 
+                            <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า
                                 </button>
-                                <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ให้รีวิว
-                                </button>
-                            </div>`,
+                                <button style="margin-bottom: 10px; font-size: 18px; font-weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;"
+                                onclick="location.href='/give_review.html?productId=${item.product_id}'">
+                                ให้รีวิว
+                            </button>
+                        </div>`,
                         4: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">การจัดส่งไม่สำเร็จ</span>',
+                        5: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #A49A89;">รอตรวจสอบการโอนเงิน</span>',
+                        6: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ชำระเงินไม่สำเร็จ</span>',
                     };
-                    return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';  // Default message for unknown status
+                    return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';
                 }
 
                 // Only show tracking number and shipping provider for statuses 1 to 4
@@ -137,12 +144,12 @@
                 `;
                 }
 
+                // Generate HTML for each product
                 const productHTML = `
                             <div class="row">
                                <img src="public/img/${item.product_img}" alt="${item.product_name}" style="border-radius: 15px; margin-left: 25px; max-width: 150px; max-height: 150px; width: auto; height: auto; object-fit: contain;">
-
                                 <div class="col" style="margin-left: 50PX;">
-                                    <span style="font-size: 20px;">ชื่อร้าน: ${item.first_name} ${item.last_name}</span>
+                                    <span style="font-size: 20px;">ผู้ขาย: ${item.seller_first_name} ${item.seller_last_name}</span>
                                     <span>ชื่อสินค้า: ${item.product_name}</span>
                                     <span>ราคา: ${item.product_price} บาท</span>
                                     <span>คิวที่: ${item.queue_num} เวลา: ${formatDateTime(item.queue_time)}</span>
@@ -175,6 +182,7 @@
             });
         })
         .catch(error => console.error('Error fetching product status:', error));
+
     document.addEventListener('click', function (event) {
         const btnAccept = event.target.closest('#btnaccept');
         const btnCancel = event.target.closest('#btncancel');
@@ -226,7 +234,6 @@
         display: flex;
         flex-direction: column;
     }
-
 </style>
 
 </html>
