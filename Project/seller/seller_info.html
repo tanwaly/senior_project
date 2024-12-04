@@ -1,226 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Personal Information</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" />
     <script src="/public/js/bootstrap.bundle.min.js"></script>
-    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
+    <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png" />
     <style>
-        .br {
-            display: flex;
-            margin-bottom: 15px;
-        }
+      .br {
+        display: flex;
+        margin-bottom: 15px;
+        
+      }
 
-        input::placeholder {
-            font-size: 25px;
-        }
+      input::placeholder {
+        font-size: 25px;
+      }
     </style>
-</head>
+  </head>
 
-<body style="background-color: #f1f1f1;">
-    <div style="background-color:#f5eecc;" class="d-flex">
-        <div class="d-flex align-items-center"
-            style="background:#4b2f7b ; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/sellerhomepage"
-                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-house-door"></i> Homepage
-                </a>
-                <a href="/add-trackingnum"
-                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-truck"></i> เลขพัสดุ
-                </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
-                    data-bs-toggle="modal" data-bs-target="#helpModal">
-                    <i class="bi bi-chat-dots"></i> Help
-                </a>
+  <body style="background-color: #f1f1f1">
+    <div style="background-color: #f5eecc" class="d-flex">
+      <div
+        class="d-flex align-items-center"
+        style="
+          background: #4b2f7b;
+          border-radius: 0px 300px 300px 0px;
+          width: 1300px;
+          height: 120px;
+          padding: 20px;
+        "
+      >
+        <img src="/public/img/logo-w.png" width="100px" alt="Logo" />
+        <div class="d-flex justify-content-between" style="margin-left: 65px">
+          <a
+            href="/sellerhomepage"
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+          >
+            <i class="bi bi-house-door"></i> Homepage
+          </a>
+          <a
+            href="/add-trackingnum"
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+          >
+            <i class="bi bi-truck"></i> เลขพัสดุ
+          </a>
+          <a
+            style="
+              color: white;
+              text-decoration: none;
+              font-size: 20px;
+              padding-left: 65px;
+            "
+            data-bs-toggle="modal"
+            data-bs-target="#helpModal"
+          >
+            <i class="bi bi-chat-dots"></i> Help
+          </a>
+        </div>
+        <!-- pop up contect store -->
+        <div
+          class="modal fade"
+          id="helpModal"
+          tabindex="-1"
+          aria-labelledby="helpModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color: #f3f3e3">
+              <div class="modal-header" style="background-color: #a9b489">
+                <h5 class="modal-title" id="helpModalLabel">
+                  ช่องทางการติดต่อ
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <p><strong>ID LINE:</strong> qwqwefs</p>
+                <p><strong>IG:</strong> surety_sp</p>
+                <p><strong>Facebook:</strong> klsdadj</p>
+              </div>
             </div>
-            <!-- pop up contect store -->
-            <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content" style="background-color: #F3F3E3;">
-                        <div class="modal-header" style="background-color:#A9B489;">
-                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>ID LINE:</strong> qwqwefs</p>
-                            <p><strong>IG:</strong> surety_sp</p>
-                            <p><strong>Facebook:</strong> klsdadj</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
-                Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
-            </button>
-        </div>
+      </div>
+      <div
+        class="d-flex align-items-center ms-auto"
+        style="padding-right: 20px"
+      >
+        <button
+          id="btnlogout"
+          style="
+            background: #b72323;
+            border-radius: 13px;
+            border-color: transparent;
+            width: 150px;
+            height: 46px;
+            color: white;
+          "
+          onclick="location.replace('/login');"
+        >
+          Log out
+          <i class="bi bi-box-arrow-right" style="padding-left: 15px"></i>
+        </button>
+      </div>
     </div>
-    <h1 style="text-align: center; font-weight: bold; margin: 30px;">ประวัติส่วนตัว</h1>
-    <div style="margin-left: 150px; font-size: 30px;">
-        <div class="br">
-            <strong>ชื่อ: </strong>
-            <span id="nameDisplay"></span>
-            <input type="text" id="nameInput" class="form-control"
-                style="width: 1200px; margin-left: 10px; display: none;">
-        </div>
-        <div class="br">
-            <strong>เบอร์โทร: </strong>
-            <span id="phoneDisplay"></span>
-            <input type="text" id="phoneInput" class="form-control"
-                style="width: 1200px; margin-left: 10px; display: none;">
-        </div>
-        <div class="br">
-            <strong>Email: </strong>
-            <span id="emailDisplay"></span>
-            <input type="text" id="emailInput" class="form-control"
-                style="width: 1200px; margin-left: 10px; display: none;">
-        </div>
-        <div class="br">
-            <strong>ธนาคาร: </strong>
-            <span id="bankAcNameDisplay"></span>
-            <input type="text" id="bankAcNameInput" class="form-control"
-                style="width: 1200px; margin-left: 10px; display: none;">
-        </div>
-        <div class="br">
-            <strong>เลขบัญชีธนาคาร: </strong>
-            <span id="bankAcNumDisplay"></span>
-            <input type="text" id="bankAcNumInput" class="form-control"
-                style="width: 1200px; margin-left: 10px; display: none;">
-        </div>
+    <h1 style="text-align: center; font-weight: bold; margin: 30px">
+      ประวัติส่วนตัว
+    </h1>
+    <div style="margin-left: 150px; font-size: 30px">
+      <div class="br">
+        <strong>ชื่อ: </strong>
+        <span id="nameDisplay" style="margin-left: 20px;"></span>
+        <input
+          type="text"
+          id="nameInput"
+          class="form-control"
+          style="width: 1200px; margin-left: 10px; display: none"
+        />
+      </div>
+      <div class="br">
+        <strong>เบอร์โทร: </strong>
+        <span id="phoneDisplay" style="margin-left: 20px;"></span>
+        <input
+          type="text"
+          id="phoneInput"
+          class="form-control"
+          style="width: 1200px; margin-left: 10px; display: none"
+        />
+      </div>
+      <div class="br">
+        <strong>Email: </strong>
+        <span id="emailDisplay" style="margin-left: 20px;"></span>
+        <input
+          type="text"
+          id="emailInput"
+          class="form-control"
+          style="width: 1200px; margin-left: 10px; display: none"
+        />
+      </div>
+      <div class="br">
+        <strong>ธนาคาร: </strong>
+        <span id="bankAcNameDisplay" style="margin-left: 20px;"></span>
+        <input
+          type="text"
+          id="bankAcNameInput"
+          class="form-control"
+          style="width: 1200px; margin-left: 10px; display: none"
+        />
+      </div>
+      <div class="br">
+        <strong>เลขบัญชีธนาคาร: </strong>
+        <span id="bankAcNumDisplay" style="margin-left: 20px;"></span>
+        <input
+          type="text"
+          id="bankAcNumInput"
+          class="form-control"
+          style="width: 1200px; margin-left: 10px; display: none"
+        />
+      </div>
     </div>
-
 
     <center>
-        <button id="editButton"
-            style="border: none; background-color: #FFE48C; width: 180px; height: 60px; border-radius: 15px; font-weight: bold; font-size: 25px; margin-top: 100px;">
-            แก้ไข
-        </button>
-        <button id="saveButton"
-            style="border: none; background-color: #bde3a7; width: 180px; height: 60px; border-radius: 15px; font-weight: bold; font-size: 25px; margin-top: 100px; display: none;">
-            บันทึก
-        </button>
+      <button
+        id="editButton"
+        style="
+          border: none;
+          background-color: #ffe48c;
+          width: 180px;
+          height: 60px;
+          border-radius: 15px;
+          font-weight: bold;
+          font-size: 25px;
+          margin-top: 100px;
+        "
+      >
+        แก้ไข
+      </button>
+      <button
+        id="saveButton"
+        style="
+          border: none;
+          background-color: #bde3a7;
+          width: 180px;
+          height: 60px;
+          border-radius: 15px;
+          font-weight: bold;
+          font-size: 25px;
+          margin-top: 100px;
+          display: none;
+        "
+      >
+        บันทึก
+      </button>
     </center>
+  </body>
 
-</body>
+  <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+          const sellerId = window.location.pathname.split("/").pop();
+        //   const sellerId = localStorage.getItem('users_id'); // หรือ sessionStorage
+          if (!sellerId) {
+            console.error('Seller ID not found');
+            return;
+        }
 
-<script>
-    // Function to toggle to edit mode
-    document.addEventListener('DOMContentLoaded', async () => {
-        const sellerId = window.location.pathname.split('/').pop();
-
-        // Fetch seller's profile data
         try {
-            const response = await fetch(`/sellerInfo/${sellerId}`);
+            const response = await fetch(`/sellerInfo1/${sellerId}`); // เรียก API พร้อม sellerId
             const data = await response.json();
 
             if (data.error) {
                 console.error(data.error);
             } else {
-                // Populate fields with seller data
+                console.log('Seller Data:', JSON.stringify(data, null, 2));
+                // แสดงผลข้อมูลผู้ขายบนหน้าเว็บ
                 document.getElementById('nameDisplay').textContent = `${data.first_name} ${data.last_name}`;
                 document.getElementById('phoneDisplay').textContent = data.phonenum;
                 document.getElementById('emailDisplay').textContent = data.email;
                 document.getElementById('bankAcNameDisplay').textContent = data.bank_ac_name;
                 document.getElementById('bankAcNumDisplay').textContent = data.bank_ac_num;
-
-                // Set input values for editing mode
-                document.getElementById('nameInput').value = `${data.first_name} ${data.last_name}`;
-                document.getElementById('phoneInput').value = data.phonenum;
-                document.getElementById('emailInput').value = data.email;
-                document.getElementById('bankAcNameInput').value = data.bank_ac_name;
-                document.getElementById('bankAcNumInput').value = data.bank_ac_num;
             }
         } catch (error) {
-            console.error("Failed to fetch seller information:", error);
+            console.error('Failed to fetch seller information:', error);
         }
-
-        // Toggle to edit mode
-        document.getElementById('editButton').onclick = function () {
-            document.getElementById('editButton').style.display = 'none';
-            document.getElementById('saveButton').style.display = 'inline-block';
-
-            document.getElementById('nameDisplay').style.display = 'none';
-            document.getElementById('nameInput').style.display = 'inline-block';
-
-            document.getElementById('phoneDisplay').style.display = 'none';
-            document.getElementById('phoneInput').style.display = 'inline-block';
-
-            document.getElementById('emailDisplay').style.display = 'none';
-            document.getElementById('emailInput').style.display = 'inline-block';
-
-            document.getElementById('bankAcNameDisplay').style.display = 'none';
-            document.getElementById('bankAcNameInput').style.display = 'inline-block';
-
-            document.getElementById('bankAcNumDisplay').style.display = 'none';
-            document.getElementById('bankAcNumInput').style.display = 'inline-block';
-        };
-
-        // Save the updated data
-        document.getElementById('saveButton').onclick = async function () {
-            const updatedData = {
-                first_name: document.getElementById('nameInput').value.split(' ')[0],
-                last_name: document.getElementById('nameInput').value.split(' ')[1] || '',
-                phonenum: document.getElementById('phoneInput').value,
-                email: document.getElementById('emailInput').value,
-                bank_ac_name: document.getElementById('bankAcNameInput').value,
-                bank_ac_num: document.getElementById('bankAcNumInput').value
-            };
-
-            try {
-                const saveResponse = await fetch(`/updateSellerInfo/${sellerId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedData)
-                });
-
-                if (saveResponse.ok) {
-                    // Update the display elements
-                    document.getElementById('nameDisplay').textContent = `${updatedData.first_name} ${updatedData.last_name}`;
-                    document.getElementById('phoneDisplay').textContent = updatedData.phonenum;
-                    document.getElementById('emailDisplay').textContent = updatedData.email;
-                    document.getElementById('bankAcNameDisplay').textContent = updatedData.bank_ac_name;
-                    document.getElementById('bankAcNumDisplay').textContent = updatedData.bank_ac_num;
-
-                    // Switch back to view mode
-                    document.getElementById('editButton').style.display = 'inline-block';
-                    document.getElementById('saveButton').style.display = 'none';
-
-                    document.getElementById('nameDisplay').style.display = 'inline';
-                    document.getElementById('nameInput').style.display = 'none';
-
-                    document.getElementById('phoneDisplay').style.display = 'inline';
-                    document.getElementById('phoneInput').style.display = 'none';
-
-                    document.getElementById('emailDisplay').style.display = 'inline';
-                    document.getElementById('emailInput').style.display = 'none';
-
-                    document.getElementById('bankAcNameDisplay').style.display = 'inline';
-                    document.getElementById('bankAcNameInput').style.display = 'none';
-
-                    document.getElementById('bankAcNumDisplay').style.display = 'inline';
-                    document.getElementById('bankAcNumInput').style.display = 'none';
-                } else {
-                    console.error('Failed to update seller information');
-                }
-            } catch (error) {
-                console.error('Error saving seller information:', error);
-            }
-            
-
-        };
     });
 
-    
-</script>
+          // Toggle to edit mode
+          document.getElementById("editButton").onclick = function () {
+            document.getElementById("editButton").style.display = "none";
+            document.getElementById("saveButton").style.display = "inline-block";
 
+            document.getElementById("nameDisplay").style.display = "none";
+            document.getElementById("nameInput").style.display = "inline-block";
+
+            document.getElementById("phoneDisplay").style.display = "none";
+            document.getElementById("phoneInput").style.display = "inline-block";
+
+            document.getElementById("emailDisplay").style.display = "none";
+            document.getElementById("emailInput").style.display = "inline-block";
+
+            document.getElementById("bankAcNameDisplay").style.display = "none";
+            document.getElementById("bankAcNameInput").style.display =
+              "inline-block";
+
+            document.getElementById("bankAcNumDisplay").style.display = "none";
+            document.getElementById("bankAcNumInput").style.display =
+              "inline-block";
+          };
+
+          
+          // Save the updated data
+          document.getElementById("saveButton").onclick = async function () {
+    const updatedData = {
+        first_name: document.getElementById("nameInput").value.split(" ")[0],
+        last_name: document.getElementById("nameInput").value.split(" ")[1] || "",
+        phonenum: document.getElementById("phoneInput").value,
+        email: document.getElementById("emailInput").value,
+        bank_ac_name: document.getElementById("bankAcNameInput").value,
+        bank_ac_num: document.getElementById("bankAcNumInput").value,
+    };
+
+    // ตรวจสอบว่า sellerId ถูกดึงจาก sessionStorage หรือไม่ได้
+    let sellerId = sessionStorage.getItem("sellerId");
+
+    if (!sellerId) {
+        // ถ้า sellerId ยังไม่ถูกกำหนด จะต้องแสดงข้อผิดพลาดหรือทำการดึงจาก session หรือที่อื่น
+        console.error("Seller ID is not defined.");
+        return;
+    }
+
+    try {
+        const saveResponse = await fetch(`/updateSellerInfo/${sellerId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedData),
+        });
+
+        if (saveResponse.ok) {
+            // Update the display elements
+            document.getElementById("nameDisplay").textContent = `${updatedData.first_name} ${updatedData.last_name}`;
+            document.getElementById("phoneDisplay").textContent = updatedData.phonenum;
+            document.getElementById("emailDisplay").textContent = updatedData.email;
+            document.getElementById("bankAcNameDisplay").textContent = updatedData.bank_ac_name;
+            document.getElementById("bankAcNumDisplay").textContent = updatedData.bank_ac_num;
+
+            // Switch back to view mode
+            document.getElementById("editButton").style.display = "inline-block";
+            document.getElementById("saveButton").style.display = "none";
+
+            document.getElementById("nameDisplay").style.display = "inline";
+            document.getElementById("nameInput").style.display = "none";
+
+            document.getElementById("phoneDisplay").style.display = "inline";
+            document.getElementById("phoneInput").style.display = "none";
+
+            document.getElementById("emailDisplay").style.display = "inline";
+            document.getElementById("emailInput").style.display = "none";
+
+            document.getElementById("bankAcNameDisplay").style.display = "inline";
+            document.getElementById("bankAcNameInput").style.display = "none";
+
+            document.getElementById("bankAcNumDisplay").style.display = "inline";
+            document.getElementById("bankAcNumInput").style.display = "none";
+        } else {
+            console.error("Failed to update seller information");
+        }
+    } catch (error) {
+        console.error("Error saving seller information:", error);
+    }
+};
+
+          
+  </script>
 </html>

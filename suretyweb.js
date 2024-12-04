@@ -727,7 +727,7 @@ app.get('/sellerData', (req, res) => {
 });
 
 // Fetch user data
-app.get('/sellerPersonalData/:id', (req, res) => {
+app.put('/sellerPersonalData/:id', (req, res) => {
     const userId = req.params.userId;
     const sql = `
         SELECT *
