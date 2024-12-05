@@ -822,7 +822,7 @@ app.get('/getSellerData', (req, res) => {
         return res.status(401).json({ error: 'Not logged in or session expired' });
     }
 
-    const sql = `SELECT first_name, profile_img FROM users WHERE users_id = ?;`;
+    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img FROM users WHERE users_id = ?;`;
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
@@ -830,34 +830,45 @@ app.get('/getSellerData', (req, res) => {
         } else if (results.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         } else {
-            res.json(results[0]);  // Return the first_name and profile_img as JSON
+            res.json(results[0]);  // Return the user's information as JSON
         }
     });
 });
 
-// seller information
+// seller information page
 app.get('/sellerprofile', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
 });
 
-app.get('/sellerinfo/:sellerId', (req, res) => {
-    const sellerId = req.session.users_id;
+app.get('/sellerprofile', (req, res) => {
+    // ดึง userId จาก session
+    const userId = req.session.users_id;
 
-    if (!sellerId) {
-        return res.status(401).json({ error: 'Not logged in or session expired' });
+    if (!userId) {
+        return res.redirect('/login'); // ถ้าไม่มี session ให้ redirect ไปที่หน้า login
     }
 
-    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img 
-                 FROM users WHERE users_id = ?;`;
+    // ส่งค่า userId ไปยังหน้า HTML
+    res.render('seller_info', { userId: userId });
+});
 
+
+
+app.get('/sellerinfo/:sellerId', (req, res) => {
+    const sellerId = req.params.sellerId;
+    const sql = `
+        SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img 
+        FROM users WHERE users_id = ?;
+    `;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
-        } else if (results.length === 0) {
-            return res.status(404).json({ error: 'Seller not found' });
-        } else {
-            res.json(results[0]);  // Send seller info as JSON
+            console.error("Error fetching data:", err);
+            return res.status(500).send('Internal Server Error');
         }
+        if (results.length === 0) {
+            return res.status(404).send('Seller not found');
+        }
+        res.json(results[0]);
     });
 });
 
