@@ -469,6 +469,57 @@ app.put('/updateOrderStatus/:orderId', (req, res) => {
     });
 });
 
+// customer information & edit
+app.get('/customerprofile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/cus_info.html'));
+});
+
+app.get('/customerinfo', (req, res) => {
+    const customerId = req.session.users_id;
+
+    if (!customerId) {
+        return res.status(401).json({ error: 'Not logged in or session expired' });
+    }
+
+    const sql = `SELECT first_name, last_name, phonenum, email FROM users WHERE users_id = ?;`;
+
+    con.query(sql, [customerId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        } else if (results.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        } else {
+            res.json(results[0]);  // Send customer info as JSON
+        }
+    });
+});
+
+app.put('/updateCustomerInfo', (req, res) => {
+    const customerId = req.session.users_id;  // Use session ID for security
+    const { first_name, last_name, phonenum, email } = req.body;
+
+    const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ? WHERE users_id = ?;`;
+    const params = [first_name, last_name, phonenum, email, customerId];
+
+    con.query(sql, params, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database update failed' });
+        }
+        res.status(200).json({ message: 'Information updated successfully' });
+    });
+});
+
+
+// --- give review ---
+
+app.get('/reportstore', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
+});
+
+
+
+
+//================== sellers =====================
 // click on seller; store info
 app.get('/seller-profile/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/store_profile.html'));
@@ -635,6 +686,12 @@ app.get('/reportstore', (req, res) => {
 
 //================== sellers =====================
 
+app.get('/sellerinfo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
+});
+
+
+
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;
 
@@ -755,6 +812,7 @@ app.get('/sellerhomepage', (req, res) => {
 //         }
 //     });
 // });
+
 
 
 app.get('/getSellerData', (req, res) => {
