@@ -151,8 +151,8 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
-        const path = window.location.pathname; // Get the full path
-        const sellerId = path.split('/').pop(); // Extract the last segment (sellerId)
+        const path = window.location.pathname; 
+        const sellerId = path.split('/').pop(); 
 
         if (!sellerId) {
             alert('Seller ID is missing.');

@@ -494,23 +494,8 @@ app.get('/customerinfo', (req, res) => {
     });
 });
 
-app.put('/updateCustomerInfo', (req, res) => {
-    const customerId = req.session.users_id;  // Use session ID for security
-    const { first_name, last_name, phonenum, email } = req.body;
-
-    const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ? WHERE users_id = ?;`;
-    const params = [first_name, last_name, phonenum, email, customerId];
-
-    con.query(sql, params, (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database update failed' });
-        }
-        res.status(200).json({ message: 'Information updated successfully' });
-    });
-});
 
 
-// --- give review ---
 
 app.get('/reportstore', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
@@ -556,35 +541,102 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
 });
 
 // --- give review ---
-app.get('/give_review', (req, res) => {
+app.get('/give_review/:id', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/give_review.html'));
 });
+// displaying product 
+app.get('/reviewProduct/:id', (req, res) => {
+    const { id: orderId } = req.params; // Get orderId from params
 
-app.post('/submitReview', (req, res) => {
-    const { sellerId, productId, rating, comment } = req.body;
-    const customerId = req.session.users_id; // Ensure the user is logged in
-
-    console.log('Submitting review:', { sellerId, productId, rating, comment, customerId });
-
-    if (!customerId) {
-        console.warn('User not logged in');
-        return res.status(401).json({ success: false, message: 'Not logged in' });
+    if (!orderId || isNaN(orderId)) {
+        console.warn('Invalid Order ID:', orderId);
+        return res.status(400).json({ error: 'Invalid Order ID' });
     }
 
     const sql = `
-        INSERT INTO reviews (customer_id, seller_id, product_id, rating, comment) 
-        VALUES (?, ?, ?, ?, ?);
+        SELECT 
+            p.product_name, 
+            p.product_img, 
+            p.product_price, 
+            o.order_tracknum, 
+            o.order_shipname 
+        FROM orders o
+        JOIN queue q ON o.queue_id = q.queue_id
+        JOIN products p ON q.product_id = p.product_id
+        WHERE o.order_id = ?;
     `;
 
-    con.query(sql, [customerId, sellerId, productId, rating, comment], (err) => {
+    con.query(sql, [orderId], (err, results) => {
         if (err) {
-            console.error('Database error:', err); // Log database errors
-            return res.status(500).json({ success: false, message: 'Database error' });
+            console.error('Database query error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
         }
 
-        res.json({ success: true, message: 'Review submitted successfully' });
+        if (results.length === 0) {
+            console.warn('No product found for Order ID:', orderId);
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        res.json(results[0]); // Return the product details
     });
 });
+
+app.post('/submitReview', upload.single('reviewImg'), (req, res) => {
+    const { orderId, score, comment } = req.body;
+    const reviewImg = req.file ? req.file.filename : null; // Get the uploaded file name
+    const reviewDate = new Date();
+
+    const sqlInsert = `
+        INSERT INTO review (order_id, score, comment, review_date, review_img)
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    const insertParams = [
+        orderId,
+        score,
+        comment,
+        reviewDate,
+        reviewImg
+    ];
+
+    con.query(sqlInsert, insertParams, (err, result) => {
+        if (err) {
+            console.error('Error inserting review:', err);
+            return res.status(500).send('Database error');
+        }
+        res.json({ success: true });
+    });
+});
+
+// app.post('/submitReview', upload.single('reviewImg1'), (req, res) => {
+//     const { score, comment } = req.body;
+//     const reviewImg1 = req.file ? req.file.filename : null;
+//     const reviewDate = new Date();
+
+//     const sqlInsert = `
+//         INSERT INTO review (score, comment, review_date, review_img)
+//         VALUES (?, ?, ?, ?)
+//     `;
+
+//     const insertParams = [
+//         score,
+//         comment,
+//         reviewDate,
+//         reviewImg1 // Include the image filename if it's uploaded
+//     ];
+
+//     con.query(sqlInsert, insertParams, (err, result) => {
+//         if (err) {
+//             console.error('Error inserting review:', err);
+//             return res.status(500).send('Database error');
+//         }
+//         res.json({ success: true });
+//     });
+// });
+
+
+
+
 // ------veiw review page
 app.get('/veiw-review/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/view_review.html'));
@@ -647,37 +699,7 @@ app.get('/getSellerAvgScore/:sellerId', (req, res) => {
 });
 
 
-// displaying product อาจจะไม่เอา
-// app.get('/reviewProduct/:productId', (req, res) => {
-//     const { productId } = req.params;
 
-//     if (!productId || isNaN(productId)) {
-//         console.warn('Invalid Product ID:', productId);
-//         return res.status(400).json({ error: 'Invalid Product ID' });
-//     }
-
-//     const sql = `
-//         SELECT products.product_name, products.product_img, orders.order_tracknum, 
-//                orders.order_shipname 
-//         FROM products 
-//         JOIN orders ON products.product_id = orders.order_id 
-//         WHERE products.product_id = ?;
-//     `;
-
-//     con.query(sql, [productId], (err, results) => {
-//         if (err) {
-//             console.error('Database query error:', err);
-//             return res.status(500).json({ error: 'Database query failed' });
-//         }
-
-//         if (results.length === 0) {
-//             console.warn('No product found for ID:', productId);
-//             return res.status(404).json({ error: 'Product not found' });
-//         }
-
-//         res.json(results[0]);
-//     });
-// });
 
 // --- report store ---
 app.get('/reportstore', (req, res) => {

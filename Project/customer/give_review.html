@@ -20,6 +20,21 @@
         .bi-star-fill {
             transition: color 0.2s ease-in-out;
         }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hidden {
+            display: none;
+        }
     </style>
 
 </head>
@@ -41,22 +56,6 @@
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
             </div>
-            <!-- pop up contect store -->
-            <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content" style="background-color: #F3F3E3;">
-                        <div class="modal-header" style="background-color:#A9B489;">
-                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>ID LINE:</strong> qwqwefs</p>
-                            <p><strong>IG:</strong> surety_sp</p>
-                            <p><strong>Facebook:</strong> klsdadj</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
@@ -67,19 +66,8 @@
         </div>
     </div>
     <center>
-        <div class="flex m-4 shadow"
-            style="background-color: #E6F3FF; width: 1450px; height: 200px; border-radius: 20px; align-items: center;">
-            <img id="productImage" src="/public/img/product.png" alt="Product Image"
-                style="height: 150px; border-radius: 20px; margin-left: 60px;">
-            <div class="column" style="margin-left: 60px;">
-                <h1 id="productName" style="font-weight: bold; margin-left: -50px;">Product</h1>
-                <strong style="font-size: 25px;">เลขพัสดุ: </strong>
-                <span id="trackingNumber" style="font-size: 25px;">Tracking Number</span>
-                <br>
-                <strong style="font-size: 25px;">จัดส่งโดย: </strong>
-                <span id="shippingName" style="font-size: 25px;">Shipping Name</span>
-            </div>
-        </div>
+        <div class="shProduct"></div>
+
         <div class="shadow m-4" style="background-color: white; width: 1000px;border-radius: 10px; padding: 30px;">
             <h1 style="font-weight: bold; ">ให้คะแนนร้าน</h1>
             <div id="rating-stars">
@@ -89,94 +77,166 @@
                 <i class="bi bi-star" data-value="4" style="color: gray; font-size: 35px; cursor: pointer;"></i>
                 <i class="bi bi-star" data-value="5" style="color: gray; font-size: 35px; cursor: pointer;"></i>
             </div>
-            <h2 style="font-weight: bold; margin-left: -500px;">ความคิดเห็น</h2>
-            <input type="text" class="form-control" style="background-color: #d9d9d9; width: 700px; height: 150px;">
-            <button id="submit-rating"
-                style="border: none; background-color: #BDE3A7; width: 180px; height: 60px; border-radius: 25px; font-weight: bold; font-size: 25px; margin-top: 20px;">ยืนยัน</button>
+            <div class="flex" style="margin-left: 30px;">
+                <span
+                    style="font-weight: 600; text-align: start; margin-left: 100px; font-size: 30px;">ความคิดเห็น</span>
+                <div style="margin-left: 400px;">
+                    <!-- Hidden file input -->
+                    <input type="file" id="file-input" class="hidden" accept="image/*" onchange="handleFileSelect()">
+                    <button id="upload-button"
+                        style="border: none; background-color: #161E52; color: white; width: 120px; height: 40px; border-radius: 25px; font-weight: 500; font-size: 20px;"
+                        onclick="document.getElementById('file-input').click();">เพิ่มรูปภาพ</button>
+                </div>
+            </div>
+            <textarea id="comment"
+                style="background-color: #d9d9d9; width: 700px; height: 150px; margin-top: 10px; margin-bottom: 10px; padding: 15px;"></textarea>
+            <div class="col center">
+                <!-- Image preview -->
+                <img id="image-preview" src="/public/img/white.png" alt=""
+                    style="max-width: 250px; object-fit: contain;">
+                <input type="file" hidden>
+                <button id="submit-rating"
+                    style="border: none; background-color: #BDE3A7; width: 180px; height: 60px; border-radius: 25px; font-weight: bold; font-size: 25px; margin-top: 10px;">ยืนยัน</button>
+            </div>
         </div>
     </center>
 
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const orderId = urlParams.get('orderId');
+        const path = window.location.pathname;
+        const orderId = path.split('/').pop(); // Extract orderId from the URL path
 
-        if (!orderId) {
-            alert('Order ID is missing.');
+        if (!orderId || isNaN(orderId)) {
+            alert('Order ID is missing or invalid.');
+            console.error('Order ID is missing or invalid.');
             return;
         }
 
         try {
-            const response = await fetch(`/orderDetails/${orderId}`);
+            // Fetch order details based on orderId
+            const response = await fetch(`/reviewProduct/${orderId}`);
             const order = await response.json();
 
             if (!response.ok) {
                 throw new Error(order.error || 'Failed to fetch order details.');
             }
 
-            document.querySelector('#productImage').src = `/public/img/${order.product_img}`;
-            document.querySelector('#productName').textContent = order.product_name;
-            document.querySelector('#trackingNumber').textContent = order.order_tracknum;
-            document.querySelector('#shippingName').textContent = order.order_shipname;
+            // Populate product section
+            document.querySelector('.shProduct').innerHTML = `
+            <div class="flex m-4 shadow"
+                style="background-color: #E6F3FF; width: 1450px; height: 200px; border-radius: 20px; align-items: center;">
+                <img id="productImage" src="/public/img/${order.product_img}" alt="Product Image"
+                    style="height: 150px; border-radius: 20px; margin-left: 60px;">
+                <div class="column" style="margin-left: 60px;">
+                    <h1 id="productName" style="font-weight: bold; text-align: start;">${order.product_name}</h1>
+                    <div style="text-align: start;">
+                        <strong style="font-size: 25px;">ราคา: </strong>
+                        <span id="trackingNumber" style="font-size: 25px;">${order.product_price}</span>
+                        <br>
+                        <strong style="font-size: 25px;">เลขพัสดุ: </strong>
+                        <span id="trackingNumber" style="font-size: 25px;">${order.order_tracknum}</span>
+                        <br>
+                        <strong style="font-size: 25px;">จัดส่งโดย: </strong>
+                        <span id="shippingName" style="font-size: 25px;">${order.order_shipname}</span>
+                    </div>
+                </div>
+            </div>
+        `;
 
-            function updateStars(rating) {
-                stars.forEach(star => {
-                    const value = parseInt(star.getAttribute('data-value'), 10);
-                    if (value <= rating) {
-                        star.classList.remove('bi-star');
-                        star.classList.add('bi-star-fill');
-                        star.style.color = 'darkorange';
-                    } else {
-                        star.classList.remove('bi-star-fill');
-                        star.classList.add('bi-star');
-                        star.style.color = 'gray';
-                    }
-                });
-            }
+            handleStarRating(); // Initialize star rating
 
-            // Event listener for each star
-            stars.forEach(star => {
-                star.addEventListener('click', () => {
-                    selectedRating = parseInt(star.getAttribute('data-value'), 10);
-                    updateStars(selectedRating);
-                });
+            // Handle image upload and preview
+            const uploadButton = document.getElementById('upload-button');
+            const fileInput = document.getElementById('file-input');
+            const imagePreview = document.getElementById('image-preview');
 
-                // Optional: Add hover effect for better user experience
-                star.addEventListener('mouseover', () => {
-                    const hoverRating = parseInt(star.getAttribute('data-value'), 10);
-                    updateStars(hoverRating);
-                });
-
-                star.addEventListener('mouseout', () => {
-                    updateStars(selectedRating);
-                });
-            });
-
-            document.querySelector('#submit-rating').addEventListener('click', async () => {
-                const score = selectedRating;
-                const comment = document.querySelector('.form-control').value.trim();
-                const reviewImg1 = "test.jpg"; // Placeholder, replace with actual upload logic
-
-                const reviewResponse = await fetch('/submitReview', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ orderId, score, comment, reviewImg1 }),
-                });
-
-                const result = await reviewResponse.json();
-                if (result.success) {
-                    alert('Review submitted successfully!');
-                    location.href = `/view_review.html?sellerId=${order.seller_id}`;
-                } else {
-                    alert('Failed to submit review.');
+            // Show preview when an image is selected
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result; // Update image preview
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
+
+            // Handle form submission
+            document.querySelector('#submit-rating').addEventListener('click', async () => {
+                const comment = document.querySelector('#comment').value.trim();
+                const selectedRating = getSelectedRating();
+                const file = fileInput.files[0]; // Image file
+
+                if (!selectedRating) {
+                    alert('Please select a star rating.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('orderId', orderId);
+                formData.append('score', selectedRating);
+                formData.append('comment', comment);
+                if (file) {
+                    formData.append('reviewImg', file); // Append file to FormData
+                }
+
+                try {
+                    const response = await fetch('/submitReview', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    if (result.success) {
+                        alert('Review submitted successfully!');
+                        location.href = `/cf-status`;
+                    } else {
+                        throw new Error(result.error || 'Failed to submit review.');
+                    }
+                } catch (error) {
+                    console.error('Error submitting review:', error);
+                    alert('Failed to submit review. Please try again.');
+                }
+            });
+
         } catch (error) {
             console.error('Error fetching order details:', error);
             alert('Failed to load order details.');
         }
     });
+
+    let selectedRating = 0; // Variable to store the selected rating
+
+    // Function to get the selected rating
+    function getSelectedRating() {
+        return selectedRating;
+    }
+
+    // Handle star rating functionality
+    function handleStarRating() {
+        const stars = document.querySelectorAll('#rating-stars .bi-star, #rating-stars .bi-star-fill');
+
+        function updateStars(rating) {
+            stars.forEach(star => {
+                const value = parseInt(star.dataset.value, 10);
+                star.classList.toggle('bi-star-fill', value <= rating);
+                star.classList.toggle('bi-star', value > rating);
+                star.style.color = value <= rating ? 'darkorange' : 'gray';
+            });
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => updateStars(parseInt(star.dataset.value, 10)));
+            star.addEventListener('mouseout', () => updateStars(getSelectedRating()));
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.dataset.value, 10); // Persistently store selected rating
+                updateStars(selectedRating);
+            });
+        });
+    }
+
 
 </script>
 
