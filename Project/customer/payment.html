@@ -25,33 +25,37 @@
                 <a href="#" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a href="#" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
-                    onclick="openPopup()">
+                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                    data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
             </div>
             <!-- pop up contect store -->
-            <div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
-                <div class="popup-box" onclick="event.stopPropagation()">
-                    <button class="close-button" onclick="closePopup(event)">✖</button>
-                    <div class="contact-header">ช่องทางการติดต่อ</div>
-                    <div class="contact-info">
-                        <p>ID LINE: qwqwefs</p>
-                        <p>IG: dasldkakd</p>
-                        <p>Fackbook: klsdadj</p>
+            <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="background-color: #F3F3E3;">
+                        <div class="modal-header" style="background-color:#A9B489;">
+                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>ID LINE:</strong> qwqwefs</p>
+                            <p><strong>IG:</strong> surety_sp</p>
+                            <p><strong>Facebook:</strong> klsdadj</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+        <!-- <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
             <button id="btnlogout"
                 style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: white;"
                 onclick="location.replace('/login');">
                 Log out
                 <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
             </button>
-        </div>
+        </div> -->
     </div>
 
     <div style="padding: 25px;">
@@ -89,81 +93,60 @@
     </div>
 
     <script>
-        async function loadQRCode(account, amount) {
+        document.addEventListener('DOMContentLoaded', async () => {
+            const productId = new URLSearchParams(window.location.search).get('productId');
+            if (!productId) {
+                console.error('Product ID is missing in the URL');
+                return;
+            }
+
             try {
-                const response = await fetch(`/generate-qr/${account}/${amount}`);
-                const qrCodeHTML = await response.text();
-                document.getElementById('qrCodeContainer').innerHTML = qrCodeHTML;
-            } catch (error) {
-                console.error('Error loading QR Code:', error);
-            }
-        }
+                // Fetch product details
+                const productResponse = await fetch(`/payment/${productId}`);
+                if (productResponse.ok) {
+                    const product = await productResponse.json();
+                    const price = product.product_price; // Extract price from response
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const account = '0812345678'; // Replace with dynamic PromptPay account
-            const amount = 100.00;       // Replace with dynamic amount
-            loadQRCode(account, amount);
-        });
-        function openPopup() {
-            document.getElementById('popupOverlay').style.display = 'flex';
-        }
-
-        // Function to close the popup
-        function closePopup(event) {
-            document.getElementById('popupOverlay').style.display = 'none';
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const showProduct = document.getElementById('showProduct');
-            const confirmbtn = document.getElementById('confirmbtn');
-
-            if (!showProduct) {
-                console.error('showProduct element not found');
-                return; // Exit if the element is not found
-            }
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('productId');
-
-            if (productId) {
-                getPayment(productId);
-            } else {
-                console.error('No productId found in the URL');
-            }
-
-            async function getPayment(productId) {
-                try {
-                    const productResponse = await fetch(`/payment/${productId}`);
-                    if (productResponse.ok) {
-                        const product = await productResponse.json();
-                        console.log('Fetched data:', product);
-
-                        let productHTML = `
-                        <div class="row">
-                            <img id="productImage" src="/public/img/${product.product_img}" alt="product image" style="border-radius: 20px; margin-left: 25px; width: 200px; height: 180px;">
-                            <div class="col">
-                                <p style="font-size: 20px;"><strong>ชื่อ: </strong><span>${product.product_name}</span></p>
-                                <p style="font-size: 20px;"><strong>คำอธิบาย: </strong><span>${product.product_caption}</span></p>
-                                <p style="font-size: 20px;"><strong>ราคา: </strong><span>${product.product_price}</span></p>
-                            </div>
-                        </div>
-                        `;
-                        let cbtn = `<div class="text-center" style="margin-top: 20px">
+                    // Display product details
+                    const productHTML = `
+                <div class="row">
+                    <img src="/public/img/${product.product_img}" alt="Product Image" style="width:200px; height:180px; border-radius:20px; object-fit: contain;">
+                    <div class="col">
+                        <p><strong>ชื่อ:</strong> ${product.product_name}</p>
+                        <p><strong>คำอธิบาย:</strong> ${product.product_caption}</p>
+                        <p><strong>ราคา:</strong> ${price} THB</p>
+                    </div>
+                </div>
+            `;
+                    confirmbtn.innerHTML = `<div class="text-center" style="margin-top: 20px">
                             <button id="payButton" onclick="confirmPayment()" data-queue-id="${product.queue_id}"
                              style="background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
                                 ยืนยัน
                             </button>
                         </div>
                         `;
+                    document.getElementById('showProduct').innerHTML = productHTML;
 
-                        showProduct.innerHTML = productHTML;
-                        confirmbtn.innerHTML = cbtn;
+                    // Generate QR code
+                    const qrResponse = await fetch('/generateQR', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ amount: price }),
+                    });
+
+                    if (qrResponse.ok) {
+                        const { Result: qrCodeUrl } = await qrResponse.json();
+                        document.getElementById('qrCodeContainer').innerHTML = `
+                    <img src="${qrCodeUrl}" alt="PromptPay QR Code" style="width:300px;">
+                `;
                     } else {
-                        console.error('Failed to fetch data:', productResponse.status, productResponse.statusText);
+                        console.error('Failed to generate QR code');
                     }
-                } catch (error) {
-                    console.error('Fetch error:', error);
+                } else {
+                    console.error('Failed to fetch product details:', productResponse.statusText);
                 }
+            } catch (error) {
+                console.error('Error:', error);
             }
         });
 
@@ -173,7 +156,7 @@
             const queueId = document.getElementById('payButton').dataset.queueId;
             const productId = new URLSearchParams(window.location.search).get('productId');
 
-            // Validate input
+            // Validate input fields
             if (!orderAddName || !orderAddress) {
                 Swal.fire({
                     icon: 'warning',
@@ -182,38 +165,48 @@
                 return;
             }
 
-            // const paymentTime = new Date().toISOString();
+            // Show SweetAlert2 file input for image upload
+            const { value: file } = await Swal.fire({
+                title: "Select image",
+                input: "file",
+                inputAttributes: {
+                    "accept": "image/*",
+                    "aria-label": "กรุณาอัพโหลดสลิป"
+                },
+                confirmButtonText: 'Upload',
+                cancelButtonText: 'Cancel',
+                showCancelButton: true,
+            });
+
+            if (!file) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'You must upload a payment slip to complete the order',
+                });
+                return;
+            }
+
+            // Read the uploaded file and create a FormData object
+            const formData = new FormData();
+            formData.append("order_address", orderAddress);
+            formData.append("order_addname", orderAddName);
+            formData.append("order_status", 5); // Update order_status to 5
+            formData.append("queue_id", queueId);
+            formData.append("product_id", productId);
+            formData.append("payment_img", file);
 
             try {
+                // Send the data to the server
                 const response = await fetch('/addorder', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        order_address: orderAddress,
-                        order_addname: orderAddName,
-                        order_status: 0,
-                        queue_id: queueId,
-                        product_id: productId
-                        // payment_time: paymentTime
-                    })
+                    body: formData,
                 });
 
                 if (response.ok) {
-                    const result = await response.text();
                     Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: result,
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-
-                    // Delay before navigating to the order status page
-                    setTimeout(() => {
-                        location.replace("/cf-status");
-                    }, 1500);
+                        icon: 'success',
+                        title: 'Order completed successfully!',
+                    }).then(() => location.replace("/cf-status"));
                 } else {
                     const error = await response.text();
                     Swal.fire({
@@ -227,10 +220,12 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'There was an error processing your payment.',
+                    text: 'There was an error processing your request.',
                 });
             }
         }
+
+
     </script>
 
     <style>

@@ -15,6 +15,11 @@
             display: flex;
             flex-direction: row;
         }
+
+        .bi-star,
+        .bi-star-fill {
+            transition: color 0.2s ease-in-out;
+        }
     </style>
 
 </head>
@@ -64,15 +69,15 @@
     <center>
         <div class="flex m-4 shadow"
             style="background-color: #E6F3FF; width: 1450px; height: 200px; border-radius: 20px; align-items: center;">
-            <img src="https://da.lnwfile.com/06xxl3.jpg" alt="ชุดเดรส"
+            <img id="productImage" src="/public/img/product.png" alt="Product Image"
                 style="height: 150px; border-radius: 20px; margin-left: 60px;">
             <div class="column" style="margin-left: 60px;">
-                <h1 style="font-weight: bold; margin-left: -50px;">ชุดเดรส</h1>
+                <h1 id="productName" style="font-weight: bold; margin-left: -50px;">Product</h1>
                 <strong style="font-size: 25px;">เลขพัสดุ: </strong>
-                <span style="font-size: 25px;">z56t2nk</span>
+                <span id="trackingNumber" style="font-size: 25px;">Tracking Number</span>
                 <br>
                 <strong style="font-size: 25px;">จัดส่งโดย: </strong>
-                <span style="font-size: 25px;">FLASH</span>
+                <span id="shippingName" style="font-size: 25px;">Shipping Name</span>
             </div>
         </div>
         <div class="shadow m-4" style="background-color: white; width: 1000px;border-radius: 10px; padding: 30px;">
@@ -93,20 +98,44 @@
 
 </body>
 <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('productId'); // Extract productId from URL
+
+        if (!productId) {
+            alert('Product ID is missing from the URL.');
+            console.error('Product ID is missing from the URL.');
+            return;
+        }
+
+        console.log('Fetched Product ID:', productId); // Log to verify
+
+        try {
+            const response = await fetch(`/reviewProduct/${productId}`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch product details: ${response.statusText}`);
+            }
+
+            const product = await response.json();
+            document.querySelector('#productImage').src = `/public/img/${product.product_img}`;
+            document.querySelector('#productName').textContent = product.product_name;
+            document.querySelector('#trackingNumber').textContent = product.order_tracknum;
+            document.querySelector('#shippingName').textContent = product.order_shipname;
+        } catch (error) {
+            console.error('Error fetching product details:', error);
+            alert('Failed to load product details.');
+        }
+    });
+
+
+
     document.addEventListener('DOMContentLoaded', () => {
         const stars = document.querySelectorAll('#rating-stars .bi');
         let selectedRating = 0;
 
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                selectedRating = parseInt(star.getAttribute('data-value'));
-                updateStars(selectedRating);
-            });
-        });
-
         function updateStars(rating) {
             stars.forEach(star => {
-                const value = parseInt(star.getAttribute('data-value'));
+                const value = parseInt(star.getAttribute('data-value'), 10);
                 if (value <= rating) {
                     star.classList.remove('bi-star');
                     star.classList.add('bi-star-fill');
@@ -119,32 +148,59 @@
             });
         }
 
+        // Event listener for each star
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'), 10);
+                updateStars(selectedRating);
+            });
+
+            // Optional: Add hover effect for better user experience
+            star.addEventListener('mouseover', () => {
+                const hoverRating = parseInt(star.getAttribute('data-value'), 10);
+                updateStars(hoverRating);
+            });
+
+            star.addEventListener('mouseout', () => {
+                updateStars(selectedRating);
+            });
+        });
+
         document.getElementById('submit-rating').addEventListener('click', async () => {
-            if (selectedRating === 0) {
-                alert('Please select a rating.');
+            const productId = new URLSearchParams(window.location.search).get('productId');
+            const sellerId = window.location.pathname.split('/').pop(); // Get sellerId from URL
+            const rating = selectedRating; // Logic to capture selected stars
+            const comment = document.querySelector('.form-control').value.trim();
+
+            if (!rating || !comment) {
+                alert('Please provide a rating and comment.');
                 return;
             }
 
-            const sellerId = window.location.pathname.split('/').pop(); // Get sellerId from URL
-            const response = await fetch('/submitReview', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    sellerId: sellerId,
-                    rating: selectedRating,
-                }),
-            });
+            console.log('Submitting review:', { sellerId, productId, rating, comment });
 
-            const result = await response.json();
-            if (result.success) {
-                alert('Thank you for your rating!');
-            } else {
-                alert('Failed to submit rating.');
+            try {
+                const response = await fetch('/submitReview', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sellerId, productId, rating, comment }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('Review submitted successfully!');
+                    window.location.href = `/view_review.html?sellerId=${sellerId}`;
+                } else {
+                    alert('Failed to submit review.');
+                }
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                alert('An error occurred while submitting your review.');
             }
         });
+
     });
+
 </script>
 
 </html>

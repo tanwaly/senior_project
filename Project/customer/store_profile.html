@@ -175,7 +175,7 @@
             const productsContainer = document.getElementById('showSellerProduct');
             products.forEach(product => {
                 const productHTML = `
-                  <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
+                <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
                 <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                     <div style="display: flex; align-items: center;">
                         <button style="background-color: transparent; border: none;">
@@ -256,27 +256,6 @@
             requestAnimationFrame(() => setInterval(updateBackgroundColor, 60000));
         });
     }
-
-    document.getElementById('viewReviews').addEventListener('click', async () => {
-        const sellerId = window.location.pathname.split('/').pop();
-        const response = await fetch(`/reviews/${sellerId}`);
-        const reviews = await response.json();
-
-        const reviewsContainer = document.getElementById('reviewsList');
-        reviewsContainer.innerHTML = ''; // Clear any existing content
-
-        reviews.forEach(review => {
-            const reviewDiv = `
-            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 8px;">
-                <strong>${review.first_name} ${review.last_name}</strong>
-                <p>Rating: ${'⭐'.repeat(review.rating)}</p>
-                <p>${review.comment}</p>
-                <small>${new Date(review.created_at).toLocaleString()}</small>
-            </div>
-        `;
-            reviewsContainer.innerHTML += reviewDiv;
-        });
-    });
 
 </script>
 
