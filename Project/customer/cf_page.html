@@ -194,7 +194,7 @@ function formatDateTime(dateTimeStr, includeDate = true) {
 
             let productHTML = `
                 <div style="width: 1370px; min-height: 1520px; height: auto; background: #E1E1E1; border-radius: 5px; padding-bottom: 75px;">
-                    <div style="width: 1370px; height: 135px; background:#FFFFF7; border-radius: 5px 5px 0px 0px;">
+                    <div style="width: 1370px; height: 135px; background:#FFEEB5; border-radius: 5px 5px 0px 0px;">
                         <div style="display: flex; align-items: center;">
                             <img src="/public/img/${product.profile_img}" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;">
                             <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
@@ -208,14 +208,14 @@ function formatDateTime(dateTimeStr, includeDate = true) {
                     </div>
                     <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 8px; display: flex; justify-content: center;">
                         <div>
-                            <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #FFF4D2; border-radius: 20px; margin-top: 120px; flex-direction: row;">
+                            <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #EFF7FF; border-radius: 20px; margin-top: 120px; flex-direction: row;">
                                 <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px; max-height: 500px; max-width: 500px; width: auto; height: auto; object-fit: contain;">
                                 <div class="container col" style="margin-left: 45px; height: auto; width: 0px;">
                                     <span class="name-p">Name : <span class="name-p2">${product.product_name}</span></span>
                                     <span class="name-p">Price : <span class="name-p2">${product.product_price}</span></span>
                                     ${sizeHTML}
                                     <span class="name-p">Description :<div class="name-p2">${product.product_detail}</div></span>
-                                    <button id="cfButton" class="center" style="width: 276px; height: 66px; background: #F3F3E3; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
+                                    <button id="cfButton" class="center" style="width: 276px; height: 66px; background: #F292B6; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
                                         CF
                                     </button>
                                 </div>

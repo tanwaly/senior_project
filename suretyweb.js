@@ -416,31 +416,32 @@ app.get('/cf-status', (req, res) => {
 app.get('/orderStatus', (req, res) => {
     const loggedInUserId = req.session.users_id;
     const sql = `
-              SELECT 
-            orders.order_id, 
-            orders.order_status, 
-            orders.order_tracknum, 
-            orders.order_shipname,
-            products.product_name, 
-            products.product_price, 
-            products.product_img,        
-            u_cus.first_name AS cus_first_name, 
-            u_cus.last_name AS cus_last_name, 
-            u_cus.profile_img AS cus_profile_img,
-            u_seller.first_name AS seller_first_name, 
-            u_seller.last_name AS seller_last_name,
-            queue.queue_num, 
-            queue.queue_time 
-        FROM 
-            queue 
-        JOIN orders ON queue.queue_id = orders.queue_id
-        JOIN products ON queue.product_id = products.product_id  
-        JOIN users u_cus ON queue.cus_id = u_cus.users_id  
-        JOIN users u_seller ON products.seller_id = u_seller.users_id  
-        WHERE u_cus.users_id = ?
-        ORDER BY orders.order_id DESC;
-    `;
-
+    SELECT DISTINCT
+        orders.order_id, 
+        orders.order_status, 
+        orders.order_tracknum, 
+        orders.order_shipname,
+        products.product_name, 
+        products.product_price, 
+        products.product_img,        
+        u_cus.first_name AS cus_first_name, 
+        u_cus.last_name AS cus_last_name, 
+        u_cus.profile_img AS cus_profile_img,
+        u_seller.first_name AS seller_first_name, 
+        u_seller.last_name AS seller_last_name,
+        queue.queue_num, 
+        queue.queue_time,
+        CASE WHEN review.order_id IS NOT NULL THEN 1 ELSE 0 END AS has_review
+    FROM 
+        queue 
+    JOIN orders ON queue.queue_id = orders.queue_id
+    JOIN products ON queue.product_id = products.product_id  
+    JOIN users u_cus ON queue.cus_id = u_cus.users_id  
+    JOIN users u_seller ON products.seller_id = u_seller.users_id  
+    LEFT JOIN review ON orders.order_id = review.order_id
+    WHERE u_cus.users_id = ?
+    ORDER BY orders.order_id DESC;
+`;
     con.query(sql, [loggedInUserId], (err, results) => {
         if (err) {
             res.status(500).json({ error: 'Database query failed' });
@@ -468,6 +469,19 @@ app.put('/updateOrderStatus/:orderId', (req, res) => {
         res.json({ success: true, message: 'Order status updated successfully' });
     });
 });
+// check is this order got review already?
+// app.get('/getReviewedOrders', (req, res) => {
+//     const { orderId } = req.params;
+//     const query = 'SELECT order_id FROM review WHERE';
+//     db.query(query, (err, results) => {
+//         if (err) {
+//             console.error('Error fetching reviewed orders:', err);
+//             return res.status(500).json({ error: 'Internal Server Error' });
+//         }
+//         res.json(results);
+//     });
+// });
+
 
 // customer information & edit
 app.get('/customerprofile', (req, res) => {

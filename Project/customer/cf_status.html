@@ -109,10 +109,11 @@
                          <span style="background:#e2fee2 ; padding:5px 10px 5px 10px; border-radius: 50px; color:green; margin-bottom:10px;">การจัดส่งสำเร็จ</span> 
                             <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background:#EFF7FF ; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า
                                 </button>
-                                <button style="margin-bottom: 10px; font-size: 18px; font-weight: bold; background:#FAD2E1 ; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;"
-                                    onclick="location.href='/give_review/${item.order_id}'">
-                                    รีวิว
-                                </button>
+                                <button 
+    style="margin-bottom: 10px; font-size: 18px; font-weight: bold; background:#FAD2E1; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;"
+    ${item.has_review ? 'disabled' : `onclick="location.href='/give_review/${item.order_id}'"`}>
+    รีวิว
+</button>
                         </div>`,
                         4: '<span style="background:#F7F6F6 ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">การจัดส่งไม่สำเร็จ</span>',
                         5: '<span style="background:#F7F6F6; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">รอตรวจสอบการโอนเงิน</span>',
