@@ -622,34 +622,6 @@ app.post('/submitReview', upload.single('reviewImg'), (req, res) => {
     });
 });
 
-// app.post('/submitReview', upload.single('reviewImg1'), (req, res) => {
-//     const { score, comment } = req.body;
-//     const reviewImg1 = req.file ? req.file.filename : null;
-//     const reviewDate = new Date();
-
-//     const sqlInsert = `
-//         INSERT INTO review (score, comment, review_date, review_img)
-//         VALUES (?, ?, ?, ?)
-//     `;
-
-//     const insertParams = [
-//         score,
-//         comment,
-//         reviewDate,
-//         reviewImg1 // Include the image filename if it's uploaded
-//     ];
-
-//     con.query(sqlInsert, insertParams, (err, result) => {
-//         if (err) {
-//             console.error('Error inserting review:', err);
-//             return res.status(500).send('Database error');
-//         }
-//         res.json({ success: true });
-//     });
-// });
-
-
-
 
 // ------veiw review page
 app.get('/veiw-review/:sellerId', (req, res) => {
