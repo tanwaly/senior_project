@@ -869,7 +869,8 @@ app.get('/sellerinfo/:sellerId', (req, res) => {
         return res.status(401).json({ error: 'Not logged in or session expired' });
     }
 
-    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num FROM users WHERE users_id = ?;`;
+    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img 
+                 FROM users WHERE users_id = ?;`;
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
@@ -882,99 +883,35 @@ app.get('/sellerinfo/:sellerId', (req, res) => {
     });
 });
 
-// Update user data
-app.put('/sellerPersonalData/:id', (req, res) => {
-    const userId = req.params.id; // Corrected from req.params.userId
+app.post('/updateSellerInfo/:sellerId', upload.single('profile_img'), (req, res) => {
+    const sellerId = req.session.users_id; // Securely fetch seller ID from session
+    const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact } = req.body;
+    const profile_img = req.file ? req.file.filename : null;
+
     const sql = `
-        SELECT *
-        FROM users WHERE users_id = ?;
+        UPDATE users 
+        SET 
+            first_name = ?, 
+            last_name = ?, 
+            phonenum = ?, 
+            email = ?, 
+            bank_ac_name = ?, 
+            bank_ac_num = ?, 
+            sacc_contact = ?, 
+            profile_img = COALESCE(?, profile_img) 
+        WHERE users_id = ?;
     `;
-    con.query(sql, [userId], (err, results) => {
+    const params = [first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img, sellerId];
+
+    con.query(sql, params, (err, result) => {
         if (err) {
-            res.status(500).json({ error: 'Database query failed' });
-        } else if (results.length === 0) {
-            res.status(404).json({ error: 'Report not found' });
-        } else {
-            res.json(results[0]);
-        }
-    });
-});
-
-
-// app.get('/getSellerData', (req, res) => {
-//     const sellerId = req.session.users_id;
-
-//     if (!sellerId) {
-//         return res.status(401).json({ error: 'Not logged in or session expired' });
-//     }
-
-//     const sql = `SELECT first_name, profile_img FROM users WHERE users_id = ?;`;
-
-//     con.query(sql, [sellerId], (err, results) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Database query failed' });
-//         } else if (results.length === 0) {
-//             return res.status(404).json({ error: 'User not found' });
-//         } else {
-//             res.json(results[0]);  // Return the first_name and profile_img as JSON
-//         }
-//     });
-// });
-
-// // seller information
-// app.get('/sellerprofile', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
-// });
-
-// app.get('/sellerinfo/:sellerId', (req, res) => {
-//     const sellerId = req.session.users_id;
-
-//     if (!sellerId) {
-//         return res.status(401).json({ error: 'Not logged in or session expired' });
-//     }
-
-//     const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num FROM users WHERE users_id = ?;`;
-
-//     con.query(sql, [sellerId], (err, results) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Database query failed' });
-//         } else if (results.length === 0) {
-//             return res.status(404).json({ error: 'Seller not found' });
-//         } else {
-//             res.json(results[0]);  // Send seller info as JSON
-//         }
-//     });
-// });
-
-// app.put('/updateSellerInfo/:sellerId', (req, res) => {
-//     const sellerId = req.session.users_id;  // Use session ID for security
-//     const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num } = req.body;
-
-//     const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ?, bank_ac_name = ?, bank_ac_num = ? WHERE users_id = ?;`;
-//     const params = [first_name, last_name, phonenum, email, , bank_ac_name, bank_ac_num, sellerId];
-
-//     con.query(sql, params, (err, results) => {
-//         if (err) {
-//             return res.status(500).json({ error: 'Database update failed' });
-//         }
-//         res.status(200).json({ message: 'Information updated successfully' });
-//     });
-// });
-
-app.put('/updateSellerInfo/:sellerId', (req, res) => {
-    const sellerId = req.session.users_id;  // Use session ID for security
-    const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num } = req.body;
-
-    const sql = `UPDATE users SET first_name = ?, last_name = ?, phonenum = ?, email = ?, bank_ac_name = ?, bank_ac_num = ? WHERE users_id = ?;`;
-    const params = [first_name, last_name, phonenum, email, , bank_ac_name, bank_ac_num, sellerId];
-
-    con.query(sql, params, (err, results) => {
-        if (err) {
+            console.error("Database update failed:", err);
             return res.status(500).json({ error: 'Database update failed' });
         }
-        res.status(200).json({ message: 'Information updated successfully' });
+        res.status(200).json({ message: 'Profile updated successfully' });
     });
 });
+
 
 app.get('/sellerproduct', (req, res) => {
     const sellerId = req.session.users_id;
@@ -1004,9 +941,6 @@ app.get('/sellerproduct', (req, res) => {
         }
     });
 });
-
-
-
 
 app.get('/sellerproduct/:id', (req, res) => {
     const productId = req.params.id;
