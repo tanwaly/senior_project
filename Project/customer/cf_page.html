@@ -13,10 +13,10 @@
     <title>CF</title>
 </head>
 
-<body style="background-color:#f1f1f1;">
-    <div style="background-color:#f5eecc;" class="d-flex">
+<body style="background-color:white;">
+    <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#4b2f7b; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
                 <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -63,18 +63,14 @@
 </body>
 
 <script>
-    function formatDateTime(dateTimeStr, includeDate = true) {
-        if (!dateTimeStr) return '';
+function formatDateTime(dateTimeStr, includeDate = true) {
+    if (!dateTimeStr) return '';
+    const date = new Date(dateTimeStr);
+    return includeDate 
+        ? `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}<br>${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}` 
+        : `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+}
 
-        const date = new Date(dateTimeStr);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-
-        return includeDate ? `${hours}:${minutes}<br>${day}/${month}/${year}` : `${hours}:${minutes}`;
-    }
 
     function generateQueueHTML(queue) {
         return queue.length > 0 ? queue.map(q => `
@@ -198,7 +194,7 @@
 
             let productHTML = `
                 <div style="width: 1370px; min-height: 1520px; height: auto; background: #E1E1E1; border-radius: 5px; padding-bottom: 75px;">
-                    <div style="width: 1370px; height: 135px; background:#FFFFF7; border-radius: 5px 5px 0px 0px;">
+                    <div style="width: 1370px; height: 135px; background:#FFEEB5; border-radius: 5px 5px 0px 0px;">
                         <div style="display: flex; align-items: center;">
                             <img src="/public/img/${product.profile_img}" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;">
                             <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
@@ -212,14 +208,14 @@
                     </div>
                     <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 8px; display: flex; justify-content: center;">
                         <div>
-                            <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #BDE3A7; border-radius: 20px; margin-top: 120px; flex-direction: row;">
+                            <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #EFF7FF; border-radius: 20px; margin-top: 120px; flex-direction: row;">
                                 <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px; max-height: 500px; max-width: 500px; width: auto; height: auto; object-fit: contain;">
                                 <div class="container col" style="margin-left: 45px; height: auto; width: 0px;">
                                     <span class="name-p">Name : <span class="name-p2">${product.product_name}</span></span>
                                     <span class="name-p">Price : <span class="name-p2">${product.product_price}</span></span>
                                     ${sizeHTML}
                                     <span class="name-p">Description :<div class="name-p2">${product.product_detail}</div></span>
-                                    <button id="cfButton" class="center" style="width: 276px; height: 66px; background: #F3F3E3; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
+                                    <button id="cfButton" class="center" style="width: 276px; height: 66px; background: #F292B6; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
                                         CF
                                     </button>
                                 </div>

@@ -12,10 +12,10 @@
     <title>CF Status</title>
 </head>
 
-<body style="background-color: #f1f1f1;">
-    <div style="background-color:#f5eecc;" class="d-flex">
+<body style="background-color: white;">
+    <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#4b2f7b; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
                 <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -54,7 +54,7 @@
             </button>
         </div>
     </div>
-    <div style="padding: 25px;">
+    <div style="padding: 35px 80px 0px 80px;">
         <div class="row">
             <div id="product-container"></div>
             <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
@@ -94,9 +94,9 @@
                 let trackingHTML = '';
                 function changeStatus(sta) {
                     const status = {
-                        0: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: skyblue">กำลังเตรียมสินค้า</span>',
+                        0: '<span style="background:#f2f9fc ; padding:5px 10px 5px 10px; border-radius: 50px; color: #4ECCF5">กำลังเตรียมสินค้า</span>',
                         1: `<div class="col center">
-                            <span style="background:white; padding:0px 10px 0px 10px; border-radius: 50px; color: #FFC226; margin-bottom:10px;">กำลังจัดส่งสินค้า</span>
+                            <span style="background:#fcf7e3; padding:0px 10px 0px 10px; border-radius: 50px; color: #edb015; margin-bottom:10px;">กำลังจัดส่งสินค้า</span>
                             <button id="btnaccept" data-order-id="${item.order_id}" style="margin-bottom: 10px; color:white; font-size: 18px; font-weight: bold; background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">
                                 ยืนยัน
                             </button>
@@ -104,19 +104,20 @@
                                 ยกเลิก
                             </button>
                         </div>`,
-                        2: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: red;">ถูกยกเลิก</span>',
+                        2: '<span style="background:#fbedf1 ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ถูกยกเลิก</span>',
                         3: `<div class="col center">
-                         <span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color:green; margin-bottom:10px;">การจัดส่งสำเร็จ</span> 
-                            <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า
+                         <span style="background:#e2fee2 ; padding:5px 10px 5px 10px; border-radius: 50px; color:green; margin-bottom:10px;">การจัดส่งสำเร็จ</span> 
+                            <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background:#EFF7FF ; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า
                                 </button>
-                                <button style="margin-bottom: 10px; font-size: 18px; font-weight: bold; background: lightgrey; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;"
-                                onclick="location.href='/give_review.html?productId=${item.product_id}'">
-                                ให้รีวิว
-                            </button>
+                                <button 
+                                    style="margin-bottom: 10px; font-size: 18px; font-weight: bold; background:#FAD2E1; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;"
+                                    ${item.has_review ? 'disabled' : `onclick="location.href='/give_review/${item.order_id}'"`}>
+                                    รีวิว
+                                </button>
                         </div>`,
-                        4: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">การจัดส่งไม่สำเร็จ</span>',
-                        5: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #A49A89;">รอตรวจสอบการโอนเงิน</span>',
-                        6: '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ชำระเงินไม่สำเร็จ</span>',
+                        4: '<span style="background:#F7F6F6 ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">การจัดส่งไม่สำเร็จ</span>',
+                        5: '<span style="background:#F7F6F6; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">รอตรวจสอบการโอนเงิน</span>',
+                        6: '<span style="background:#FFEBEE ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ชำระเงินไม่สำเร็จ</span>',
                     };
                     return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';
                 }

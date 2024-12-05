@@ -255,7 +255,8 @@
                     const modalBody = document.querySelector('.modal-body');
 
                     const bankDetails = (user.role === 2) ? `
-                <p><span>ธนาคาร: ${user.bank_ac_name || 'N/A'}</span></p>
+                <p><span>ธนาคาร: ${user.bank_ac_type || 'N/A'}</span></p>
+                <p><span>ชื่อบัญชีธนาคาร: ${user.bank_ac_name || 'N/A'}</span></p>
                 <p><span>เลขบัญชีธนาคาร: ${user.bank_ac_num || 'N/A'}</span></p>
                 <p><span style="text-decoration: underline;">บัตรประชาชน</span></p>
                 <div class="center">
