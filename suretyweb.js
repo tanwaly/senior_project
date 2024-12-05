@@ -470,7 +470,7 @@ app.put('/updateOrderStatus/:orderId', (req, res) => {
 });
 
 // click on seller; store info
-app.get('/seller/:sellerId', (req, res) => {
+app.get('/seller-profile/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/store_profile.html'));
 });
 
@@ -505,10 +505,9 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
 });
 
 // --- give review ---
-app.get('/give_review.html', (req, res) => {
+app.get('/give_review', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/give_review.html'));
 });
-
 
 app.post('/submitReview', (req, res) => {
     const { sellerId, productId, rating, comment } = req.body;
@@ -535,17 +534,32 @@ app.post('/submitReview', (req, res) => {
         res.json({ success: true, message: 'Review submitted successfully' });
     });
 });
-
+// ------veiw review page
+app.get('/veiw-review/:sellerId', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/view_review.html'));
+});
 app.get('/reviews/:sellerId', (req, res) => {
     const { sellerId } = req.params;
 
     const sql = `
-        SELECT review.score, review.comment, review.created_at, 
-               users.first_name, users.last_name 
-        FROM review 
-        JOIN users ON reviews.customer_id = users.users_id 
-        WHERE review.seller_id = ? 
-        ORDER BY review.created_at DESC;
+                 SELECT 
+            r.score, 
+            r.comment, 
+            r.review_date, 
+            r.review_img, 
+            u.first_name AS customer_first_name, 
+            u.last_name AS customer_last_name, 
+            u.profile_img AS customer_profile_img,
+            s.first_name AS seller_first_name,
+            s.last_name AS seller_last_name
+        FROM review r
+        JOIN orders o ON r.order_id = o.order_id
+        JOIN queue q ON o.queue_id = q.queue_id
+        JOIN products p ON q.product_id = p.product_id
+        JOIN users u ON q.cus_id = u.users_id
+        JOIN users s ON p.seller_id = s.users_id
+        WHERE p.seller_id = ?
+        ORDER BY r.review_date DESC;
     `;
 
     con.query(sql, [sellerId], (err, results) => {
@@ -557,38 +571,62 @@ app.get('/reviews/:sellerId', (req, res) => {
         res.json(results);
     });
 });
-
-// displaying product
-app.get('/reviewProduct/:productId', (req, res) => {
-    const { productId } = req.params;
-
-    if (!productId || isNaN(productId)) {
-        console.warn('Invalid Product ID:', productId);
-        return res.status(400).json({ error: 'Invalid Product ID' });
-    }
+app.get('/getSellerAvgScore/:sellerId', (req, res) => {
+    const { sellerId } = req.params;
 
     const sql = `
-        SELECT products.product_name, products.product_img, orders.order_tracknum, 
-               orders.order_shipname 
-        FROM products 
-        JOIN orders ON products.product_id = orders.order_id 
-        WHERE products.product_id = ?;
+        SELECT AVG(r.score) AS avg_score
+        FROM review r
+        JOIN orders o ON r.order_id = o.order_id
+        JOIN queue q ON o.queue_id = q.queue_id
+        JOIN products p ON q.product_id = p.product_id
+        WHERE p.seller_id = ?;
     `;
 
-    con.query(sql, [productId], (err, results) => {
+    con.query(sql, [sellerId], (err, results) => {
         if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).json({ error: 'Database query failed' });
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
         }
 
-        if (results.length === 0) {
-            console.warn('No product found for ID:', productId);
-            return res.status(404).json({ error: 'Product not found' });
-        }
-
-        res.json(results[0]);
+        // Ensure avg_score is always a number
+        const avgScore = results[0]?.avg_score || 0;
+        res.json({ avg_score: avgScore });
     });
 });
+
+
+// displaying product อาจจะไม่เอา
+// app.get('/reviewProduct/:productId', (req, res) => {
+//     const { productId } = req.params;
+
+//     if (!productId || isNaN(productId)) {
+//         console.warn('Invalid Product ID:', productId);
+//         return res.status(400).json({ error: 'Invalid Product ID' });
+//     }
+
+//     const sql = `
+//         SELECT products.product_name, products.product_img, orders.order_tracknum, 
+//                orders.order_shipname 
+//         FROM products 
+//         JOIN orders ON products.product_id = orders.order_id 
+//         WHERE products.product_id = ?;
+//     `;
+
+//     con.query(sql, [productId], (err, results) => {
+//         if (err) {
+//             console.error('Database query error:', err);
+//             return res.status(500).json({ error: 'Database query failed' });
+//         }
+
+//         if (results.length === 0) {
+//             console.warn('No product found for ID:', productId);
+//             return res.status(404).json({ error: 'Product not found' });
+//         }
+
+//         res.json(results[0]);
+//     });
+// });
 
 // --- report store ---
 app.get('/reportstore', (req, res) => {
@@ -596,9 +634,6 @@ app.get('/reportstore', (req, res) => {
 });
 
 //================== sellers =====================
-
-
-
 
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;

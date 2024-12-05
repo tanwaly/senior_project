@@ -68,25 +68,10 @@
                 <div class="column">
                     <div class="flex mt-4">
                         <div>
-                            <span id="sellerName" style="font-size: 40px; font-weight: bold;">Eiei</span>
+                            <span id="sellerName" style="font-size: 40px; font-weight: bold;"></span>
                             <div>
-                                <i class="bi bi-star-fill"
-                                    style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                                <i class="bi bi-star-fill"
-                                    style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                                <i class="bi bi-star-fill"
-                                    style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                                <i class="bi bi-star-fill"
-                                    style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                                <i class="bi bi-star-fill"
-                                    style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>
-                                <span style="font-size: 25px; font-weight: bold; margin-left: 15px;">5/5</span>
-                                <button id="viewReviews"
-                                    onclick="location.href='/view_review.html?sellerId=${sellerId}'"
-                                    style="border: none; background-color: #e2e2e2; width: 100px; height: 25px; text-align: center; margin-left: 20px; border-radius: 5px;">
-                                    ดูรีวิว
-                                </button>
-
+                                <div class="reviewStar"></div>
+                                <div id="shrbtn"></div>
                             </div>
                         </div>
                     </div>
@@ -116,31 +101,6 @@
                             </div>
                         </div>
 
-                        <script>
-                            document.getElementById('uploadButton').addEventListener('click', function () {
-                                document.getElementById('addProductImage').click();
-                            });
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const sizeRadios = document.querySelectorAll('input[name="size"]');
-                                const clothSizeSelect = document.getElementById('clothSizeSelect');
-                                const shoesSizeSelect = document.getElementById('shoesSizeSelect');
-
-                                sizeRadios.forEach(option => {
-                                    option.addEventListener('change', function () {
-                                        if (this.value === 'cloth') {
-                                            clothSizeSelect.style.display = 'block';
-                                            shoesSizeSelect.style.display = 'none';
-                                        } else if (this.value === 'shoes') {
-                                            clothSizeSelect.style.display = 'none';
-                                            shoesSizeSelect.style.display = 'block';
-                                        } else {
-                                            clothSizeSelect.style.display = 'none';
-                                            shoesSizeSelect.style.display = 'none';
-                                        }
-                                    });
-                                });
-                            });
-                        </script>
                     </div>
                 </div>
             </div>
@@ -148,6 +108,7 @@
         </div>
     </div>
     </div>
+
     <!-- post ขาย หลัก -->
     <div class="center">
         <div id="showSellerProduct"
@@ -157,6 +118,44 @@
 </body>
 
 <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const sellerId = window.location.pathname.split('/').pop();
+
+        try {
+            // Fetch average score of the seller
+            const avgScoreResponse = await fetch(`/getSellerAvgScore/${sellerId}`);
+            const avgScoreData = await avgScoreResponse.json();
+
+            if (avgScoreData.error) {
+                console.error(avgScoreData.error);
+            } else {
+                // Ensure avg_score is a valid number
+                const avgScore = Number(avgScoreData.avg_score) || 0;
+                const reviewStarDiv = document.querySelector('.reviewStar');
+                reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+            }
+        } catch (error) {
+            console.error('Error fetching average score:', error);
+        }
+    });
+
+    /**
+     * Generate HTML for star ratings based on the average score
+     */
+    function generateStarHTML(avgScore) {
+        const fullStars = Math.floor(avgScore);
+        const halfStar = avgScore % 1 >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+
+        return `
+        ${'<i class="bi bi-star-fill" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>'.repeat(fullStars)}
+        ${'<i class="bi bi-star-half" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>'.repeat(halfStar)}
+        ${'<i class="bi bi-star" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>'.repeat(emptyStars)}
+        <span style="font-size: 25px; font-weight: 500; margin-left: 5px;">${avgScore.toFixed(1)}</span>
+    `;
+    }
+
+
     document.addEventListener('DOMContentLoaded', async () => {
         const sellerId = window.location.pathname.split('/').pop();
 
@@ -171,9 +170,6 @@
                 document.getElementById('profileImg').src = `/public/img/${sellerData.profile_img || 'default.jpg'}`;
                 document.getElementById('sellerName').textContent = `${sellerData.first_name || 'Unknown'} ${sellerData.last_name || ''}`;
 
-                // Update "View Reviews" button with sellerId
-                const viewReviewsButton = document.getElementById('viewReviews');
-                viewReviewsButton.setAttribute('onclick', `location.href='/view_review.html?sellerId=${sellerId}'`);
             }
 
             // Fetch and display seller's products
@@ -187,12 +183,12 @@
                 <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                     <div style="display: flex; align-items: center;">
                         <button style="background-color: transparent; border: none;">
-                            <a href="/seller/${product.seller_id}">
+                            <a href="/seller-profile/${product.seller_id}">
                                 <img src="/public/img/${product.profile_img}" alt="Profile Image" width="120px" style="border-radius: 50%; margin: 10px;">
                             </a>
                         </button>
                         <div>
-                            <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit; ">
+                            <a href="/seller-profile/${product.seller_id}" style="text-decoration: none; color: inherit; ">
                                 <span style="font-size: 25px; font-weight: 700; ">${product.first_name} ${product.last_name}</span>
                             </a>
                             <div class="row" style="padding: 15px;">
@@ -222,6 +218,10 @@
                 </div>
             </div>`;
                 productsContainer.insertAdjacentHTML('beforeend', productHTML);
+                document.querySelector('#shrbtn').innerHTML = `<button id="viewReviews" onclick="location.href='/veiw-review/${product.seller_id}'"
+                                    style="border: none; background-color: #e2e2e2; width: 100px; height: 25px; text-align: center; border-radius: 15px;">
+                                    ดูรีวิว
+                                </button>`;
             });
             checkAndUpdateProductTimes(products);
         } catch (error) {
