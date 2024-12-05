@@ -89,12 +89,13 @@
                 </div>
                 <div class="flex">
                     <div>
-                        <button
+                        <div class="reportbtn"></div>
+                        <!-- <button
                             style="border: none; background-color: #CE5757; width: 150px; height: 50px; text-align: center; border-radius: 30px; font-weight: bold; font-size: 20px; margin-right: 30px; "
-                            class="mt-3 text-white shadow" onclick="location.replace('/reportstore');">รายงาน</button>
+                            class="mt-3 text-white shadow" onclick="location.replace('/reportstore');">รายงาน</button> -->
                         <button
-                            style="border: none; background-color: #FFD8D8; width: 150px; height: 50px; text-align: center; border-radius: 30px; font-weight: bold; font-size: 20px;"
-                            type="button" class="add-post-btn" data-bs-toggle="modal"
+                            style="border: none; background-color: #FFD8D8; width: 150px; height: 50px; text-align: center; border-radius: 30px; font-weight: bold; font-size: 20px; margin-top: 10px;"
+                            type="button" class="add-post-btn " data-bs-toggle="modal"
                             data-bs-target="#addPostModel">ติดต่อ</button>
 
                         <!-- ช่องทางการติดต่อ model -->
@@ -214,6 +215,11 @@
                 </div>
             </div>`;
                 productsContainer.insertAdjacentHTML('beforeend', productHTML);
+                document.querySelector('.reportbtn').innerHTML = `
+                <button
+                            style="border: none; background-color: #CE5757; width: 150px; height: 50px; text-align: center; border-radius: 30px; font-weight: bold; font-size: 20px; margin-right: 30px; "
+                            class="mt-3 text-white " onclick="location.replace('/reportstore/${product.seller_id}');">รายงาน</button>
+                `;
             });
             checkAndUpdateProductTimes(products);
         } catch (error) {

@@ -11,11 +11,11 @@ const bodyParser = require('body-parser')
 const _ = require('lodash')
 const cors = require('cors')
 const app = express();
+
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 app.use(cors())
 
 const storage = multer.diskStorage({
@@ -39,6 +39,7 @@ app.use(session({
         maxAge: 2 * 60 * 60 * 1000
     }
 }));
+app.use(express.static('public'));
 
 //--------- register ---------
 app.get('/register', (req, res) => {
@@ -122,6 +123,7 @@ app.post('/login', (req, res) => {
                 if (same) {
                     req.session.users_id = user.users_id;  // Set users_id in session
                     req.session.role = user.role;          // Save the role in session too
+                    console.log("After login session:", req.session);
 
                     // Set session to expire in 2 hours
                     req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
@@ -509,89 +511,39 @@ app.put('/updateCustomerInfo', (req, res) => {
 });
 
 
-// --- give review ---
-
-app.get('/reportstore', (req, res) => {
+// --- report ---
+app.get('/reportstore/:id', (req, res) => {
+    // console.log("Session at /reportstore:", req.session);
+    // if (!req.session.users_id) {
+    //     return res.status(401).send("Unauthorized: Please log in first.");
+    // }
     res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
 });
-
-app.post('/reportstore', (req, res) => {
-    const uploadMiddleware = multer({ storage: storage }).single('report_img');
-
-    uploadMiddleware(req, res, (err) => {
-        if (err) {
-            console.error("File upload error:", err);
-            return res.status(500).send("File upload error");
-        }
-
-        console.log("File uploaded:", req.file);
-        console.log("Request body:", req.body);
-
-        const { report_reason, report_detail, seller_id } = req.body;
-        const reportImg = req.file ? req.file.filename : null;
-
-        if (!reportImg) {
-            console.error("Report image is missing");
-            return res.status(400).send("Report image is required");
-        }
-
-        const username = req.session.username;
-        if (!username) {
-            console.error("Unauthorized access - no username in session");
-            return res.status(401).send("Unauthorized: Please log in first.");
-        }
-
-        // SQL การดึง user_id
-        const sqlGetUserId = `SELECT user_id FROM users WHERE username = ?`;
-        con.query(sqlGetUserId, [username], (err, result) => {
-            if (err) {
-                console.error("Database error while fetching user ID:", err);
-                return res.status(500).send("Database error while fetching user ID");
-            }
-
-            if (result.length === 0) {
-                console.error("User not found in the database");
-                return res.status(404).send("User not found");
-            }
-
-            const cus_id = result[0].user_id;
-            console.log("Customer ID:", cus_id);
-
-            const sqlInsertReport = `
-                INSERT INTO reports (report_id, cus_id, seller_id, report_reason, report_detail, report_img, report_status)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            `;
-            const insertParams = [null, cus_id, seller_id, report_reason, report_detail, reportImg, 1];
-
-            con.query(sqlInsertReport, insertParams, (err, result) => {
-                if (err) {
-                    console.error("Database error while inserting report:", err);
-                    return res.status(500).send("Database error while inserting report");
-                }
-
-                console.log("Report successfully inserted:", result);
-
-                const sqlUpdateUserStatus = `
-                    UPDATE users 
-                    SET user_status = 3 
-                    WHERE user_id = ?
-                `;
-
-                con.query(sqlUpdateUserStatus, [seller_id], (updateErr) => {
-                    if (updateErr) {
-                        console.error("Failed to update user status:", updateErr);
-                        return res.status(500).send("Failed to update user status");
-                    }
-
-                    console.log("User status updated successfully");
-                    res.redirect('/dashboard');
-                });
-            });
-        });
+app.post('/reportstore', upload.single('report_img'), (req, res) => {
+    const { report_reason, report_detail } = req.body;
+    const customerId = req.session.users_id; // Ensure the user is logged in
+    const sellerId = req.body.seller_id; // Pass seller_id from the form or URL
+    const reportImg = req.file ? req.file.filename : null; // Handle uploaded image
+  
+    if (!customerId) {
+      console.warn('User not logged in');
+      return res.status(401).json({ success: false, message: 'Not logged in' });
+    }
+  
+    const sql = `
+      INSERT INTO reports (seller_id, cus_id, report_reason, report_detail, report_img, report_status) 
+      VALUES (?, ?, ?, ?, ?, 0);
+    `;
+  
+    con.query(sql, [sellerId, customerId, report_reason, report_detail, reportImg], (err) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ success: false, message: 'Database error' });
+      }
+  
+      res.json({ success: true, message: 'Report submitted successfully' });
     });
-});
-
-
+  });
 
 //================== sellers =====================
 // click on seller; store info
@@ -714,13 +666,6 @@ app.get('/reviewProduct/:productId', (req, res) => {
         res.json(results[0]);
     });
 });
-
-// --- report store ---
-app.get('/reportstore', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
-});
-
-
 
 //================== sellers =====================
 

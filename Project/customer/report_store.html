@@ -63,75 +63,149 @@
         เหตุผลในการรายงาน
       </h2>
       <!-- ข้อความสีขาว -->
-      <div class="mt-3" style="margin-bottom: 10px;">เหตุผลหลัก</div>
-      <select name="year" id="year" style="
-            width: 600px;
-            height: 30px;
-            margin-left: 25px;
-            background-color: #d9d9d9;
-            font-size: 15px;
-            border-radius: 8px;
-            border: none;
-            color: #515050;
-          ">
-        <option value="1">สินค้าไม่ตรงปก/ชำรุด</option>
-        <option value="2">ผู้ขายพูดไม่สุภาพ</option>
-        <option value="3">อื่นๆ</option>
-      </select>
-      <div class="mt-3" style="margin-bottom: 10px;">คำอธิบาย</div>
-      <textarea class="form-control mb-2 mr-sm-2" rows="3" id="txtAddress" style="
-            width: 1100px;
-            border-color: #d9d9d9;
-            background-color: #d9d9d9;
-            margin-left: 25px;
-            border-radius: 15px;
-          "></textarea>
-      <u style="font-size: 20px">หลักฐาน</u><br />
-
-      <div class="row mt-3 center" style="justify-content: center; width: 1100px; margin-left: 50px;">
-        <div class="photo center position-relative">
-          <label for="upload1" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer;">
-            <i id="icon1" class="bi bi-plus-lg" style="font-size: 50px;"></i>
-            <img id="preview1" src="#" alt="Preview" style="display: none; width: 100%; height: 100%; border-radius: 15px;">
-          </label>
-          <input id="upload1" type="file" accept="image/*" style="display: none;" onchange="previewImage(event, 'preview1', 'icon1')">
+      <div class="mt-3" style="margin-bottom: 10px; font-size: 22px;">เหตุผลหลัก</div>
+      <form id="reportForm" action="/reportstore" method="POST" enctype="multipart/form-data">
+        <!-- Hidden input to pass seller_id -->
+        <input type="hidden" id="seller_id" name="seller_id" value="">
+        <select name="report_reason" id="report_reason" required style="
+              width: 600px;
+              height: 50px;
+              margin-left: 25px;
+              background-color: #d9d9d9;
+              font-size: 15px;
+              border-radius: 15px;
+              border: none;
+              color: #515050;
+              padding: 15px;">
+          <option value="สินค้าไม่ตรงปก/ชำรุด">สินค้าไม่ตรงปก/ชำรุด</option>
+          <option value="ผู้ขายพูดไม่สุภาพ">ผู้ขายพูดไม่สุภาพ</option>
+          <option value="อื่นๆ">อื่นๆ</option>
+        </select>
+        
+        <div class="mt-3" style="margin-bottom: 10px; font-size: 22px;">คำอธิบาย</div>
+        <textarea class="form-control mb-2 mr-sm-2" rows="3" id="report_detail" name="report_detail" required style="
+              max-width: 1000px;
+              border-color: #d9d9d9;
+              background-color: #d9d9d9;
+              margin-left: 25px;
+              border-radius: 15px;"></textarea>
+        
+        <u style="font-size: 23px">หลักฐาน</u>
+        <div class="row" style="max-width: 1000px; margin: 0 auto; justify-content: center;">
+          <!-- Image input centered -->
+          <div class="photo" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+            <label for="upload1" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer;">
+              <i id="icon1" class="bi bi-plus-lg" style="font-size: 50px;"></i>
+              <img id="preview1" src="#" alt="Preview" style="display: none; width: 100%; height: 100%; border-radius: 15px;">
+            </label>
+            <input id="upload1" type="file" accept="image/*" name="report_img" style="display: none;" onchange="previewImage(event, 'preview1', 'icon1')">
+          </div>
         </div>
+        
+        <div class="center mt-4">
+          <button type="submit" id="btnConfirm" style="
+              background: #bde3a7;
+              border-radius: 15px;
+              border-color: transparent;
+              width: 120px;
+              height: 50px;
+              color: black;
+              font-weight: bold;
+              font-size: 20px;
+              margin-right: 200px;">ยืนยัน</button>
+              <button id="btnCancel" style="
+              background: #b72323;
+              border-radius: 15px;
+              border-color: transparent;
+              width: 120px;
+              height: 50px;
+              color: white;
+              font-weight: bold;
+              font-size: 20px;
+            ">
+            ยกเลิก<i class="bi"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+</div>
+
       </div>
-      
-
-      <div class="center mt-4">
-        <button id="btnConfirm" style="
-            background: #bde3a7;
-            border-radius: 15px;
-            border-color: transparent;
-            width: 120px;
-            height: 50px;
-            color: black;
-            font-weight: bold;
-            font-size: 20px;
-            margin-right: 200px;
-            
-          " >
-          ยืนยัน<i class="bi"></i>
-        </button>
-
-        <button id="btnCancel" style="
-            background: #b72323;
-            border-radius: 15px;
-            border-color: transparent;
-            width: 120px;
-            height: 50px;
-            color: white;
-            font-weight: bold;
-            font-size: 20px;
-          ">
-          ยกเลิก<i class="bi"></i>
-        </button>
-      </div>
-
-
     </div>
   </div>
+  <script>
+    // Populate hidden input with seller_id dynamically
+const sellerId = window.location.pathname.split('/').pop();
+document.getElementById('seller_id').value = sellerId;
+
+    // Simplify the image preview functionality
+    function previewImage(event, previewId, iconId) {
+      const input = event.target;
+      const preview = document.getElementById(previewId);
+      const icon = document.getElementById(iconId);
+  
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          icon.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        preview.src = '#';
+        preview.style.display = 'none';
+        icon.style.display = 'block';
+      }
+    }
+  
+    // Form submission handling
+    document.getElementById('reportForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent default form submission
+  
+      const form = new FormData(this);
+  
+      // Confirmation dialog before submission
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to submit this report?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, submit it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch('/reportstore', {
+            method: 'POST',
+            body: form,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                Swal.fire({
+                  title: "Success!",
+                  text: "Your report has been submitted.",
+                  icon: "success",
+                }).then(() => {
+                  location.replace('/homepage'); // Redirect on success
+                });
+              } else {
+                Swal.fire("Error!", data.message || "Failed to submit report.", "error");
+              }
+            })
+            .catch(() => {
+              Swal.fire("Error!", "Something went wrong. Please try again.", "error");
+            });
+        }
+      });
+    });
+  
+    // Cancel button handling
+    document.getElementById('btnCancel').addEventListener('click', function () {
+      location.replace('/homepage');
+    });
+  </script>
+  
+  
 </body>
 
 <style>
@@ -154,9 +228,7 @@
 
   .white-border {
     border: 0px solid white;
-    /* กำหนดขอบสีขาว */
     padding: 50px;
-    /* กำหนดการเว้นระยะภายใน */
     background-color: white;
   }
 
@@ -168,64 +240,6 @@
   }
 </style>
 
-<script>
 
-document.getElementById('btnConfirm').addEventListener('click', function () {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to submit this report?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, submit it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // ทำงานเมื่อกดยืนยัน
-        Swal.fire({
-          title: "Submitted!",
-          text: "Your report has been successfully submitted.",
-          icon: "success"
-        }).then(() => {
-          // ส่งฟอร์มหรือทำงานต่อ
-          // console.log("Report submitted!");
-          // ตัวอย่าง: เปลี่ยนหน้า
-          location.replace('/homepage');
-        });
-      }
-    });
-  });
-
-  document.getElementById('btnCancel').addEventListener('click', function () {
-    Swal.fire({
-      title: "Canceled!",
-      text: "Your action has been canceled.",
-      icon: "info"
-    });
-  });
-
-function previewImage(event, previewId, iconId) {
-    const input = event.target;
-    const preview = document.getElementById(previewId);
-    const icon = document.getElementById(iconId);
-
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        preview.src = e.target.result; // แสดงรูปภาพที่อัปโหลด
-        preview.style.display = 'block'; // แสดงรูป
-        icon.style.display = 'none'; // ซ่อนไอคอน "+"
-      };
-      reader.readAsDataURL(input.files[0]);
-    } else {
-      preview.src = '#';
-      preview.style.display = 'none'; // ซ่อนรูปหากไม่มีไฟล์
-      icon.style.display = 'block'; // แสดงไอคอน "+" กลับมา
-    }
-  }
-
-  
-  
-</script>
 
 </html>
