@@ -63,7 +63,7 @@ app.post('/register', Idupload, async (req, res) => {
         const bcryptPass = await bcrypt.hash(req.body.password, 10);
 
         // Prepare the INSERT query
-        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img, bank_ac_name, bank_ac_num, user_status, profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const sqlInsert = 'INSERT INTO users (first_name, last_name, email, password, phonenum, role, id_img,bank_ac_type, bank_ac_name, bank_ac_num, user_status, profile_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)';
         const insertParams = [
             req.body.first_name,
             req.body.last_name,
@@ -72,6 +72,7 @@ app.post('/register', Idupload, async (req, res) => {
             req.body.phonenum,
             req.body.role,
             req.file ? req.file.filename : null,
+            req.body.bank_ac_type || null,
             req.body.bank_ac_name || null,
             req.body.bank_ac_num || null,
             req.body.user_status,
@@ -132,9 +133,9 @@ app.post('/login', (req, res) => {
                     } else if (user.role == 2) {
                         return res.send('sellerhomepage');
                     } else if (user.role == 3) {
-                        return res.send('selectpage');
+                        return res.send('dashboard');
                     } else {
-                        return res.status(403).send("Unauthorized role");
+                        return res.send('login');
                     }
 
                 } else {
@@ -323,10 +324,6 @@ app.get('/payment/:productId', (req, res) => {
     });
 });
 
-// app.get('/payment-test', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'Project/customer/payment_test.html'));
-// });
-
 app.post('/generateQR', (req, res) => {
     const amount = parseFloat(_.get(req, ["body", "amount"]));
     const mobileNumber = '0882451914';
@@ -355,38 +352,6 @@ app.post('/generateQR', (req, res) => {
 
     })
 })
-// app.get('/update-payment-status', (req, res) => {
-//     const { orderId } = req.params;
-
-//     const sql = 'SELECT order_status FROM orders WHERE order_id = ?';
-
-//     con.query(sql, [orderId], (err, results) => {
-//         if (err) {
-//             console.error('Database error:', err);
-//             return res.status(500).send('Database query failed');
-//         }
-
-//         if (results.length === 0) {
-//             return res.status(404).send('Order not found');
-//         }
-
-//         res.json(results[0]); // Return the order status
-//     });
-// });
-
-// app.post('/update-payment-status', (req, res) => {
-//     const { orderId, status } = req.body;
-//     const sql = 'UPDATE orders SET order_status = ? WHERE order_id = ?';
-
-//     con.query(sql, [status, orderId], (err) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).send('Error updating payment status');
-//         }
-//         res.send('Order status updated successfully');
-//     });
-// });
-
 
 //---------add order after pay
 
@@ -544,8 +509,19 @@ app.put('/updateCustomerInfo', (req, res) => {
     });
 });
 
+
+// --- give review ---
+
+app.get('/reportstore', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
+});
+
+
+
+
+//================== sellers =====================
 // click on seller; store info
-app.get('/seller/:sellerId', (req, res) => {
+app.get('/seller-profile/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/store_profile.html'));
 });
 
@@ -580,86 +556,128 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
 });
 
 // --- give review ---
-app.get('/give_review.html', (req, res) => {
+app.get('/give_review', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/give_review.html'));
 });
 
 app.post('/submitReview', (req, res) => {
-    const { orderId, score, comment, reviewImg1, reviewImg2, reviewImg3 } = req.body;
+    const { sellerId, productId, rating, comment } = req.body;
+    const customerId = req.session.users_id; // Ensure the user is logged in
+
+    console.log('Submitting review:', { sellerId, productId, rating, comment, customerId });
+
+    if (!customerId) {
+        console.warn('User not logged in');
+        return res.status(401).json({ success: false, message: 'Not logged in' });
+    }
 
     const sql = `
-        INSERT INTO review (order_id, score, comment, review_date, review_img1, review_img2, review_img3)
-        VALUES (?, ?, ?, NOW(), ?, ?, ?);
+        INSERT INTO reviews (customer_id, seller_id, product_id, rating, comment) 
+        VALUES (?, ?, ?, ?, ?);
     `;
 
-    con.query(sql, [orderId, score, comment, reviewImg1 || null, reviewImg2 || null, reviewImg3 || null], (err) => {
+    con.query(sql, [customerId, sellerId, productId, rating, comment], (err) => {
         if (err) {
-            console.error('Error inserting review:', err);
-            return res.status(500).json({ error: 'Failed to submit review' });
+            console.error('Database error:', err); // Log database errors
+            return res.status(500).json({ success: false, message: 'Database error' });
         }
-        res.json({ success: true, message: 'Review submitted successfully.' });
+
+        res.json({ success: true, message: 'Review submitted successfully' });
     });
 });
-
-// displaying product
-app.get('/orderDetails/:orderId', (req, res) => {
-    const { orderId } = req.params;
-    const sql = `
-        SELECT orders.order_id, orders.order_tracknum, orders.order_shipname, 
-               products.product_id, products.product_name, products.product_img,
-               users.users_id AS seller_id, users.first_name, users.last_name
-        FROM orders
-        JOIN queue ON orders.order_id = queue.queue_id
-        JOIN products ON queue.queue_id = products.product_id
-        JOIN users ON products.seller_id = users.users_id
-        WHERE orders.order_id = ?;
-    `;
-
-    con.query(sql, [orderId], (err, results) => {
-        if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).json({ error: 'Failed to fetch order details' });
-        }
-
-        if (results.length === 0) {
-            return res.status(404).json({ error: 'Order not found' });
-        }
-        res.json(results[0]);
-    });
-});
-
-// view reviews
-app.get('/view_review.html', (req, res) => {
+// ------veiw review page
+app.get('/veiw-review/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/view_review.html'));
 });
-
 app.get('/reviews/:sellerId', (req, res) => {
     const { sellerId } = req.params;
+
     const sql = `
-        SELECT review.review_id, review.score, review.comment, review.review_date, 
-               review.review_img1, review.review_img2, review.review_img3, 
-               products.product_name, products.product_img, 
-               orders.order_tracknum, orders.order_shipname
-        FROM review
-        JOIN orders ON review.order_id = orders.order_id
-        JOIN queue ON orders.order_id = queue.queue_id
-        JOIN products ON queue.queue_id = products.product_id
-        WHERE products.seller_id = ?;
+                 SELECT 
+            r.score, 
+            r.comment, 
+            r.review_date, 
+            r.review_img, 
+            u.first_name AS customer_first_name, 
+            u.last_name AS customer_last_name, 
+            u.profile_img AS customer_profile_img,
+            s.first_name AS seller_first_name,
+            s.last_name AS seller_last_name
+        FROM review r
+        JOIN orders o ON r.order_id = o.order_id
+        JOIN queue q ON o.queue_id = q.queue_id
+        JOIN products p ON q.product_id = p.product_id
+        JOIN users u ON q.cus_id = u.users_id
+        JOIN users s ON p.seller_id = s.users_id
+        WHERE p.seller_id = ?
+        ORDER BY r.review_date DESC;
     `;
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).json({ error: 'Database query failed' });
-        }
-
-        if (results.length === 0) {
-            return res.status(404).json({ message: 'No reviews found for this seller.' });
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
         }
 
         res.json(results);
     });
 });
+app.get('/getSellerAvgScore/:sellerId', (req, res) => {
+    const { sellerId } = req.params;
+
+    const sql = `
+        SELECT AVG(r.score) AS avg_score
+        FROM review r
+        JOIN orders o ON r.order_id = o.order_id
+        JOIN queue q ON o.queue_id = q.queue_id
+        JOIN products p ON q.product_id = p.product_id
+        WHERE p.seller_id = ?;
+    `;
+
+    con.query(sql, [sellerId], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        // Ensure avg_score is always a number
+        const avgScore = results[0]?.avg_score || 0;
+        res.json({ avg_score: avgScore });
+    });
+});
+
+
+// displaying product อาจจะไม่เอา
+// app.get('/reviewProduct/:productId', (req, res) => {
+//     const { productId } = req.params;
+
+//     if (!productId || isNaN(productId)) {
+//         console.warn('Invalid Product ID:', productId);
+//         return res.status(400).json({ error: 'Invalid Product ID' });
+//     }
+
+//     const sql = `
+//         SELECT products.product_name, products.product_img, orders.order_tracknum, 
+//                orders.order_shipname 
+//         FROM products 
+//         JOIN orders ON products.product_id = orders.order_id 
+//         WHERE products.product_id = ?;
+//     `;
+
+//     con.query(sql, [productId], (err, results) => {
+//         if (err) {
+//             console.error('Database query error:', err);
+//             return res.status(500).json({ error: 'Database query failed' });
+//         }
+
+//         if (results.length === 0) {
+//             console.warn('No product found for ID:', productId);
+//             return res.status(404).json({ error: 'Product not found' });
+//         }
+
+//         res.json(results[0]);
+//     });
+// });
 
 // --- report store ---
 app.get('/reportstore', (req, res) => {
@@ -672,9 +690,7 @@ app.get('/sellerinfo', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
 });
 
-app.get('/sellerinfoedit', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/seller/seller_info_edit.html'));
-});
+
 
 app.get('/sellerhomepage', (req, res) => {
     const sellerId = req.session.users_id;
@@ -703,99 +719,100 @@ app.get('/sellerhomepage', (req, res) => {
 });
 
 
-// Update ID line
-app.get('/getUserData', (req, res) => {
-    const loggedInUserId = req.session?.users_id;
+// // Update ID line
+// app.get('/getUserData', (req, res) => {
+//     const loggedInUserId = req.session?.users_id;
 
-    if (!loggedInUserId) {
-        console.warn('Unauthorized access attempt to /getUserData');
-        return res.status(401).json({ success: false, message: 'User not logged in' });
-    }
+//     if (!loggedInUserId) {
+//         console.warn('Unauthorized access attempt to /getUserData');
+//         return res.status(401).json({ success: false, message: 'User not logged in' });
+//     }
 
-    const sql = `SELECT sacc_contact FROM User WHERE users_id = ?`;
+//     const sql = `SELECT sacc_contact FROM User WHERE users_id = ?`;
 
-    con.query(sql, [loggedInUserId], (err, result) => {
-        if (err) {
-            console.error('Database error in /getUserData:', err);
-            return res.status(500).json({ success: false, message: 'Database query failed' });
-        }
+//     con.query(sql, [loggedInUserId], (err, result) => {
+//         if (err) {
+//             console.error('Database error in /getUserData:', err);
+//             return res.status(500).json({ success: false, message: 'Database query failed' });
+//         }
 
-        if (result.length > 0) {
-            const contact = result[0].sacc_contact || ''; // ป้องกัน null
-            return res.json({ success: true, line_id: contact });
-        } else {
-            console.warn('User not found for ID:', loggedInUserId);
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-    });
-});
-
-
-
-// Route for updating sacc_contact in the User table
-app.put('/updateLineID', (req, res) => {
-    console.log('Request Body:', req.body);
-    const { line_id } = req.body;
-    const loggedInUserId = req.session?.users_id;
-
-    if (!line_id || !loggedInUserId) {
-        console.error('Invalid input or user not logged in');
-        return res.status(400).json({ success: false, message: 'Invalid input data' });
-    }
-
-    // Escape line_id เพื่อป้องกัน SQL Injection
-    const sanitizedLineId = con.escape(line_id.trim());
-
-    const sqlUpdate = `UPDATE User SET sacc_contact = ? WHERE users_id = ?`;
-
-    con.query(sqlUpdate, [sanitizedLineId, loggedInUserId], (err, result) => {
-        if (err) {
-            console.error('Database error in /updateLineID:', err);
-            return res.status(500).json({ success: false, message: 'Database update failed' });
-        }
-
-        if (result.affectedRows > 0) {
-            console.log('Line ID updated for user ID:', loggedInUserId);
-            return res.json({ success: true, message: 'Line ID updated successfully' });
-        } else {
-            console.warn('No rows updated for user ID:', loggedInUserId);
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-    });
-});
+//         if (result.length > 0) {
+//             const contact = result[0].sacc_contact || ''; // ป้องกัน null
+//             return res.json({ success: true, line_id: contact });
+//         } else {
+//             console.warn('User not found for ID:', loggedInUserId);
+//             return res.status(404).json({ success: false, message: 'User not found' });
+//         }
+//     });
+// });
 
 
 
-// Route for updating Line ID
-app.post('/updateLineID', (req, res) => {
-    const { lineID } = req.body;
-    const loggedInUserId = req.session?.users_id;
+// // Route for updating sacc_contact in the User table
+// app.put('/updateLineID', (req, res) => {
+//     console.log('Request Body:', req.body);
+//     const { line_id } = req.body;
+//     const loggedInUserId = req.session?.users_id;
 
-    console.log('Line ID:', lineID);  // Debug lineID
-    console.log('Logged in User ID:', loggedInUserId);  // Debug users_id
+//     if (!line_id || !loggedInUserId) {
+//         console.error('Invalid input or user not logged in');
+//         return res.status(400).json({ success: false, message: 'Invalid input data' });
+//     }
 
-    if (!lineID || !loggedInUserId) {
-        console.error('Invalid input or user not logged in');
-        return res.status(400).json({ success: false, message: 'Invalid input or user not logged in.' });
-    }
+//     // Escape line_id เพื่อป้องกัน SQL Injection
+//     const sanitizedLineId = con.escape(line_id.trim());
 
-    const sqlUpdate = `UPDATE users SET sacc_contact = ? WHERE users_id = ?`;
+//     const sqlUpdate = `UPDATE User SET sacc_contact = ? WHERE users_id = ?`;
 
-    con.query(sqlUpdate, [lineID.trim(), loggedInUserId], (err, result) => {
-        if (err) {
-            console.error('Database error in /updateLineID:', err);
-            return res.status(500).json({ success: false, message: 'Database error.' });
-        }
+//     con.query(sqlUpdate, [sanitizedLineId, loggedInUserId], (err, result) => {
+//         if (err) {
+//             console.error('Database error in /updateLineID:', err);
+//             return res.status(500).json({ success: false, message: 'Database update failed' });
+//         }
 
-        if (result.affectedRows > 0) {
-            console.log('Line ID updated successfully');
-            return res.json({ success: true, message: 'Line ID updated successfully.' });
-        } else {
-            console.warn('No user found for ID:', loggedInUserId);
-            return res.status(404).json({ success: false, message: 'User not found.' });
-        }
-    });
-});
+//         if (result.affectedRows > 0) {
+//             console.log('Line ID updated for user ID:', loggedInUserId);
+//             return res.json({ success: true, message: 'Line ID updated successfully' });
+//         } else {
+//             console.warn('No rows updated for user ID:', loggedInUserId);
+//             return res.status(404).json({ success: false, message: 'User not found' });
+//         }
+//     });
+// });
+
+
+
+// // Route for updating Line ID
+// app.post('/updateLineID', (req, res) => {
+//     const { lineID } = req.body;
+//     const loggedInUserId = req.session?.users_id;
+
+//     console.log('Line ID:', lineID);  // Debug lineID
+//     console.log('Logged in User ID:', loggedInUserId);  // Debug users_id
+
+//     if (!lineID || !loggedInUserId) {
+//         console.error('Invalid input or user not logged in');
+//         return res.status(400).json({ success: false, message: 'Invalid input or user not logged in.' });
+//     }
+
+//     const sqlUpdate = `UPDATE users SET sacc_contact = ? WHERE users_id = ?`;
+
+//     con.query(sqlUpdate, [lineID.trim(), loggedInUserId], (err, result) => {
+//         if (err) {
+//             console.error('Database error in /updateLineID:', err);
+//             return res.status(500).json({ success: false, message: 'Database error.' });
+//         }
+
+//         if (result.affectedRows > 0) {
+//             console.log('Line ID updated successfully');
+//             return res.json({ success: true, message: 'Line ID updated successfully.' });
+//         } else {
+//             console.warn('No user found for ID:', loggedInUserId);
+//             return res.status(404).json({ success: false, message: 'User not found.' });
+//         }
+//     });
+// });
+
 
 
 app.get('/getSellerData', (req, res) => {
@@ -1065,13 +1082,70 @@ cron.schedule('0 0 * * *', () => {
 
 // ================== admin =====================
 //----------Select
-app.get('/selectpage', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
-});
+// app.get('/selectpage', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'Project/admin/select_page.html'));
+// });
 
 //----------Dashboard
 app.get('/Dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/admin/Dashboard.html'));
+});
+
+app.get('/orderStatusSummary', (req, res) => {
+    const sql = `
+        SELECT 
+        COUNT(*) AS total_orders,
+            SUM(order_status = 0) AS preparing_count,
+            SUM(order_status = 1) AS shipping_count,
+            SUM(order_status = 2) AS canceled_count,
+            SUM(order_status = 3) AS delivered_count,
+            SUM(order_status = 4) AS failed_count,
+            SUM(order_status = 5) AS awaiting_payment_count,
+            SUM(order_status = 6) AS payment_success_count,
+            SUM(order_status = 7) AS payment_failed_count
+        FROM orders;
+    `;
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.json(results[0]);
+    });
+});
+
+app.get('/getIncomeData/:year', (req, res) => {
+    const year = req.params.year;
+    const sql = `
+        SELECT DATE_FORMAT(o.order_date, '%Y-%m') AS month, SUM(p.product_price) AS total_income
+        FROM orders o 
+        JOIN queue q ON o.queue_id = q.queue_id 
+        JOIN products p ON q.product_id = p.product_id 
+        WHERE o.order_status = 3 AND DATE_FORMAT(o.order_date, '%Y') = ?
+        GROUP BY DATE_FORMAT(o.order_date, '%Y-%m')
+        ORDER BY month;
+    `;
+    con.query(sql, [year], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.json(results);
+    });
+});
+app.get('/getAvailableYears', (req, res) => {
+    const sql = `
+        SELECT DISTINCT DATE_FORMAT(order_date, '%Y') AS year
+        FROM orders
+        ORDER BY year DESC;
+    `;
+    con.query(sql, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+        res.json(results.map(row => row.year));
+    });
 });
 
 
@@ -1144,12 +1218,16 @@ app.get('/sellerverify', (req, res) => {
     const sql = 'SELECT * FROM users WHERE users.user_status = 2';
     con.query(sql, (err, results) => {
         if (err) {
+            console.error('Database error:', err);
             res.status(500).json({ error: 'Database query failed' });
         } else {
+            console.log('Query results:', results);
             res.json(results);
         }
     });
 });
+
+
 app.post('/updateSeller/:userId', (req, res) => {
     const userId = req.params.userId;
     const { status } = req.body;
