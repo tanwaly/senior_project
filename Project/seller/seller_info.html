@@ -22,39 +22,34 @@
 </head>
 
 <body style="background-color: white;">
-    <div style="background-color:#FEF3D0;" class="d-flex">
-        <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/sellerhomepage"
-                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-house-door"></i> Homepage
-                </a>
-                <a href="/add-trackingnum"
-                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-                    <i class="bi bi-truck"></i> เลขพัสดุ
-                </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
-                    data-bs-toggle="modal" data-bs-target="#helpModal">
-                    <i class="bi bi-chat-dots"></i> Help
-                </a>
+  <div style="background-color:#FEF3D0;" class="d-flex">
+    <div class="d-flex align-items-center"
+      style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+      <img src="/public/img/logo-w.png" width="100px" alt="Logo">
+      <div class="d-flex justify-content-between" style="margin-left: 65px;">
+        <a href="/sellerhomepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+          <i class="bi bi-house-door"></i> Homepage
+        </a>
+        <a href="/add-trackingnum" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+          <i class="bi bi-truck"></i> เลขพัสดุ
+        </a>
+        <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;" data-bs-toggle="modal"
+          data-bs-target="#helpModal">
+          <i class="bi bi-chat-dots"></i> Help
+        </a>
+      </div>
+      <!-- pop up contect store -->
+      <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style="background-color: #F3F3E3;">
+            <div class="modal-header" style="background-color:#D46F95;">
+              <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <!-- pop up contect store -->
-            <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content" style="background-color: #F3F3E3;">
-                        <div class="modal-header" style="background-color:#D46F95;">
-                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>ID LINE:</strong> qwqwefs</p>
-                            <p><strong>IG:</strong> surety_sp</p>
-                            <p><strong>Facebook:</strong> klsdadj</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-body">
+              <p><strong>ID LINE:</strong> qwqwefs</p>
+              <p><strong>IG:</strong> surety_sp</p>
+              <p><strong>Facebook:</strong> klsdadj</p>
             </div>
           </div>
         </div>
@@ -75,25 +70,26 @@
         src="/public/img/fprofile.jpg">
       <input id="profileImageUpload" type="file" style="margin-top: 10px;" disabled>
     </div>
-    <div style="margin-left: 450px;">
-      <div class="row">
-        <span style="width: 260px; font-weight: 700;">Name:</span>
-        <input id="userName" style="padding:15px; flex-grow: 1; width:500px; border-radius: 25px; border:none;"
+    <div style="margin-left: 400px;">
+      <div class="row" style="margin: 5px;">
+        <span style="width: 260px; font-weight: 700;">ชื่อ:</span>
+        <input id="userName" style="padding:10px; width: 500px; border-radius: 25px; border:none;"
           disabled>
       </div>
-      <div class="row">
-        <span style="width: 260px; font-weight: 700;">Phone Number:</span>
-        <input id="userPhonenum" style="padding:15px; flex-grow: 1; width:500px; border-radius: 25px; border:none;"
-          disabled>
+      <div class="row" style="margin: 5px;">
+        <span style="width: 260px; font-weight: 700;">เบอร์โทรศัพท์:</span>
+        <input id="userPhonenum"
+          style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
-      <div class="row">
+      <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">Email:</span>
-        <input id="userEmail" style="padding:15px; flex-grow: 1; width:500px; border-radius: 25px; border:none;"
+        <input id="userEmail" style="padding:10px; width:500px; border-radius: 25px; border:none;"
           disabled>
       </div>
-      <div class="row">
-        <span style="width: 260px; font-weight: 700;">Bank Account Name:</span>
-        <select id="userBankName" disabled style="border-radius: 15px; border:none; padding:5px; width:500px;">
+      <div class="row" style="margin: 5px;">
+        <span style="width: 260px; font-weight: 700;">ชื่อบัญชีธนาคาร:</span>
+        <select id="userBankName" disabled
+          style="border-radius: 15px; border:none; padding:5px; width:500px;">
           <option value="กรุงเทพ">กรุงเทพ</option>
           <option value="กสิกรไทย">กสิกรไทย</option>
           <option value="กรุงไทย">กรุงไทย</option>
@@ -124,23 +120,25 @@
           <option value="TrueMoney Wallet">TrueMoney Wallet</option>
         </select>
       </div>
-      <div class="row">
-        <span style="width: 260px; font-weight: 700;">Bank Account Number:</span>
-        <input id="userBankNum" style="padding:15px; flex-grow: 1; width:500px; border-radius: 25px; border:none;"
-          disabled>
+      <div class="row" style="margin: 5px;">
+        <span style="width: 260px; font-weight: 700;">เลขบัญชีธนาคาร:</span>
+        <input id="userBankNum"
+          style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
-      <div class="row">
-        <span style="width: 260px; font-weight: 700;">Other Contact:</span>
-        <input id="userContact" style="padding:15px; flex-grow: 1; width:500px; border-radius: 25px; border:none;"
-          disabled>
+      <div class="row" style="margin: 5px;">
+        <span style="width: 260px; font-weight: 700;">ช่องทางการติดต่ออื่น ๆ:</span>
+        <input id="userContact"
+          style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
-      <div class="center">
+    </div>
+    <center>
+      <div>
         <button onclick="enableEditing()"
           style="width: 300px; color:white; background-color: black; border-radius: 25px;">Edit</button>
         <button onclick="saveChanges()"
           style="width: 300px; color:white; background-color: green; border-radius: 25px; display: none;">Save</button>
       </div>
-    </div>
+    </center>
   </div>
 
 </body>
