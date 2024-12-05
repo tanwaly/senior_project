@@ -14,10 +14,106 @@
             font-size: 15px;
             text-align: center;
         }
+
+        .btn-logout {
+            background: #B72323;
+            border-radius: 13px;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #990000;
+        }
+
+        .parent-container {
+            margin-top: 50px;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .row img {
+            border-radius: 15px;
+            margin-right: 20px;
+            width: auto;
+            max-height: 150px;
+        }
+
+        .col {
+            flex-grow: 1;
+        }
+
+        .edit-button,
+        .confirm-button {
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .edit-button {
+            background: #FFE48C;
+        }
+
+        .edit-button:hover {
+            background: #FFD54F;
+        }
+
+        .confirm-button {
+            background: #BDE3A7;
+        }
+
+        .confirm-button:hover {
+            background: #A6D89E;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .header-logo-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .header-links {
+                margin-top: 10px;
+            }
+
+            .row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .row img {
+                max-height: 100px;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 
-<body style="background-color: white;">
+<body>
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
             style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
@@ -40,7 +136,7 @@
             <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="background-color: #F3F3E3;">
-                        <div class="modal-header" style="background-color:#A9B489;">
+                        <div class="modal-header" style="background-color:#D46F95;">
                             <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -64,27 +160,49 @@
 
     <div style="margin-top: 50px;" class="parent-container"></div>
 
-    <script>
-        fetch('/trackingnum')
-            .then(response => response.json())
-            .then(data => {
-                const container = document.querySelector('.parent-container');
-                container.innerHTML = '';  // Clear any existing content
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color: #F3F3E3;">
+                <div class="modal-header" style="background-color: #A9B489;">
+                    <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>ID LINE:</strong> qwqwefs</p>
+                    <p><strong>IG:</strong> surety_sp</p>
+                    <p><strong>Facebook:</strong> klsdadj</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 
-                data.forEach((item, index) => {
-                    const orderTracknum = item.tracking_number ? item.tracking_number : 'กรุณากรอกข้อมูล';  // Use item.tracking_number
-                    const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';  // Use item.first_name (or the appropriate field)
+</html>
 
-                    const rowHTML = `
+<script>
+    fetch('/trackingnum')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.querySelector('.parent-container');
+            container.innerHTML = '';  // Clear any existing content
+
+            data.forEach((item, index) => {
+                const orderTracknum = item.tracking_number ? item.tracking_number : 'กรุณากรอกข้อมูล';  // Use item.tracking_number
+                const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';  // Use item.first_name (or the appropriate field)
+
+                const rowHTML = `
                 <div class="row">
                     <img src="/public/img/${item.product_img}" alt="${item.product_name}" 
                         style="border-radius: 15px; margin-left: 25px; width: auto; max-height: 150px;">
                     <div class="col" style="margin-left: 50px;">
                         <span style="font-size: 26px;">${item.product_name}</span>
                         <div id="trackingSection${index}">
-                            <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 300;">${orderTracknum}</span></span><br>
-                            <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 300;">${orderShipname}</span></span>
-                        </div>
+                            <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 400;">${orderTracknum}</span></span><br>
+                            <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 400;">${orderShipname}</span></span>
+                            </div>
+                            <span style="font-weight: 700; font-size:18px">ชื่อผู้รับ: <span style="font-weight: 400;">${item.order_addname}</span></span>
+                            <span style="font-weight: 700; font-size:18px; width:600px ;  word-wrap: break-word;">ที่อยู่: <span style="font-weight: 400;">${item.order_address}</span></span>
                     </div>
                     <div class="col center" style="margin-left: 700px;">
                         <button id="editBtn${index}" class="edit-button" style="background: #FFE48C; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;" onclick="editTracking(${index}, ${item.order_id})">
@@ -95,20 +213,20 @@
                 <hr>
             `;
 
-                    container.insertAdjacentHTML('beforeend', rowHTML);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching tracking data:', error);
+                container.insertAdjacentHTML('beforeend', rowHTML);
             });
+        })
+        .catch(error => {
+            console.error('Error fetching tracking data:', error);
+        });
 
 
-        // Function to replace the display with input fields
-        function editTracking(index, orderId) {
-            const trackingSection = document.getElementById(`trackingSection${index}`);
-            const editButton = document.getElementById(`editBtn${index}`);
+    // Function to replace the display with input fields
+    function editTracking(index, orderId) {
+        const trackingSection = document.getElementById(`trackingSection${index}`);
+        const editButton = document.getElementById(`editBtn${index}`);
 
-            trackingSection.innerHTML = `
+        trackingSection.innerHTML = `
         <div style="display:flex; margin-bottom: 15px;">
             <span style="font-weight: 700; font-size:18px">เลขพัสดุ: </span>
             <input type="text" id="trackingCode${index}" 
@@ -135,51 +253,51 @@
         </button>
     `;
 
-            // Hide the edit button and show the confirm button
-            editButton.style.display = 'none';
-        }
+        // Hide the edit button and show the confirm button
+        editButton.style.display = 'none';
+    }
 
-        // Function to handle the confirm edit
-        function confirmEdit(index, orderId) {
-            const trackingCode = document.getElementById(`trackingCode${index}`).value;
-            const transport = document.getElementById(`transports${index}`).value;
+    // Function to handle the confirm edit
+    function confirmEdit(index, orderId) {
+        const trackingCode = document.getElementById(`trackingCode${index}`).value;
+        const transport = document.getElementById(`transports${index}`).value;
 
-            // Send the updated data to the server via a PUT request
-            fetch('/updateTracking', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    order_id: orderId,
-                    order_tracknum: trackingCode,
-                    order_shipname: transport,
-                    order_status: 1 // Set status to 1 upon update
-                })
+        // Send the updated data to the server via a PUT request
+        fetch('/updateTracking', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                order_id: orderId,
+                order_tracknum: trackingCode,
+                order_shipname: transport,
+                order_status: 1 // Set status to 1 upon update
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Update the UI with the new tracking information
-                        const trackingSection = document.getElementById(`trackingSection${index}`);
-                        const editButton = document.getElementById(`editBtn${index}`);
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the UI with the new tracking information
+                    const trackingSection = document.getElementById(`trackingSection${index}`);
+                    const editButton = document.getElementById(`editBtn${index}`);
 
-                        trackingSection.innerHTML = `
+                    trackingSection.innerHTML = `
                 <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 300;">${trackingCode}</span></span><br>
                 <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 300;">${transport}</span></span>
             `;
 
-                        editButton.style.display = 'block';
-                    } else {
-                        alert('Error updating tracking information');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
+                    editButton.style.display = 'block';
+                } else {
+                    alert('Error updating tracking information');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
-    </script>
+</script>
 </body>
 <style>
     .center {

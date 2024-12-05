@@ -1030,6 +1030,8 @@ app.get('/trackingnum', (req, res) => {
             orders.order_id, 
             orders.order_tracknum AS tracking_number, 
             orders.order_shipname, 
+            orders.order_addname, 
+            orders.order_address, 
             products.product_name, 
             products.product_img,        
             users.first_name, 
