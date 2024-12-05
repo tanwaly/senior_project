@@ -830,7 +830,7 @@ app.get('/getSellerData', (req, res) => {
         return res.status(401).json({ error: 'Not logged in or session expired' });
     }
 
-    const sql = `SELECT first_name, profile_img FROM users WHERE users_id = ?;`;
+    const sql = `SELECT first_name, last_name,profile_img FROM users WHERE users_id = ?;`;
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
