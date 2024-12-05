@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Seller Verification</title>
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
     <script src="/public/js/bootstrap.bundle.min.js"></script>
@@ -13,7 +14,17 @@
 <body style="background-color: #2C2C2C;">
 
     <div style="margin: 20px;">
-        <h2 style="text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ต้องการการตรวจสอบ</h2>
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;  margin-bottom: 10px;">
+            <h2 style="text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ต้องการการตรวจสอบ</h2>
+            <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
+                height: 46px; color: white;" onclick="location.replace('/login');">
+                    Log out
+                    <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                </button>
+            </div>
+        </div>
+
         <div style=" display: flex; justify-content: space-between; margin-bottom: 20px;">
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="ค้นหา...">
@@ -36,25 +47,25 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
-            <div class="modal-dialog center" role="document">
-                <div class="modal-content"
-                    style="background-color:  #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
-                    <div class="modal-header" style="background-color: #272727;">
-                        <h5 class="modal-title" id="svdModalLabel" style="color: white; font-size: 22px;">รายละเอียด
-                        </h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
-                            style="background-color: transparent; border: none; color: white; font-size: 40px;">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" style="padding: 50px;">
-                        <!-- Dynamic details content will go here -->
+            <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered center" role="document">
+                    <div class="modal-content"
+                        style="background-color: #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
+                        <div class="modal-header" style="background-color: #272727;">
+                            <h5 class="modal-title" id="svdModalLabel" style="color: white; font-size: 22px;">รายละเอียด
+                            </h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                                style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="sellerdetail">
+                            <!-- Dynamic details content will go here -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
     </div>
 
     <script>
@@ -67,11 +78,14 @@
             async function fetchUserList() {
                 try {
                     const response = await fetch('/sellerverify');
-                    if (response.ok) {
-                        allUsers = await response.json();
-                        filterUsers();
-                    } else {
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Fetch error:', errorText);
+                        return;
                     }
+
+                    allUsers = await response.json();
+                    filterUsers();
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
@@ -87,9 +101,9 @@
 
                 userTableBody.innerHTML = filteredUsers.map(user => `
                     <tr>
-                        <td>${formatUserId(user.users_id)}</td>
+                        <td>${user.users_id.toString().padStart(11, '0')}</td>
                         <td>ชื่อ: ${user.first_name} ${user.last_name}</td>
-                        <td><button data-bs-toggle="modal" data-bs-target="#svdModal" class="btn-details" data-user-id="${user.users_id}">รายละเอียด</button></td>
+                        <td><button data-bs-toggle="modal" data-bs-target="#svdModal" class="btn-details" onclick="showUserDetails(${user.users_id})">รายละเอียด</button></td>
                         <td>
                             <button class="approve-btn" onclick="updateUserStatus(${user.users_id}, 1)">อนุมัติ</button>
                             <button class="disapprove-btn" onclick="updateUserStatus(${user.users_id}, 4)">ไม่อนุมัติ</button>
@@ -98,74 +112,66 @@
                 `).join('');
             }
 
-            // Format user ID
-            function formatUserId(userId) {
-                return userId.toString().padStart(11, '0');
-            }
-
             // Display user details in the modal
-            function showUserDetails(userId) {
+            window.showUserDetails = (userId) => {
                 const user = allUsers.find(u => u.users_id === userId);
-                const modalBody = document.querySelector('.modal-body');
-                modalBody.innerHTML = `
-                    <div style="font-size: 25px; color: #000;">
-                        <p style="font-weight: 600;">ชื่อ - นามสกุล:<span style="font-weight: 200;"> ${user.first_name} ${user.last_name}</span></p>
-                        <p style="font-weight: 600;">เบอร์โทร:<span style="font-weight: 200;"> ${user.phonenum || 'N/A'}</span></p>
-                        <p style="font-weight: 600;">Email:<span style="font-weight: 200;"> ${user.email || 'N/A'}</span></p>
-                        <p style="font-weight: 600;">ธนาคาร:<span style="font-weight: 200;"> ${user.bank_ac_name || 'N/A'}</span></p>
-                        <p style="font-weight: 600;">เลขบัญชีธนาคาร:<span style="font-weight: 200;"> ${user.bank_ac_num || 'N/A'}</span></p>
-                        <p style="font-weight: 600;"><span style="text-decoration: underline;">บัตรประชาชน</span></p>
-                        <div class="center">
-                            <img style="height: 250px;" src="/public/img/${user.id_img}" alt="บัตรประชาชน">
+                const sellerDetail = document.querySelector('.sellerdetail');
+                sellerDetail.innerHTML = `
+                    <div class="modal-body">
+                        <div style="font-size: 25px; color: #000;">
+                            <p><strong>ชื่อ - นามสกุล:</strong> ${user.first_name} ${user.last_name}</p>
+                            <p><strong>เบอร์โทร:</strong> ${user.phonenum || 'N/A'}</p>
+                            <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                            <p><strong>ธนาคาร:</strong> ${user.bank_ac_type || 'N/A'}</p>
+                            <p><strong>ชื่อบัญชีธนาคาร:</strong> ${user.bank_ac_name || 'N/A'}</p>
+                            <p><strong>เลขบัญชีธนาคาร:</strong> ${user.bank_ac_num || 'N/A'}</p>
+                            <div class="center">
+                                <img style="height: 250px;" src="/public/img/${user.id_img}" alt="บัตรประชาชน">
+                            </div>
                         </div>
-                    </div>`;
-            }
+                        <div class="row" style="display: flex; justify-content: space-around; margin-top: 20px;">
+                            <button class="approve-btn" onclick="updateUserStatus(${user.users_id}, 1)" style="width:200px;">อนุมัติ</button>
+                            <button class="disapprove-btn" onclick="updateUserStatus(${user.users_id}, 4)" style="width:200px;">ไม่อนุมัติ</button>
+                        </div>
+                    </div>
+                `;
+            };
 
-            // Add event listeners
-            userTableBody.addEventListener('click', (event) => {
-                if (event.target.classList.contains('btn-sdetails')) {
-                    const userId = parseInt(event.target.getAttribute('data-user-id'), 10);
-                    showUserDetails(userId);
+            // Update user status
+            window.updateUserStatus = async (userId, status) => {
+                try {
+                    const response = await fetch(`/updateSeller/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status }),
+                    });
+
+                    if (!response.ok) throw new Error(await response.text());
+
+                    alert(await response.text());
+                    fetchUserList();
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message);
                 }
-            });
+            };
 
             searchInput.addEventListener('input', filterUsers);
 
             fetchUserList();
         });
-
-        async function updateUserStatus(userId, status) {
-            try {
-                const response = await fetch(`/updateSeller/${userId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ status })
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(errorText);
-                }
-
-                // Alert success message
-                alert(await response.text());
-
-                const row = document.querySelector(`[data-user-id="${userId}"]`).closest('tr');
-                if (row) row.remove();
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert(error.message);
-            }
-        }
-
-
     </script>
 
+    <style>
+        /* Your original styles retained */
+    </style>
 
 </body>
+
+</html>
+
 <style>
     .search-bar {
         flex: 1;
@@ -205,7 +211,8 @@
     }
 
     th {
-        background-color: #F3F3E3;
+        background-color: rgb(157, 158, 138);
+        color: white;
         font-weight: bold;
     }
 
@@ -240,6 +247,22 @@
 
     .disapprove-btn {
         background-color: #FFA4A4;
+    }
+
+    .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .col {
+        display: flex;
+        flex-direction: column;
     }
 </style>
 

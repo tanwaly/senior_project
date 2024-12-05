@@ -12,7 +12,7 @@
     <title>Register</title>
 </head>
 
-<body style="background: #b084a9">
+<body style="background: #D46F95">
     <div class="container">
         <h1>Register</h1>
         <center>
@@ -54,7 +54,7 @@
                 <!-- Seller Form -->
                 <div id="sellerForm" style="display: none; width: 500px; margin-top: 20px;">
                     <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ธนาคาร</p>
-                    <select id="bank" name="bank_ac_name"
+                    <select id="bank" name="bank_ac_type"
                         style="padding-left: 10px; width: 500px; height: 50px; background-color: #E9E9E9; font-size: 15px; border-radius: 8px; border: none; color: #515050; margin-bottom: 15px;">
                         <option option value="" disabled selected>กรุณาเลือกธนาคาร</option>
                         <option value="1">กรุงเทพ</option>
@@ -83,8 +83,10 @@
                         <option value="24">ไอซีบีซี (ไทย)</option>
                         <option value="25">Promptpay</option>
                         <option value="26">TrueMoney Wallet</option>
-
                     </select>
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ชื่อบัญชีธนาคาร</p>
+                    <input type="text" class="form-control" name="bank_ac_name"
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
                     <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">เลขบัญชีธนาคาร</p>
                     <input type="text" class="form-control" name="bank_ac_num"
                         style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
@@ -102,7 +104,7 @@
                 </div>
 
                 <button class="btn mt-3" type="submit"
-                    style="background-color: #8472AC; color: white; width: 500px; height: 50px; 
+                    style="background-color: #FFEEB5; color: black; width: 500px; height: 50px; 
                     font-size: 18px; font-weight: bold; border-radius: 30px;">Register</button>
             </form>
             <hr style="width: 600px;">
@@ -140,6 +142,7 @@
         const email = form['email'].value;
         const pass = form['password'].value;
         const confirmPass = form['confirm-pass'].value;
+        const bankAcType = form['bank_ac_type'] ? form['bank_ac_type'].value : null;
         const bankAcName = form['bank_ac_name'] ? form['bank_ac_name'].value : null;
         const bankAcNum = form['bank_ac_num'] ? form['bank_ac_num'].value : null;
         const idImg = form['id_img']?.files[0];
@@ -150,7 +153,7 @@
         if (document.getElementById('seller').checked) {
             selectedRole = 2;
             status = 2;
-            if (firstName === '' || lastName === '' || phonenum === '' || email === '' || pass === '' || confirmPass === '' || bankAcName === '' || bankAcNum === '' || !idImg) {
+            if (firstName === '' || lastName === '' || phonenum === '' || email === '' || pass === '' || confirmPass === '' || bankAcType === '' || bankAcName === '' || bankAcNum === '' || !idImg) {
                 Swal.fire({
                     icon: 'error',
                     title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
@@ -191,6 +194,7 @@
         formData.append('password', pass);
         formData.append('phonenum', phonenum);
         formData.append('role', selectedRole);
+        formData.append('bank_ac_type', bankAcType);
         formData.append('bank_ac_name', bankAcName);
         formData.append('bank_ac_num', bankAcNum);
         formData.append('user_status', status);
@@ -272,7 +276,7 @@
         position: relative;
         width: 160px;
         height: 40px;
-        background-color: #ddd;
+        background-color: #C1C3C4;
         border-radius: 20px;
         display: flex;
         justify-content: space-between;
@@ -303,7 +307,7 @@
         position: absolute;
         width: 50%;
         height: 100%;
-        background-color: #A1C9E2;
+        background-color: #D1E6FF;
         border-radius: 20px;
         z-index: 1;
         transition: transform 0.3s ease;
@@ -311,12 +315,12 @@
 
     #customer:checked~.toggle-switch-button {
         transform: translateX(0);
-        background-color: #A1C9E2;
+        background-color: #D1E6FF;
     }
 
     #seller:checked~.toggle-switch-button {
         transform: translateX(100%);
-        background-color: #A1C9E2;
+        background-color: #D1E6FF;
     }
 
     .photo {

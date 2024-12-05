@@ -13,10 +13,10 @@
     <title>Homepage</title>
 </head>
 
-<body style="background-color:#fbfbfb;">
-    <div style="background-color:#f5eecc;" class="d-flex">
+<body style="background-color:white;">
+    <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#4b2f7b; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
                 <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -170,12 +170,12 @@
                 <div style="min-height: 147px; height: auto; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                     <div style="display: flex; align-items: center;">
                         <button style="background-color: transparent; border: none;">
-                            <a href="/seller/${product.seller_id}">
+                            <a href="/seller-profile/${product.seller_id}">
                                 <img src="/public/img/${product.profile_img}" alt="Profile Image" width="120px" style="border-radius: 50%; margin: 10px;">
                             </a>
                         </button>
                         <div>
-                            <a href="/seller/${product.seller_id}" style="text-decoration: none; color: inherit; ">
+                            <a href="/seller-profile/${product.seller_id}" style="text-decoration: none; color: inherit; ">
                                 <span style="font-size: 25px; font-weight: 700; ">${product.first_name} ${product.last_name}</span>
                             </a>
                             <div class="row" style="padding: 15px;">
@@ -191,7 +191,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="height: 465px; background: #E9F3CE; border-radius: 5px; padding: 25px;">
+                <div style="height: 465px; background: #FFF4D2; border-radius: 5px; padding: 25px;">
                     <div class="center">
                         <button style="background-color: transparent; border: none;" onclick="cfproduct('${product.product_id}')">
                             <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; width: auto; height: auto; object-fit: contain;">
@@ -199,7 +199,7 @@
                     </div>
                     <div class="col" style="margin-top:30px;">
                         <span style="width: 300px; font-size: 26px; font-weight: 600; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
-                         <span style="font-size: 18px; font-weight: 500; margin-left: 20px; color:#4b2f7b;">฿<span style =" font-size: 28px; font-weight: 800;">${product.product_price}</span></span>
+                         <span style="font-size: 18px; font-weight: 500; margin-left: 20px; color:#E7417F;">฿<span style =" font-size: 28px; font-weight: 800;">${product.product_price}</span></span>
                         <span style="width: 300px; font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
                 </div>
                 </div>
@@ -298,7 +298,7 @@
     }
 
     .category-sh {
-        background: #FFF4D2;
+        background: #EFF7FF;
         border-radius: 60px;
         height: 53px;
         border: none;
