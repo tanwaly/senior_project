@@ -15,7 +15,7 @@
 <body style="background-color: white;">
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
                 <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -24,7 +24,7 @@
                 <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; padding-right: 265px;"
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -33,14 +33,21 @@
             <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="background-color: #F3F3E3;">
-                        <div class="modal-header" style="background-color:#A9B489;">
-                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                        <div class="modal-header" style="background-color:#D46F95;">
+                            <h5 class="modal-title" id="helpModalLabel" style="font-weight: 600; color: white;">
+                                ช่องทางการติดต่อ</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>ID LINE:</strong> qwqwefs</p>
-                            <p><strong>IG:</strong> surety_sp</p>
-                            <p><strong>Facebook:</strong> klsdadj</p>
+                            <p style="font-size: 18px;"><i class="bi bi-line"
+                                    style="font-size: 25px; color: #06c755"></i><strong> Line
+                                    :</strong> surety_offical</p>
+                            <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 18px;"><i class="bi bi-facebook"
+                                    style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
+                                    :</strong> Surety</p>
                         </div>
                     </div>
                 </div>

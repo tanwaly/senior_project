@@ -221,24 +221,27 @@ app.get('/cfproduct/:productId', (req, res) => {
     });
 });
 
-app.get('/queue/:productId', (req, res) => {
-    const { productId } = req.params;
-    const sql = `
-        SELECT queue.*, users.first_name, users.last_name, products.product_time_duration, 
-            DATE_ADD(queue.queue_time, INTERVAL TIME_TO_SEC(products.product_time_duration) SECOND) AS estimated_time FROM queue 
-        JOIN users ON queue.cus_id = users.users_id 
-        JOIN products ON queue.product_id = products.product_id 
-        WHERE queue.product_id = ?;`;
+app.get('/queue/:productId', async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const sql = `
+            SELECT queue.*, users.first_name, users.last_name, products.product_time_duration
+            FROM queue
+            JOIN users ON queue.cus_id = users.users_id
+            JOIN products ON queue.product_id = products.product_id
+            WHERE queue.product_id = ?
+            ORDER BY queue.queue_num ASC;
+        `;
+        const [results] = await con.promise().query(sql, [productId]);
 
-    con.query(sql, [productId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
-        }
         if (results.length === 0) {
             return res.status(404).json({ message: 'No queue found for this product' });
         }
+
         res.json(results);
-    });
+    } catch (err) {
+        res.status(500).json({ error: 'Database query failed' });
+    }
 });
 
 app.get('/isUserInQueue/:product_id/:cus_id', (req, res) => {
@@ -260,30 +263,80 @@ app.get('/isUserInQueue/:product_id/:cus_id', (req, res) => {
     });
 });
 
-app.post('/queue', (req, res) => {
+app.post('/queue', async (req, res) => {
     const { product_id, cus_id, queue_status } = req.body;
-    const findMaxQueueNumQuery = `SELECT MAX(queue_num) AS max_queue_num FROM queue WHERE product_id = ?`;
 
-    con.query(findMaxQueueNumQuery, [product_id], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
+    if (!product_id || !cus_id || typeof queue_status === 'undefined') {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    try {
+        await con.promise().query('START TRANSACTION');
+
+        // Lock the rows for this product to prevent race conditions
+        const lockQuery = `SELECT MAX(queue_num) AS max_queue_num, MAX(queue_estimated_time) AS latest_deadline 
+                           FROM queue WHERE product_id = ? FOR UPDATE`;
+        const [lockResults] = await con.promise().query(lockQuery, [product_id]);
+
+        // Get the duration of the product in seconds
+        const productDurationQuery = `
+            SELECT TIME_TO_SEC(product_time_duration) AS duration_seconds
+            FROM products
+            WHERE product_id = ?`;
+        const [prodResults] = await con.promise().query(productDurationQuery, [product_id]);
+
+        const durationSeconds = prodResults[0]?.duration_seconds || 0;
+        if (!durationSeconds) {
+            await con.promise().query('ROLLBACK');
+            return res.status(400).json({ error: 'Invalid product duration' });
         }
 
-        let nextQueueNum = 1;  // Default to 1 if no queue exists
-        if (results[0].max_queue_num !== null) {
-            nextQueueNum = results[0].max_queue_num + 1;
+        let nextQueueNum = 1;
+        let newQueueDeadline = new Date();
+
+        if (lockResults[0].max_queue_num !== null) {
+            nextQueueNum = lockResults[0].max_queue_num + 1;
+
+            const latestDeadline = lockResults[0].latest_deadline
+                ? new Date(lockResults[0].latest_deadline)
+                : new Date();
+
+            // Determine if the next queue should start from the current time or the latest deadline
+            newQueueDeadline =
+                latestDeadline > new Date()
+                    ? new Date(latestDeadline.getTime() + durationSeconds * 1000)
+                    : new Date(Date.now() + durationSeconds * 1000);
+        } else {
+            // If no existing queue, start with the current time
+            newQueueDeadline = new Date(Date.now() + durationSeconds * 1000);
         }
 
-        const insertQueueQuery = `INSERT INTO queue (product_id, cus_id, queue_num, queue_status) VALUES (?, ?, ?, ?)`;
+        const insertQueueQuery = `
+            INSERT INTO queue (product_id, cus_id, queue_num, queue_time, queue_estimated_time, queue_status) 
+            VALUES (?, ?, ?, NOW(), ?, ?)`;
+        const [insertResults] = await con.promise().query(insertQueueQuery, [
+            product_id,
+            cus_id,
+            nextQueueNum,
+            newQueueDeadline,
+            queue_status,
+        ]);
 
-        con.query(insertQueueQuery, [product_id, cus_id, nextQueueNum, queue_status], (error, insertResults) => {
-            if (error) {
-                return res.status(500).json({ error: 'Database insert failed' });
-            }
-            res.status(200).json({ success: true, queue_id: insertResults.insertId, queue_num: nextQueueNum });
+        await con.promise().query('COMMIT');
+        res.status(200).json({
+            success: true,
+            queue_id: insertResults.insertId,
+            queue_num: nextQueueNum,
+            queue_estimated_time: newQueueDeadline,
         });
-    });
+    } catch (error) {
+        await con.promise().query('ROLLBACK');
+        console.error('Transaction failed:', error);
+        res.status(500).json({ error: 'Database transaction failed' });
+    }
 });
+
+
 
 //payment
 app.get('/payment', (req, res) => {
@@ -727,102 +780,6 @@ app.get('/sellerhomepage', (req, res) => {
 });
 
 
-// // Update ID line
-// app.get('/getUserData', (req, res) => {
-//     const loggedInUserId = req.session?.users_id;
-
-//     if (!loggedInUserId) {
-//         console.warn('Unauthorized access attempt to /getUserData');
-//         return res.status(401).json({ success: false, message: 'User not logged in' });
-//     }
-
-//     const sql = `SELECT sacc_contact FROM User WHERE users_id = ?`;
-
-//     con.query(sql, [loggedInUserId], (err, result) => {
-//         if (err) {
-//             console.error('Database error in /getUserData:', err);
-//             return res.status(500).json({ success: false, message: 'Database query failed' });
-//         }
-
-//         if (result.length > 0) {
-//             const contact = result[0].sacc_contact || ''; // ป้องกัน null
-//             return res.json({ success: true, line_id: contact });
-//         } else {
-//             console.warn('User not found for ID:', loggedInUserId);
-//             return res.status(404).json({ success: false, message: 'User not found' });
-//         }
-//     });
-// });
-
-
-
-// // Route for updating sacc_contact in the User table
-// app.put('/updateLineID', (req, res) => {
-//     console.log('Request Body:', req.body);
-//     const { line_id } = req.body;
-//     const loggedInUserId = req.session?.users_id;
-
-//     if (!line_id || !loggedInUserId) {
-//         console.error('Invalid input or user not logged in');
-//         return res.status(400).json({ success: false, message: 'Invalid input data' });
-//     }
-
-//     // Escape line_id เพื่อป้องกัน SQL Injection
-//     const sanitizedLineId = con.escape(line_id.trim());
-
-//     const sqlUpdate = `UPDATE User SET sacc_contact = ? WHERE users_id = ?`;
-
-//     con.query(sqlUpdate, [sanitizedLineId, loggedInUserId], (err, result) => {
-//         if (err) {
-//             console.error('Database error in /updateLineID:', err);
-//             return res.status(500).json({ success: false, message: 'Database update failed' });
-//         }
-
-//         if (result.affectedRows > 0) {
-//             console.log('Line ID updated for user ID:', loggedInUserId);
-//             return res.json({ success: true, message: 'Line ID updated successfully' });
-//         } else {
-//             console.warn('No rows updated for user ID:', loggedInUserId);
-//             return res.status(404).json({ success: false, message: 'User not found' });
-//         }
-//     });
-// });
-
-
-
-// // Route for updating Line ID
-// app.post('/updateLineID', (req, res) => {
-//     const { lineID } = req.body;
-//     const loggedInUserId = req.session?.users_id;
-
-//     console.log('Line ID:', lineID);  // Debug lineID
-//     console.log('Logged in User ID:', loggedInUserId);  // Debug users_id
-
-//     if (!lineID || !loggedInUserId) {
-//         console.error('Invalid input or user not logged in');
-//         return res.status(400).json({ success: false, message: 'Invalid input or user not logged in.' });
-//     }
-
-//     const sqlUpdate = `UPDATE users SET sacc_contact = ? WHERE users_id = ?`;
-
-//     con.query(sqlUpdate, [lineID.trim(), loggedInUserId], (err, result) => {
-//         if (err) {
-//             console.error('Database error in /updateLineID:', err);
-//             return res.status(500).json({ success: false, message: 'Database error.' });
-//         }
-
-//         if (result.affectedRows > 0) {
-//             console.log('Line ID updated successfully');
-//             return res.json({ success: true, message: 'Line ID updated successfully.' });
-//         } else {
-//             console.warn('No user found for ID:', loggedInUserId);
-//             return res.status(404).json({ success: false, message: 'User not found.' });
-//         }
-//     });
-// });
-
-
-
 app.get('/getSellerData', (req, res) => {
     const sellerId = req.session.users_id;
 
@@ -855,7 +812,7 @@ app.get('/sellerinfo/:sellerId', (req, res) => {
         return res.status(401).json({ error: 'Not logged in or session expired' });
     }
 
-    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img 
+    const sql = `SELECT *
                  FROM users WHERE users_id = ?;`;
 
     con.query(sql, [sellerId], (err, results) => {
@@ -1231,7 +1188,7 @@ app.get('/sellerverify', (req, res) => {
             console.error('Database error:', err);
             res.status(500).json({ error: 'Database query failed' });
         } else {
-            console.log('Query results:', results);
+            // console.log('Query results:', results);
             res.json(results);
         }
     });
