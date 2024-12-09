@@ -61,10 +61,13 @@
             border: none;
             border-radius: 15px;
             padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
+            width: 100px;
+            height: 36px;
+            color: black;
         }
 
         .edit-button {
@@ -201,20 +204,20 @@
                 const rowHTML = `
                 <div class="row">
                     <img src="/public/img/${item.product_img}" alt="${item.product_name}" 
-                        style="border-radius: 15px; margin-left: 25px; width: auto; max-height: 150px;">
+                        style="border-radius: 15px; margin-left: 25px; width: auto; max-height: 100px;">
                     <div class="col" style="margin-left: 50px;">
-                        <span style="font-size: 26px;">${item.product_name}</span>
-                        <span style="font-weight: 700; font-size:18px">ชื่อผู้รับ: <span style="font-weight: 400;">${item.order_addname}</span></span>
-                            <span style="font-weight: 700; font-size:18px; width:600px ;  word-wrap: break-word;">ที่อยู่: <span style="font-weight: 400;">${item.order_address}</span></span>
+                        <span style="font-size: 17px;font-weight: 700; margin-bottom:5px;">${item.product_name}</span>
+                        <span style="font-weight: 700; font-size:14px">ชื่อผู้รับ: <span style="font-weight: 400;">${item.order_addname}</span></span>
+                            <span style="font-weight: 700; font-size:14px; width:600px ;  word-wrap: break-word;">ที่อยู่: <span style="font-weight: 400;margin-bottom:2px;">${item.order_address}</span></span>
                         <div id="trackingSection${index}">
-                            <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 400;">${orderTracknum}</span></span><br>
-                            <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 400;">${orderShipname}</span></span>
+                            <span style="font-weight: 700; font-size:14px">เลขพัสดุ: <span style="font-weight: 400;">${orderTracknum}</span></span><br>
+                            <span style="font-weight: 700; font-size:14px">จัดส่งโดย: <span style="font-weight: 400;">${orderShipname}</span></span>
                             </div>
                             
                     </div>
                     <div class="col center" style="margin-left: 700px;">
-                        <button id="editBtn${index}" class="edit-button" style="background: #FFE48C; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;" onclick="editTracking(${index}, ${item.order_id})">
-                            <span style="font-weight: bold;">แก้ไข</span>
+                        <button id="editBtn${index}" class="edit-button" style="background: #FFE48C; border-radius: 15px; border-color: transparent;" onclick="editTracking(${index}, ${item.order_id})">
+                           แก้ไข
                         </button>
                     </div>
                 </div>
@@ -235,16 +238,16 @@
         const editButton = document.getElementById(`editBtn${index}`);
 
         trackingSection.innerHTML = `
-        <div style="display:flex; margin-bottom: 15px;">
-            <span style="font-weight: 700; font-size:18px">เลขพัสดุ: </span>
+        <div style="display:flex;  margin-top:10px; margin-bottom: 15px;">
+            <span style="font-weight: 700; font-size:12px">เลขพัสดุ: </span>
             <input type="text" id="trackingCode${index}" 
-                style="width: 150px; margin-left: 10px; border-radius: 8px; border: none; color: #8D8D8D; height: 30px;" 
+                style="width: 150px; margin-left: 10px; border-radius: 8px; border: none; color: #8D8D8D; height: 25px; padding :5px;" 
                 placeholder="กรุณากรอกรหัสพัสดุ">
         </div>
         <div style="display: flex; margin-bottom: 15px;">
-            <span style="font-weight: 700; font-size:18px">จัดส่งโดย: </span>
+            <span style="font-weight: 700; font-size:12px">จัดส่งโดย: </span>
             <select name="transports" id="transports${index}" 
-                style="width: 150px; margin-left: 10px; border-radius: 8px; border: none; color: #8D8D8D; font-size: 15px; text-align: center; height: 30px;">
+                style="width: 150px; margin-left: 10px; border-radius: 8px; border: none; color: #8D8D8D; font-size: 15px; text-align: center; height: 25px;">
                 <option value="FLASH Express">FLASH Express</option>
                 <option value="J&T Express">J&T Express</option>
                 <option value="ไปรษณีย์ไทย">ไปรษณีย์ไทย</option>
@@ -256,9 +259,9 @@
                 <option value="MAKESEND">MAKESEND</option>
             </select>
         </div>
-        <button id="confirmBtn${index}" class="confirm-button" style="background: #BDE3A7; margin-left: 580px; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;" onclick="confirmEdit(${index}, ${orderId})">
-            <span style="font-weight: bold;">ยืนยัน</span> 
-        </button>
+            <button id="confirmBtn${index}" class="confirm-button" style="background: #BDE3A7;border-radius: 15px; border-color: transparent;" onclick="confirmEdit(${index}, ${orderId})">
+                ยืนยัน 
+            </button>
     `;
 
         // Hide the edit button and show the confirm button
@@ -291,8 +294,8 @@
                     const editButton = document.getElementById(`editBtn${index}`);
 
                     trackingSection.innerHTML = `
-                <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 300;">${trackingCode}</span></span><br>
-                <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 300;">${transport}</span></span>
+                <span style="font-weight: 700; font-size:12px">เลขพัสดุ: <span style="font-weight: 300;">${trackingCode}</span></span><br>
+                <span style="font-weight: 700; font-size:12px">จัดส่งโดย: <span style="font-weight: 300;">${transport}</span></span>
             `;
 
                     editButton.style.display = 'block';
