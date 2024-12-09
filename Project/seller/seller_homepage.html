@@ -35,32 +35,21 @@
         }
 
         .add-post-btn {
-            width: 200px;
-            height: 60px;
-            background: #D1D1D1;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-            border-radius: 15px;
+            width: 133px;
+            height: 40px;
+            background: #F26499;
+            border-radius: 10px;
             border: none;
-        }
+            font-size: 10px;
+            font-weight: 500;
+            color: white;
 
-        .category-btn {
-            background: #fff8e5;
-            border-radius: 60px;
-            width: 120px;
-            height: 53px;
-            /* border-color: darkgray; */
-            border: transparent;
-            transition: 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.019);
         }
 
         .category-sh {
             background: #EFF7FF;
-            border-radius: 60px;
-            height: 53px;
+            border-radius: 20px;
+            height: 35px;
             border: none;
             display: flex;
             align-items: center;
@@ -72,26 +61,6 @@
 
         .category-btn:hover {
             transform: scale(1.1);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 5px;
-            width: 300px;
-            text-align: center;
         }
 
         .button {
@@ -107,8 +76,16 @@
 
         .close-button {
             background-color: #FFA4A4;
+
             color: #000000;
             border: none;
+        }
+
+        .avatar {
+            vertical-align: middle;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -116,18 +93,18 @@
 <body style="background-color: white;">
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 870px; height: 80px; padding: 13px;">
+            <img src="/public/img/logo-w.png" width="66px" alt="Logo">
+            <div class="d-flex justify-content-between" style="margin-left: 43px;">
                 <a href="/sellerhomepage"
-                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    style="color:white; text-decoration:none; font-size: 15px; padding-left: 43px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
                 <a href="/add-trackingnum"
-                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                <a style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px; padding-right: 110px; "
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -137,84 +114,72 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="background-color: #F3F3E3;">
                         <div class="modal-header" style="background-color:#D46F95;">
-                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                            <h5 class="modal-title" id="helpModalLabel" style="font-weight: 600; color: white;">
+                                ช่องทางการติดต่อ</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>ID LINE:</strong> qwqwefs</p>
-                            <p><strong>IG:</strong> surety_sp</p>
-                            <p><strong>Facebook:</strong> klsdadj</p>
+                            <p style="font-size: 14px;"><i class="bi bi-line"
+                                    style="font-size: 20px; color: #06c755"></i><strong>
+                                    Line
+                                    :</strong> surety_offical</p>
+                            <p style="font-size: 14px;"><i class="bi bi-instagram" style="font-size: 20px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 14px;"><i class="bi bi-facebook"
+                                    style="font-size: 20px; color: 	#1877F2"></i><strong> Facebook
+                                    :</strong> Surety</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                 Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
             </button>
         </div>
     </div>
     <div>
-        <div class="flex center">
+        <div class="flex center" style="margin-top: 40px;">
             <!-- Profile Image -->
-            <img src="/public/img/fprofile.jpg" alt="Profile Picture" class="rounded-circle m-4" style="height: 120px;">
+            <img id="profileImg" src="/public/img/fprofile.jpg" alt="Profile Picture" class="avatar">
             <div class="flex" style="gap: 720px;">
+                <!-- contect. review -->
                 <div class="column" style="margin-left: 50px;">
-                    <div class="flex mt-4">
-                        <span style="font-size: 40px; font-weight: bold;">Eiei</span>
-                    </div>
-
-                    <!-- <div class="flex mt-4">
-                        <p style="font-size: 14px; font-weight: bold; color: #8D8D8D;"><span
-                                id="line-id-display">กรุณากรอกช่องทางการติดต่อเพิ่มเติม</span>
-                        </p>
-                    </div>
-                    <div class="button">
-                        <button
-                            style="border: none;color: white; background-color: #F896BB; width: 150px; height: 30px; text-align: center; 
-                        border-radius: 5px; font-weight: bold; font-size: 13px; margin-left: -20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);"
-                            onclick="openModal()">แก้ไขโปรไฟล์</button>
-                    </div> -->
-                    <!-- โมดอลสำหรับแก้ไขโปรไฟล์ -->
-                    <!-- Hidden field for userId -->
-                    <!-- <div id="editProfileModal" class="modal">
-                        <div style="border-radius: 15px;" class="modal-content">
-                            <h3>แก้ไขโปรไฟล์</h3>
-                            <input style="border-radius: 5px; border: none;" type="text" id="line-id-input" placeholder="   กรุณากรอกช่องทางการติดต่อ">
-                            <input type="hidden" id="user-id" value="12345">
-                            <br>
-                            <button style="border-radius: 5px;" class="button save-button" onclick="saveLineID()">บันทึก</button>
-                            <br>
-                            <button style="border-radius: 5px;" class="button close-button" onclick="closeModal()">ยกเลิก</button>
-                        </div>
-                    </div> -->
+                    <div id="sellerName"></div>
+                    <div style="word-wrap: break-word; max-width: 500px;" id="sContect"></div>
+                    <div class="reviewStar" style="margin-top: -20px;"></div>
+                    <button id="viewReviews" onclick="location.href='/veiwOwnReview'"
+                        style="border: none; background-color: #e2e2e2; width: 67px; height: 25px; text-align: center; border-radius: 15px;">
+                        ดูรีวิว
+                    </button>
+                    <!-- <div id="shrbtn"></div> -->
                 </div>
                 <div style="display: flex; flex-direction: column; margin-top: 15px;">
                     <button
-                        style="border: none;color: white; background-color: #F896BB; width: 200px; height: 50px; text-align: center; border-radius: 15px; font-weight: bold; font-size: 20px; margin-right: 30px;"
-                        class="mt-3 shadow" onclick="location.replace('/sellerprofile');">ประวัติส่วนตัว</button>
+                        style="border: none;color: white; background-color: #F896BB; width: 134px; height: 33px; text-align: center; border-radius: 15px; font-weight: 700; font-size: 14px; margin-right: 30px;"
+                        class="mt-3     " onclick="location.replace('/sellerprofile');">แก้ไขข้อมูลส่วนตัว</button>
 
                     <!-- Add Post button triggers modal -->
-                    <button type="button" class="btn mt-3 shadow"
-                        style="color: white; background-color: #F26499; width: 200px; height: 50px; text-align: center; border-radius: 15px; font-weight: bold; font-size: 20px; margin-right: 30px;"
-                        data-bs-toggle="modal" data-bs-target="#addPostModel">
-                        <span class="bi bi-plus" style="font-size: 20px;"><span
-                                style="font-size: 20px;">เพิ่มโพสต์</span></span>
+                    <button type="button" class="btn mt-3  add-post-btn" data-bs-toggle="modal"
+                        data-bs-target="#addPostModel">
+                        <span class="bi bi-plus" style="font-size: 16px;">เพิ่มโพสต์<span
+                                style="font-size: 16px; "></span>
                     </button>
                 </div>
             </div>
         </div>
-
+        <!-- add post popup-->
         <div class="modal fade" id="addPostModel" tabindex="-1" role="dialog" aria-labelledby="addPostModelLabel"
             aria-hidden="true">
             <div class="modal-dialog center" role="document">
                 <div class="modal-content"
-                    style="width: 1000px; min-height: 600px; height: auto; background-color: #F3F3E3;">
+                    style="width: 670px; min-height: 400px; height: auto; background-color: #F3F3E3;">
                     <div class="modal-header" style="background-color:#F0B659;">
-                        <h5 class="modal-title" id="addPostModelLabel">Add New Post</h5>
+                        <h5 class="modal-title" id="addPostModelLabel" style="font-size: 18px;">Add New Post</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             style="background-color: transparent; border: transparent;"></button>
                     </div>
@@ -223,14 +188,14 @@
                             <div class="b-post">
                                 <input type="text" name="product_caption" placeholder="คุณต้องการขายอะไร"
                                     class="form-control" id="caption"
-                                    style="background-color: transparent; border: none; height: 300px; width: 900px;">
+                                    style="background-color: transparent; border: none; height: 200px; width: 600px;">
                             </div>
                             <hr>
-                            <div class="row">
-                                <div>
-                                    Catagory:
+                            <div class="row" style="display: flex; align-items: center;">
+                                <div class="col">
+                                    Category:
                                     <select name="product_cate" id="category"
-                                        style="height: 40px; border-radius: 10px; border: none;">
+                                        style="height: 27px; border-radius: 7px; border: none; width: 150px;">
                                         <option value="1">Shirt</option>
                                         <option value="2">Coat</option>
                                         <option value="3">Dress</option>
@@ -242,12 +207,17 @@
                                         <option value="9">Accessories</option>
                                         <option value="10">Appliance</option>
                                     </select>
+                                </div>
+                                <div class="col">
                                     เวลาที่ขายสินค้า:
                                     <input type="datetime-local" name="product_time"
-                                        style="height: 40px; border-radius: 10px; border: none;" id="productOpenTime">
+                                        style="height: 27px; border-radius: 7px; border: none; width: 150px;"
+                                        id="productOpenTime">
+                                </div>
+                                <div class="col">
                                     ระยะเวลาชำระสินค้า:
                                     <select name="product_time_duration" id="ProductTimeDuration"
-                                        style="height: 40px; border-radius: 10px; border: none;">
+                                        style="height: 27px; border-radius: 7px; border: none; width: 150px;">
                                         <option value="5">5 minute</option>
                                         <option value="10">10 minute</option>
                                         <option value="15">15 minute</option>
@@ -255,57 +225,57 @@
                                         <option value="30">30 minute</option>
                                         <option value="60">60 minute</option>
                                     </select>
-
+                                </div>
+                                <div class="col">
                                     <!-- Image upload input -->
                                     <input class="form-control" id="addProductImage" type="file" name="product_img"
                                         accept="image/*" style="display: none;" />
-
-
                                     <button type="button" id="uploadButton"
-                                        style="background-color: transparent; border: none; margin-left: 20px;">
-                                        <i class="bi bi-images" style="font-size: 30px;"></i>
+                                        style="background-color: transparent; border: none;">
+                                        <i class="bi bi-images" style="font-size: 20px;"></i>
                                     </button>
                                 </div>
                             </div>
+
                             <hr>
-                            <div class="center col" style="margin-top: 30px;">
-                                <img id="previewImage" src="/public/img/logo.png" alt="Preview Image" width="500px"
-                                    style="margin-top: 10px;" />
-                                <div style="margin-top: 10px; font-size: 20px;">
+                            <div class="center col" style="margin-top: 20px;">
+                                <img id="previewImage" src="/public/img/logo.png" alt="Preview Image" width="335px"
+                                    style="margin-top: 7px;" />
+                                <div style="margin-top: 7px; font-size: 14px;">
                                     <label
-                                        style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">Product's
+                                        style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">Product's
                                         name:</label>
                                     <input type="text" name="product_name" placeholder="Name" class="form-control"
-                                        style="padding: 20px; width: 780px; height: 65px; border-radius: 10px; border: none;">
+                                        style="padding: 14px; width: 520px; height: 44px; border-radius: 7px; border: none;">
                                 </div>
-                                <div style="margin-top: 10px; font-size: 20px;">
+                                <div style="margin-top: 7px; font-size: 14px;">
                                     <label
-                                        style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">Description:</label>
+                                        style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">Description:</label>
                                     <input type="text" name="product_detail" placeholder="Description"
                                         class="form-control" id="productDescription"
-                                        style="padding: 20px; width: 780px; height: 80px; border-radius: 10px; border: none;">
+                                        style="padding: 14px; width: 520px; height: 53px; border-radius: 7px; border: none;">
                                 </div>
-                                <div style="margin: 20px; font-size: 25px;">
+                                <div style="margin: 13px; font-size: 16px;">
                                     <label>
                                         <input type="radio" name="product_type" id="clothSize" value="cloth"
-                                            style="transform: scale(1.5);">
+                                            style="transform: scale(1);">
                                         Cloth Size
                                     </label>
                                     <label>
                                         <input type="radio" name="product_type" id="shoesSize" value="shoes"
-                                            style="margin-left: 90px; transform: scale(1.5);">
+                                            style="margin-left: 60px; transform: scale(1);">
                                         Shoes Size
                                     </label>
                                     <label>
                                         <input type="radio" name="product_type" id="appliance" value="appliance"
-                                            style="margin-left: 90px; transform: scale(1.5);">
+                                            style="margin-left: 60px; transform: scale(1);">
                                         Appliance
                                     </label>
                                 </div>
 
                                 <div id="clothSizeSelect" class="select-container" style="display: none;">
                                     <select name="product_clothsize"
-                                        style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;">
+                                        style="width: 535px; height: 40px; border-radius: 7px; padding: 14px; border: none;">
                                         <option option value="" disabled selected>Select Cloth size</option>
                                         <option value="Freesize">Free size</option>
                                         <option value="XS">XS</option>
@@ -318,7 +288,7 @@
                                 </div>
                                 <div id="shoesSizeSelect" class="select-container" style="display: none;">
                                     <select name="product_shoesize"
-                                        style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;">
+                                        style="width: 535px; height: 40px; border-radius: 7px; padding: 14px; border: none;">
                                         <option option value="" disabled selected>Select Shoes size</option>
                                         <option value="36">36</option>
                                         <option value="37">37</option>
@@ -330,15 +300,15 @@
                                         <option value="43">43</option>
                                     </select>
                                 </div>
-                                <div class="row center" style="font-size: 25px;">
+                                <div class="row center" style="font-size: 16px;">
                                     Price:
                                     <input type="int" name="product_price" placeholder="Price"
-                                        style="margin: 20px; padding: 20px; width: 600px; height: 65px; border-radius: 10px; border: none;">
+                                        style="margin: 13px; padding: 14px; width: 400px; height: 44px; border-radius: 7px; border: none;">
                                     Baht
                                 </div>
                                 <div class="modal-footer">
                                     <button type="submit"
-                                        style="width: 900px; height: 60px; background: #BDE3A7; border: none; border-radius: 15px;">
+                                        style="width: 600px; height: 40px; background: #BDE3A7; border: none; border-radius: 10px;">
                                         Add Post
                                     </button>
                                 </div>
@@ -348,19 +318,22 @@
                 </div>
             </div>
         </div>
+
+        <hr style="margin: 50px 250px 30px 250px;border: 2px solid #ce94a9;">
         <div class="center" style="margin-top: 50px;">
             <div id="showSellerProduct"
-                style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px; justify-content: center;">
+                style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 1px; justify-content: center;">
+
             </div>
         </div>
     </div>
 
-    <!--Show product Modal -->
+    <!--edit post Modal -->
     <div class="modal fade" id="shpModal" tabindex="-1" aria-labelledby="shpModalLabel" aria-hidden="true">
         <div class="modal-dialog center">
-            <div class="modal-content" style="width: 1800px; min-height: 600px; background-color: #F3F3E3;">
-                <div class="modal-header" style="background-color:#A9B489;">
-                    <h5 class="modal-title" id="shpModalLabel">Product Details</h5>
+            <div class="modal-content" style="width: 1200px; min-height: 400px; background-color: #F3F3E3;">
+                <div class="modal-header" style="background-color:#F0B659;">
+                    <h6 class="modal-title" id="shpModalLabel" style="font-weight: 700;">Product Details</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         style="background-color: transparent; border: transparent;"></button>
                 </div>
@@ -372,48 +345,40 @@
     </div>
 
     <script>
+        //show star part
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Fetch average score of the logged-in seller
+                const avgScoreResponse = await fetch(`/getSellerOwnAvgScore`);
+                const avgScoreData = await avgScoreResponse.json();
 
-        // ฟังก์ชันเปิดโมดอล
-        function openModal() {
-            document.getElementById("editProfileModal").style.display = "flex";
-        }
-
-        // ฟังก์ชันปิดโมดอล
-        function closeModal() {
-            document.getElementById("editProfileModal").style.display = "none";
-        }
-
-        // ฟังก์ชันบันทึก Line ID
-        function saveLineID() {
-            const newLineID = document.getElementById("line-id-input").value.trim();
-            const userId = document.getElementById("user-id").value; // Get userId from hidden input
-
-            if (newLineID) {
-                document.getElementById("line-id-display").textContent = newLineID;
-
-                // ส่ง Line ID และ userId ไปยัง Backend
-                fetch('/updateLineID', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ lineID: newLineID, userId: userId }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Line ID updated successfully.');
-                        } else {
-                            alert('Error updating Line ID: ' + data.message);
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            } else {
-                alert('กรุณากรอก Line ID ก่อนบันทึก');
+                if (avgScoreData.error) {
+                    console.error(avgScoreData.error);
+                } else {
+                    // Ensure avg_score is a valid number
+                    const avgScore = Number(avgScoreData.avg_score) || 0;
+                    const reviewStarDiv = document.querySelector('.reviewStar');
+                    reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+                }
+            } catch (error) {
+                console.error('Error fetching average score:', error);
             }
+        });
 
-            closeModal();
+        function generateStarHTML(avgScore) {
+            const fullStars = Math.floor(avgScore);
+            const halfStar = avgScore % 1 >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+
+            return `
+        ${'<i class="bi bi-star-fill" style="color: darkorange; font-size: 20px; margin-right: 5px;"></i>'.repeat(fullStars)}
+        ${'<i class="bi bi-star-half" style="color: darkorange; font-size: 20px; margin-right: 5px;"></i>'.repeat(halfStar)}
+        ${'<i class="bi bi-star" style="color: darkorange; font-size: 20px; margin-right: 5px;"></i>'.repeat(emptyStars)}
+        <span style="font-size: 16px; font-weight: 500; margin-left: 5px;">${avgScore.toFixed(1)}</span>
+    `;
         }
+
+
 
         // Add post part
         document.addEventListener('DOMContentLoaded', function () {
@@ -467,8 +432,10 @@
                     if (data.error) {
                         console.error(data.error);
                     } else {
-                        document.querySelector('span[style*="font-size: 40px;"]').textContent = data.first_name;
-                        document.querySelector('img.rounded-circle').src = `/public/img/${data.profile_img}`;
+                        document.querySelector('#sellerName').innerHTML = ` <span style="font-size: 30px; font-weight: bold; color: #161E52;"> ${data.first_name} ${data.last_name}  </span>`;
+                        document.querySelector('#profileImg').src = `/public/img/${data.profile_img}`;
+                        document.querySelector('#sContect').innerHTML = `<p style="font-size: 14px; font-weight: 400; color:darkgery; word-wrap: break-word; max-width: 500px;">
+                        ${data.sacc_contact}</p>`;
                     }
                 } catch (error) {
                     console.error('Error fetching user data:', error);
@@ -494,39 +461,39 @@
                     let html = '';
                     data.forEach(product => {
                         html += `
-                            <div style="margin: 20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 680px;">
-                                <div style="min-height: 147px; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
-                                    <div style="display: flex; align-items: center;">
-                                        <button style="background-color: transparent; border: none;">
-                                            <img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
-                                        </button>
-                                        <div class="row">
-                                            <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name} ${product.last_name}</span>
-                                            <div class="category-sh">
-                                                <span class="${changeIcon(product.product_cate)}"></span>
-                                            </div>
-                                        </div>
-                                        <div style="width: 100%; display: flex; justify-content: end;">
-                                           
-                                            <div id="productTimeDisplay_${product.product_id}" style="width: 150px; height: 80px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
-                                                <span style="font-size: 20px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="height: 465px; background: #FFF4D2; border-radius: 5px; padding: 25px;">
-                                    <div class="center">
-                                        <button style="background-color: transparent; border: none;"  data-bs-toggle="modal" data-bs-target="#shpModal" onclick="sellerProductDetail('${product.product_id}')">
-                                            <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 240px; max-width: 250px; object-fit: contain;">
-                                        </button>
-                                    </div>
-                                    <div class="col">
-                                        <span style="font-size: 24px; font-weight: 700; margin-left: 20px; word-wrap: break-word;">${product.product_name}</span>
-                                         <span style="font-size: 18px; font-weight: 500; margin-left: 20px; color:#E7417F;">฿<span style =" font-size: 28px; font-weight: 800;">${product.product_price}</span></span>
-                                        <span style="font-size: 20px; font-weight: 400; margin-left: 20px; word-wrap: break-word;">${product.product_caption}</span>
-                                    </div>
-                                </div>
-                            </div>`;
+                           <div style="margin: 13px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 455px;">
+    <div style="min-height: 98px; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 17px;">
+        <div style="display: flex; align-items: center;">
+            <button style="background-color: transparent; border: none;">
+                <img src="/public/img/${product.profile_img}" class="avatar" alt="Product Image" width="80px" style="border-radius: 50%; margin: 7px;">
+            </button>
+            <div class="row">
+                <span style="font-size: 17px; font-weight: 700; margin-left: 13px;">${product.first_name} ${product.last_name}</span>
+                <div class="category-sh">
+                    <span class="${changeIcon(product.product_cate)}"></span>
+                </div>
+            </div>
+            <div style="width: 100%; display: flex; justify-content: end;">
+                <div id="productTimeDisplay_${product.product_id}" style="width: 100px; height: 54px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+                    <span style="font-size: 14px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 310px; background: #FFF4D2; border-radius: 5px; padding: 17px;">
+        <div class="center">
+            <button style="background-color: transparent; border: none;" data-bs-toggle="modal" data-bs-target="#shpModal" onclick="sellerProductDetail('${product.product_id}')">
+                <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 160px; max-width: 167px; object-fit: contain;">
+            </button>
+        </div>
+        <div class="col">
+            <span style="font-size: 16px; font-weight: 700; margin-left: 13px; word-wrap: break-word;">${product.product_name}</span>
+            <span style="font-size: 12px; font-weight: 500; margin-left: 13px; color:#E7417F;">฿<span style =" font-size: 19px; font-weight: 800;">${product.product_price}</span></span>
+            <span style="font-size: 14px; font-weight: 400; margin-left: 13px; word-wrap: break-word;">${product.product_caption}</span>
+        </div>
+    </div>
+</div>
+`;
                     });
 
                     showSellerProduct.innerHTML = html;
@@ -646,90 +613,89 @@
                     formattedTime = `${year}-${month}-${day}T${hours}:${minutes}`;
                 }
                 document.querySelector('.sellerPD').innerHTML = `
-                     <div class="modal-body">
-              <div class="row">
-                  <div style="margin-top: 20px; font-size: 18px;" id="shsellerproduct">
-                      <div style="margin-top: 30px; width: 585px; min-height: 96px; height: auto;">
-                         <label  style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: 700;">Caption:</label>
-                          <input id="productCaption" value="${product.product_caption}" style="padding:25px; width:800px; height:120px; border-radius: 25px; border:none;" disabled>
-                      </div>
-                      <div class="row" style="margin-top:20px">
-                          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                              <label style ="font-weight: 700;">Category:</label>
-                              <select id="productCategory" disabled style="border-radius: 15px; border:none; padding:5px;">
-                                  <option value="1" ${product.product_cate == 1 ? 'selected' : ''}>Shirt</option>
-                                  <option value="2" ${product.product_cate == 2 ? 'selected' : ''}>Coat</option>
-                                  <option value="3" ${product.product_cate == 3 ? 'selected' : ''}>Dress</option>
-                                  <option value="4" ${product.product_cate == 4 ? 'selected' : ''}>Pants</option>
-                                  <option value="5" ${product.product_cate == 5 ? 'selected' : ''}>Skirt</option>
-                                  <option value="6" ${product.product_cate == 6 ? 'selected' : ''}>Socks</option>
-                                  <option value="7" ${product.product_cate == 7 ? 'selected' : ''}>Shoes</option>
-                                  <option value="8" ${product.product_cate == 8 ? 'selected' : ''}>Hat</option>
-                                  <option value="9" ${product.product_cate == 9 ? 'selected' : ''}>Accessories</option>
-                                  <option value="10" ${product.product_cate == 10 ? 'selected' : ''}>Appliance</option>
-                              </select>
-                          </div>
-                          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                              <label style ="font-weight: 700;">Selling Time:</label>
-                              <input type="datetime-local" id="productTime" value="${formattedTime}" disabled style="padding:5px; border-radius: 15px; border:none;">
-                          </div>
-                          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                              <label style ="font-weight: 700;">Duration:</label>
-                              <select id="productDuration" disabled style="border-radius: 15px; border:none; padding:5px;">
-                                  <option value="5" ${product.product_time_duration === '00:05:00' ? 'selected' : ''}>5 minutes</option>
-                                  <option value="10" ${product.product_time_duration === '00:10:00' ? 'selected' : ''}>10 minutes</option>
-                                  <option value="15" ${product.product_time_duration === '00:15:00' ? 'selected' : ''}>15 minutes</option>
-                                  <option value="20" ${product.product_time_duration === '00:20:00' ? 'selected' : ''}>20 minutes</option>
-                                  <option value="30" ${product.product_time_duration === '00:30:00' ? 'selected' : ''}>30 minutes</option>
-                                  <option value="60" ${product.product_time_duration === '01:00:00' ? 'selected' : ''}>60 minutes</option>
-                              </select>
-                          </div>
-                      </div>
-                    <div class="center" style="margin-top: 20px;">
-                        <div class="col">
-                            <div>
-                              <img id="productImage" style="height: 250px; margin-top: 20px;" src="/public/img/${product.product_img}">
-                            </div>
-                            <div>
-                                <input type="file" id="editProductImage" accept="image/*" style="display: none;">
-                                 <!-- Change Image Button, initially hidden -->
-                                 <button type="button" id="changeImageButton" style="display: none; margin-top: 10px; padding: 5px; width: 200px; height: 50px; background-color: black; color: white; border: none; border-radius: 25px; font-size: 20px; font-weight: 700;">
-                                     Change Image
-                                 </button>
-                            </div>
-                        </div>
+             <div class="modal-body">
+    <div class="row">
+        <div style="margin-top: 18px; font-size: 16px;" id="shsellerproduct">
+            <div style="margin-top: 27px; width: 470px; min-height: 86.4px; height: auto;">
+                <label style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px; font-weight: 700;">Caption:</label>
+                <input id="productCaption" value="${product.product_caption}" style="padding:22.5px; width:640px; height:97.2px; border-radius: 22.5px; border:none;" disabled>
+            </div>
+            <div class="row" style="margin-top:18px">
+                <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px;">
+                    <label style="font-weight: 700;">Category:</label>
+                    <select id="productCategory" disabled style="border-radius: 13.5px; border:none; padding:4.5px;">
+                        <option value="1" ${product.product_cate == 1 ? 'selected' : ''}>Shirt</option>
+                        <option value="2" ${product.product_cate == 2 ? 'selected' : ''}>Coat</option>
+                        <option value="3" ${product.product_cate == 3 ? 'selected' : ''}>Dress</option>
+                        <option value="4" ${product.product_cate == 4 ? 'selected' : ''}>Pants</option>
+                        <option value="5" ${product.product_cate == 5 ? 'selected' : ''}>Skirt</option>
+                        <option value="6" ${product.product_cate == 6 ? 'selected' : ''}>Socks</option>
+                        <option value="7" ${product.product_cate == 7 ? 'selected' : ''}>Shoes</option>
+                        <option value="8" ${product.product_cate == 8 ? 'selected' : ''}>Hat</option>
+                        <option value="9" ${product.product_cate == 9 ? 'selected' : ''}>Accessories</option>
+                        <option value="10" ${product.product_cate == 10 ? 'selected' : ''}>Appliance</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px;">
+                    <label style="font-weight: 700;">Selling Time:</label>
+                    <input type="datetime-local" id="productTime" value="${formattedTime}" disabled style="padding:4.5px; border-radius: 13.5px; border:none;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px;">
+                    <label style="font-weight: 700;">Duration:</label>
+                    <select id="productDuration" disabled style="border-radius: 13.5px; border:none; padding:4.5px;">
+                        <option value="5" ${product.product_time_duration === '00:05:00' ? 'selected' : ''}>5 minutes</option>
+                        <option value="10" ${product.product_time_duration === '00:10:00' ? 'selected' : ''}>10 minutes</option>
+                        <option value="15" ${product.product_time_duration === '00:15:00' ? 'selected' : ''}>15 minutes</option>
+                        <option value="20" ${product.product_time_duration === '00:20:00' ? 'selected' : ''}>20 minutes</option>
+                        <option value="30" ${product.product_time_duration === '00:30:00' ? 'selected' : ''}>30 minutes</option>
+                        <option value="60" ${product.product_time_duration === '01:00:00' ? 'selected' : ''}>60 minutes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="center" style="margin-top: 18px;">
+                <div class="col">
+                    <div class="center">
+                        <img id="productImage" style="height: 225px; margin-top: 18px;" src="/public/img/${product.product_img}">
                     </div>
-                      <div class="col" style="margin-top: 30px;">
-                          <div class="row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                              <span style="width: 60px; font-weight: 700; ">Name:</span>
-                              <input id="productName" value="${product.product_name}" style="padding:15px; flex-grow: 1; width:100px; border-radius: 25px; border:none;" disabled>
-                          </div>
-                          <div class="row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                              <span style="width: 60px; font-weight: 700;">Price:</span>
-                              <input id="productPrice" value="${product.product_price}" style="padding:15px; flex-grow: 1; width:100px; border-radius: 25px; border:none;" disabled>
-                          </div>
-                          <div class="row" style="display: flex; align-items: center; gap: 10px;">
-                              <span style="width: 60px; font-weight: 700;">Details:</span>
-                              <textarea id="productDetail" style="margin-left:5px;padding:15px; flex-grow: 1; width:100px; border-radius: 25px; border:none;" disabled>${product.product_detail}</textarea>
-                          </div>
-                      </div>
-                      <span style="width: 60px; font-weight: 700;">Size:</span>
-                      <div style="margin: 20px; font-size: 20px;">
-                          <label>
-                              <input type="radio" name="eproduct_type" id="eclothSize" value="cloth" ${product.product_type === 'cloth' ? 'checked' : ''} style="transform: scale(1.5);" disabled>
-                              Cloth Size
-                          </label>
-                          <label>
-                              <input type="radio" name="eproduct_type" id="eshoesSize" value="shoes" ${product.product_type === 'shoes' ? 'checked' : ''} style="margin-left: 90px; transform: scale(1.5);" disabled>
-                              Shoes Size
-                          </label>
-                          <label>
-                              <input type="radio" name="eproduct_type" id="eappliance" value="appliance" ${product.product_type === 'appliance' ? 'checked' : ''} style="margin-left: 90px; transform: scale(1.5);" disabled>
-                              Appliance
-                          </label>
-                      </div>
+                    <div class="center">
+                        <input type="file" id="editProductImage" accept="image/*" style="display: none;">
+                        <button type="button" id="changeImageButton" style="display: none; margin-top: 9px; padding: 4.5px; width: 150px; height: 40px; background-color: black; color: white; border: none; border-radius: 22.5px; font-size: 16px; font-weight: 600;">
+                            Change Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="margin-top: 27px;">
+                <div class="row" style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px;">
+                    <span style="width: 63px; font-weight: 700;">Name:</span>
+                    <input id="productName" value="${product.product_name}" style="padding:13.5px; flex-grow: 1; width:60px; border-radius: 22.5px; border:none;" disabled>
+                </div>
+                <div class="row" style="display: flex; align-items: center; gap: 9px; margin-bottom: 9px;">
+                    <span style="width: 63px; font-weight: 700;">Price:</span>
+                    <input id="productPrice" value="${product.product_price}" style="padding:13.5px; flex-grow: 1; width:60px; border-radius: 22.5px; border:none;" disabled>
+                </div>
+                <div class="row" style="display: flex; align-items: center; gap: 9px;">
+                    <span style="width: 63px; font-weight: 700;">Details:</span>
+                    <textarea id="productDetail" style="margin-left:4.5px; padding:13.5px; flex-grow: 1; width:60px; border-radius: 22.5px; border:none;" disabled>${product.product_detail}</textarea>
+                </div>
+            </div>
+            <span style="width: 48.6px; font-weight: 700;">Size:</span>
+            <div style="margin: 18px; font-size: 18px;">
+                <label>
+                    <input type="radio" name="eproduct_type" id="eclothSize" value="cloth" ${product.product_type === 'cloth' ? 'checked' : ''} style="transform: scale(1.35);" disabled>
+                    Cloth Size
+                </label>
+                <label>
+                    <input type="radio" name="eproduct_type" id="eshoesSize" value="shoes" ${product.product_type === 'shoes' ? 'checked' : ''} style="margin-left: 81px; transform: scale(1.35);" disabled>
+                    Shoes Size
+                </label>
+                <label>
+                    <input type="radio" name="eproduct_type" id="eappliance" value="appliance" ${product.product_type === 'appliance' ? 'checked' : ''} style="margin-left: 81px; transform: scale(1.35);" disabled>
+                    Appliance
+                </label>
+            </div>
                       <div id="eclothSizeSelect" class="select-container" style="display: ${product.product_type === 'cloth' ? 'block' : 'none'};">
-                          <select name="eproduct_clothsize" disabled style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;" disabled> 
+                          <select name="eproduct_clothsize" disabled style="width: 720px; height: 60px; border-radius: 10px; padding: 20px; border: none;" disabled> 
                               <option value="" disabled>Select Cloth size</option>
                               <option value="Freesize" ${product.product_clothsize === 'Freesize' ? 'selected' : ''}>Free size</option>
                               <option value="XS" ${product.product_clothsize === 'XS' ? 'selected' : ''}>XS</option>
@@ -741,7 +707,7 @@
                           </select>
                       </div>
                       <div id="eshoesSizeSelect" class="select-container" style="display: ${product.product_type === 'shoes' ? 'block' : 'none'};">
-                          <select name="eproduct_shoesize" disabled style="width: 800px; height: 60px; border-radius: 10px; padding: 20px; border: none;" disabled>
+                          <select name="eproduct_shoesize" disabled style="width: 720px; height: 60px; border-radius: 10px; padding: 20px; border: none;" disabled>
                               <option value="" disabled>Select Shoes size</option>
                               <option value="36" ${product.product_shoesize === 36 ? 'selected' : ''}>36</option>
                               <option value="37" ${product.product_shoesize === 37 ? 'selected' : ''}>37</option>
@@ -753,12 +719,12 @@
                               <option value="43" ${product.product_shoesize === 43 ? 'selected' : ''}>43</option>
                           </select>
                       </div>
-                  </div>
               </div>
-          </div>
-          <div class="modal-footer">
-              <button id="editSaveButton" onclick="toggleEditSave('${product.product_id}')" style="padding:5px; width: 800px; height: 50px; background-color:black; color:white; border: none; border-radius: 25px; font-size: 20px; font-weight: 700;">Edit</button>
-          </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button id="editSaveButton" onclick="toggleEditSave('${product.product_id}')" style="padding:4.5px; width: 648px; height: 45px; background-color:black; color:white; border: none; border-radius: 22.5px; font-size: 18px; font-weight: 700;">Edit</button>
+</div>
         `;
             } catch (error) {
                 console.error('Error fetching product details:', error);

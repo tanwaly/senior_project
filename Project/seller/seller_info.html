@@ -10,31 +10,48 @@
   <script src="/public/js/bootstrap.bundle.min.js"></script>
   <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
   <style>
-    /* .br {
-            display: flex;
-            margin-bottom: 15px;
+    .br {
+      display: flex;
+      margin-bottom: 15px;
+    }
+
+    input::placeholder {
+      font-size: 25px;
+    }
+
+    .form-control[type="text"] {
+            background-color: #DCE8F5; /* สีเทา */
+            color: #000; /* สีข้อความ */
+            border: 1px solid #ccc; /* ขอบ */
+            padding: 5px;
         }
 
-        input::placeholder {
-            font-size: 25px;
-        } */
+    .form-control[type="text"]:focus {
+            background-color: #DCE8F5; /* สีเทาอ่อนเมื่อคลิก */
+            outline: none; /* เอาเส้นขอบ focus ออก */
+        }
+        
+      select#userBankName {
+  background-color: #DCE8F5 !important;
+  border-radius: 15px !important;
+}
   </style>
 </head>
 
 <body style="background-color: white;">
   <div style="background-color:#FEF3D0;" class="d-flex">
     <div class="d-flex align-items-center"
-      style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
-      <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-      <div class="d-flex justify-content-between" style="margin-left: 65px;">
-        <a href="/sellerhomepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+      style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 870px; height: 80px; padding: 13px;">
+      <img src="/public/img/logo-w.png" width="66px" alt="Logo">
+      <div class="d-flex justify-content-between" style="margin-left: 43px;">
+        <a href="/sellerhomepage" style="color:white; text-decoration:none; font-size: 15px; padding-left: 43px;">
           <i class="bi bi-house-door"></i> Homepage
         </a>
-        <a href="/add-trackingnum" style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+        <a href="/add-trackingnum" style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px;">
           <i class="bi bi-truck"></i> เลขพัสดุ
         </a>
-        <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;" data-bs-toggle="modal"
-          data-bs-target="#helpModal">
+        <a style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px; padding-right: 110px; "
+          data-bs-toggle="modal" data-bs-target="#helpModal">
           <i class="bi bi-chat-dots"></i> Help
         </a>
       </div>
@@ -43,53 +60,67 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content" style="background-color: #F3F3E3;">
             <div class="modal-header" style="background-color:#D46F95;">
-              <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+              <h5 class="modal-title" id="helpModalLabel" style="font-weight: 600; color: white;">
+                ช่องทางการติดต่อ</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <p><strong>ID LINE:</strong> qwqwefs</p>
-              <p><strong>IG:</strong> surety_sp</p>
-              <p><strong>Facebook:</strong> klsdadj</p>
+              <p style="font-size: 14px;"><i class="bi bi-line" style="font-size: 20px; color: #06c755"></i><strong>
+                  Line
+                  :</strong> surety_offical</p>
+              <p style="font-size: 14px;"><i class="bi bi-instagram" style="font-size: 20px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+              <p style="font-size: 14px;"><i class="bi bi-facebook"
+                  style="font-size: 20px; color: 	#1877F2"></i><strong> Facebook
+                  :</strong> Surety</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-      <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
+    <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+      <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+            height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
         Log out
-        <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+        <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
       </button>
     </div>
   </div>
-  <!-- <h1 style="text-align: start; font-weight: bold; margin: 30px;">ประวัติส่วนตัว</h1> -->
+
   <div class="personalInfo">
-    <div class="center">
-      <img id="userProfile" style="height: 200px; width: 200px; margin-top: 20px; border-radius: 50%;"
+    <div class="center" style="flex-direction: column;">
+      <img id="userProfile" style="height: 200px; width: 200px; margin-top: 20px; border-radius: 50%;" class="avatar"
         src="/public/img/fprofile.jpg">
-      <input id="profileImageUpload" type="file" style="margin-top: 10px;" disabled>
+      <!-- New button to upload profile image -->
+      <button id="profileImageUploadButton"
+        style="width: 200px; height: 40px; color:white; background-color: gray; border: none ; border-radius: 25px; margin: 20px; display: none;"
+        onclick="document.getElementById('profileImageUpload').click();">Edit profile picture</button>
+
+      <!-- Hidden file input -->
+      <input id="profileImageUpload" type="file" style="display: none; ">
+
     </div>
-    <div style="margin-left: 400px;">
+    <div style="margin-left: 400px; ">
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">ชื่อ:</span>
-        <input id="userName" style="padding:10px; width: 500px; border-radius: 25px; border:none;"
+        <input type="text" class="form-control" id="userName" style="padding:10px; width: 500px; border-radius: 25px; border:none;"
           disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">เบอร์โทรศัพท์:</span>
-        <input id="userPhonenum"
+        <input type="text" class="form-control" id="userPhonenum"
           style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">Email:</span>
-        <input id="userEmail" style="padding:10px; width:500px; border-radius: 25px; border:none;"
+        <input type="text" class="form-control" id="userEmail" style="padding:10px; width:500px; border-radius: 25px; border:none;"
           disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">ชื่อบัญชีธนาคาร:</span>
-        <select id="userBankName" disabled
-          style="border-radius: 15px; border:none; padding:5px; width:500px;">
+        <select  class="form-control" id="userBankName" disabled
+          style="border-radius: 15px; border:none; padding:5px; width:500px; ">
           <option value="กรุงเทพ">กรุงเทพ</option>
           <option value="กสิกรไทย">กสิกรไทย</option>
           <option value="กรุงไทย">กรุงไทย</option>
@@ -122,43 +153,42 @@
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">เลขบัญชีธนาคาร:</span>
-        <input id="userBankNum"
+        <input type="text" class="form-control" id="userBankNum"
           style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">ช่องทางการติดต่ออื่น ๆ:</span>
-        <input id="userContact"
+        <input type="text" class="form-control" id="userContact"
           style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
     </div>
     <center>
       <div>
         <button onclick="enableEditing()"
-          style="width: 300px; color:white; background-color: black; border-radius: 25px;">Edit</button>
+          style="width: 300px; height: 40px; color:white; background-color: black; border-radius: 25px; margin: 20px;">Edit</button>
         <button onclick="saveChanges()"
-          style="width: 300px; color:white; background-color: green; border-radius: 25px; display: none;">Save</button>
+          style="width: 300px; height: 40px; color:white; border: none; background-color: #70b249; border-radius: 25px; display: none; margin: 20px;">Save</button>
       </div>
     </center>
   </div>
 
 </body>
 
+</html>
+
+
 <script>
-  const userId = window.location.pathname.split('/').pop(); // Extract userId from URL
+  const userId = 'someSellerId'; // Replace with actual logic to get seller ID
 
-  if (!userId) {
-    console.error("User ID is not defined");
-  }
-
+  // Load user data into the form
   async function loadUserData() {
     try {
-      const response = await fetch(`/sellerinfo/${userId}`);
+      const response = await fetch(`/getSellerData`);
       if (!response.ok) throw new Error("Failed to fetch user data");
 
       const user = await response.json();
 
-      // Populate fields with user data
-      document.getElementById('userProfile').src = `/public/img/${user.profile_img}`;
+      document.getElementById('userProfile').src = `/public/img/${user.profile_img || 'default-profile.png'}`;
       document.getElementById('userName').value = `${user.first_name} ${user.last_name}`;
       document.getElementById('userPhonenum').value = user.phonenum;
       document.getElementById('userEmail').value = user.email;
@@ -170,48 +200,91 @@
     }
   }
 
-  function enableEditing() {
-    document.querySelectorAll('input, select').forEach(input => input.disabled = false);
-    document.querySelector('#profileImageUpload').disabled = false;
-    document.querySelector('button[onclick="saveChanges()"]').style.display = 'inline';
-    document.querySelector('button[onclick="enableEditing()"]').style.display = 'none';
-  }
 
+
+  // Handle profile image selection and display the selected image
+  document.getElementById('profileImageUpload').addEventListener('change', function (event) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      document.getElementById('userProfile').src = e.target.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  });
+
+
+  // Save the updated user data
   async function saveChanges() {
     const formData = new FormData();
     const profileImage = document.getElementById('profileImageUpload').files[0];
     if (profileImage) formData.append('profile_img', profileImage);
 
-    // Collect values from the form
     formData.append('first_name', document.getElementById('userName').value.split(' ')[0]);
-    formData.append('last_name', document.getElementById('userName').value.split(' ')[1] || '');
+    formData.append('last_name', document.getElementById('userName').value.split(' ')[1]);
     formData.append('phonenum', document.getElementById('userPhonenum').value);
     formData.append('email', document.getElementById('userEmail').value);
-    formData.append('bank_ac_name', document.getElementById('userBankName').value); // Dropdown value
+    formData.append('bank_ac_name', document.getElementById('userBankName').value);
     formData.append('bank_ac_num', document.getElementById('userBankNum').value);
     formData.append('sacc_contact', document.getElementById('userContact').value);
 
     try {
       const response = await fetch(`/updateSellerInfo/${userId}`, {
         method: 'POST',
-        body: formData,
+        body: formData
       });
 
-      if (response.ok) {
-        alert("Profile updated successfully!");
-        loadUserData(); // Reload updated data
-      } else {
-        alert("Failed to update profile");
-      }
+      if (!response.ok) throw new Error('Failed to save changes');
+      showAlert('Changes saved successfully');
+
+      // After saving, reload the user data and disable the fields
+      loadUserData();
+
+      // Disable editing mode
+      disableEditing();
     } catch (error) {
-      console.error("Error saving profile:", error);
+      console.error("Error saving changes:", error);
     }
   }
+  // Enable the fields for editing
+  function enableEditing() {
+    document.querySelectorAll('input, select').forEach(input => input.disabled = false);
+    document.querySelector('#profileImageUploadButton').style.display = 'inline';
+    document.querySelector('button[onclick="saveChanges()"]').style.display = 'inline';
+    document.querySelector('button[onclick="enableEditing()"]').style.display = 'none';
+  }
 
-  // Load user data when the page loads
+  // Disable editing and return to the original state
+  function disableEditing() {
+    document.querySelectorAll('input, select').forEach(input => input.disabled = true);
+    document.querySelector('#profileImageUploadButton').style.display = 'none';
+    document.querySelector('button[onclick="saveChanges()"]').style.display = 'none';
+    document.querySelector('button[onclick="enableEditing()"]').style.display = 'inline';
+  }
+
+
+  // Initialize page with user data
   loadUserData();
-</script>
+  function showAlert(message, type = 'info') {
+    const alertDiv = document.createElement('div');
+    alertDiv.textContent = message;
+    alertDiv.style.cssText = `
+        position: fixed; 
+        top: 20px; 
+        right: 20px; 
+        padding: 15px; 
+        border-radius: 8px; 
+        background-color: ${type === 'success' ? '#FFB3B3' : '#BDE3A7'};
+        color: ${type === 'success' ? '#D32F2F' : '#2E7D32'};
+        font-weight: bold;
+        z-index: 1000;
+    `;
 
+    document.body.appendChild(alertDiv);
+
+    setTimeout(() => {
+      alertDiv.remove();
+    }, 3000);
+  }
+</script>
 
 <style>
   .center {
@@ -229,6 +302,40 @@
     display: flex;
     flex-direction: column;
   }
-</style>
 
-</html>
+  .avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  input {
+    background-color: #ffffff; 
+    color: #000000; 
+    padding: 10px;
+    width: 500px;
+    border-radius: 25px;
+    /* border: none; */
+    font-size: 16px;
+  }
+
+  input:disabled {
+    background-color: #f3f3f3;
+    color: #7d7d7d; 
+  }
+
+  select {
+    background-color: #ffffff; 
+    color: #000000;
+    border-radius: 15px;
+    /* border: none; */
+    padding: 5px;
+    width: 500px;
+  }
+
+  select:disabled {
+    background-color: #f3f3f3; 
+    color: #7d7d7d;
+  }
+</style>

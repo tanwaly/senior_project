@@ -16,7 +16,7 @@
 <body style="background-color:white;">
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
                 <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
@@ -25,7 +25,7 @@
                 <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; padding-right: 265px;"
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -34,14 +34,21 @@
             <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="background-color: #F3F3E3;">
-                        <div class="modal-header" style="background-color:#A9B489;">
-                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                        <div class="modal-header" style="background-color:#D46F95;">
+                            <h5 class="modal-title" id="helpModalLabel" style="font-weight: 600; color: white;">
+                                ช่องทางการติดต่อ</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>ID LINE:</strong> qwqwefs</p>
-                            <p><strong>IG:</strong> surety_sp</p>
-                            <p><strong>Facebook:</strong> klsdadj</p>
+                            <p style="font-size: 18px;"><i class="bi bi-line"
+                                    style="font-size: 25px; color: #06c755"></i><strong> Line
+                                    :</strong> surety_offical</p>
+                            <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 18px;"><i class="bi bi-facebook"
+                                    style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
+                                    :</strong> Surety</p>
                         </div>
                     </div>
                 </div>
@@ -63,18 +70,23 @@
 </body>
 
 <script>
-function formatDateTime(dateTimeStr, includeDate = true) {
-    if (!dateTimeStr) return '';
-    const date = new Date(dateTimeStr);
-    return includeDate 
-        ? `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}<br>${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}` 
-        : `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-}
+    // Utility function to format date and time
+    const formatDateTime = (dateTimeStr, includeDate = true) => {
+        if (!dateTimeStr) return '';
+        const date = new Date(dateTimeStr.replace(' ', 'T')); // Ensure proper ISO format
+        if (isNaN(date.getTime())) return 'Invalid date';
 
+        const time = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+        const dateStr = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
 
-    function generateQueueHTML(queue) {
-        return queue.length > 0 ? queue.map(q => `
-        <div class="row" style="display: flex; align-items: center; justify-content: space-between; width: 1000px;">
+        return includeDate ? `${time}<br>${dateStr}` : time;
+    };
+
+    // Generate HTML for queue
+    const generateQueueHTML = (queue) => {
+        if (!queue.length) return '<p style="font-size: 34px; font-weight: 600;">ยังไม่มีคิว</p>';
+        return queue.map(q => `
+             <div class="row" style="display: flex; align-items: center; justify-content: space-between; width: 1000px;">
             <div style="display: flex; font-weight: 600; font-size: 34px;">
                 คิวที่ ${q.queue_num}
             </div>
@@ -82,121 +94,75 @@ function formatDateTime(dateTimeStr, includeDate = true) {
                 ${q.first_name} ${q.last_name}
             </span>
             <div style="display: flex; justify-content: flex-end;">
-                <div class="time" style="font-size: 30px;">Pay Before: ${formatDateTime(q.estimated_time, false)}</div>
+                <div class="time" style="font-size: 30px;">Pay Before: ${formatDateTime(q.queue_estimated_time, false)}</div>
             </div>
         </div>
         <hr style="border: 2px solid black; margin-top: 20px; width: auto;">
-    `).join('') : '<p style="font-size: 34px; font-weight: 600;">ยังไม่มีคิว</p>';
-    }
+        `).join('')
+    };
 
-    async function checkIfInQueue(productId) {
-        const loggedInUserId = localStorage.getItem('cus_id');
-        const cfButton = document.getElementById('cfButton');
-        const paymentSection = document.getElementById('paymentSection');
 
+    // Fetch queue and update the queue section
+    const updateQueue = async (productId) => {
         try {
-            const response = await fetch(`/isUserInQueue/${productId}/${loggedInUserId}`);
-            const data = await response.json();
-
-            if (data.inQueue) {
-                cfButton.disabled = true;
-                cfButton.style.backgroundColor = '#cccccc';
-                paymentSection.style.display = 'block';
-                paymentSection.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; font-size: 42px; margin-left: 20px;">
-                        คุณอยู่คิวที่ ${data.queue_num}
-                    </span>
-                    <button id="payButton" onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">
-                        ชำระเงิน
-                    </button>
-                </div>`;
-
-                const payButton = document.getElementById('payButton');
-                const estimatedTime = new Date(data.estimated_time);
-
-                manageButtonState(payButton, estimatedTime);
-            }
-            // else {
-            //     // If not in queue, ensure the button is enabled
-            //     cfButton.disabled = false;
-            //     cfButton.style.backgroundColor = '';
-            //     paymentSection.style.display = 'none'; // Hide payment section if not in queue
-            // }
-        } catch (error) {
-            console.error('Error checking if user is in queue:', error);
-        }
-    }
-
-    async function updateQueue(productId) {
-        try {
-            const queueResponse = await fetch(`/queue/${productId}`);
-            const queue = await queueResponse.json();
+            const response = await fetch(`/queue/${productId}`);
+            const queue = await response.json();
             document.getElementById('queueSection').innerHTML = generateQueueHTML(queue);
+            handlePaymentButtonState(queue); // Dynamically update button state
         } catch (error) {
             console.error('Error updating queue:', error);
         }
-    }
+    };
 
-    async function getLoggedInUserId() {
+
+    const checkUserInQueue = async (productId, userId) => {
+        try {
+            const response = await fetch(`/isUserInQueue/${productId}/${userId}`);
+            if (!response.ok) throw new Error('Error checking queue status');
+            const result = await response.json();
+
+            if (result.inQueue) {
+                document.getElementById('paymentSection').style.display = 'block';
+                document.getElementById('shqnum').innerHTML = `คุณอยู่คิวที่ ${result.queue_num}`;
+                cfButton.disabled = true;
+            }
+        } catch (error) {
+            console.error('Error checking if user is in queue:', error);
+        }
+    };
+
+    // Fetch logged-in user ID and store it locally
+    const getLoggedInUserId = async () => {
         try {
             const response = await fetch('/getUserId');
             if (response.ok) {
-                const data = await response.json();
-                if (data.cus_id) {
-                    localStorage.setItem('cus_id', data.cus_id);
-                }
+                const { cus_id } = await response.json();
+                if (cus_id) localStorage.setItem('cus_id', cus_id);
             }
         } catch (error) {
             console.error('Error fetching user ID:', error);
         }
-    }
-    getLoggedInUserId();
+    };
 
-    function manageButtonState(button, deadlineTime) {
-        const currentTime = new Date();
-
-        if (currentTime >= deadlineTime) {
-            button.disabled = true;
-            button.style.backgroundColor = '#cccccc';
-            button.onclick = (e) => e.preventDefault();
-            // clearInterval(interval);
-        } else {
-            button.disabled = false;
-            button.style.backgroundColor = '';
-            button.onclick = null;
-        }
-    }
-
-    const CFproduct = document.getElementById('CFproduct');
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('productId');
-
-    if (productId) {
-        getCFProduct(productId);
-    } else {
-        console.error('No productId found in the URL');
-    }
-
-    async function getCFProduct(productId) {
+    // Fetch product and render it with queue information
+    const getCFProduct = async (productId) => {
         try {
             const productResponse = await fetch(`/cfproduct/${productId}`);
             const queueResponse = await fetch(`/queue/${productId}`);
-
-            if (!productResponse.ok) {
-                throw new Error('Product not found');
-            }
+            if (!productResponse.ok) throw new Error('Product not found');
 
             const product = await productResponse.json();
             const queue = await queueResponse.json();
-            let sizeHTML = product.product_size ? `<span class="name-p">Size : <span class="name-p2">${product.product_size}</span></span>` : '';
-            let queueHTML = generateQueueHTML(queue);
+            console.log(queue);
 
-            let productHTML = `
-                <div style="width: 1370px; min-height: 1520px; height: auto; background: #E1E1E1; border-radius: 5px; padding-bottom: 75px;">
-                    <div style="width: 1370px; height: 135px; background:#FFFFF7; border-radius: 5px 5px 0px 0px;">
+            const sizeHTML = product.product_size ? `<span class="name-p">Size: <span class="name-p2">${product.product_size}</span></span>` : '';
+            const queueHTML = generateQueueHTML(queue);
+
+            document.getElementById('CFproduct').innerHTML = `
+                 <div style="width: 1370px; min-height: 1520px; height: auto; background: #E1E1E1; border-radius: 5px; padding-bottom: 75px;">
+                    <div style="width:auto; max-width: 1370px; height: 135px; background:#FFEEB5; border-radius: 5px 5px 0px 0px;">
                         <div style="display: flex; align-items: center;">
-                            <img src="/public/img/${product.profile_img}" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;">
+                            <img src="/public/img/${product.profile_img}" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;" class ="avatar">
                             <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
                             <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
                             <div style="width: 100%; display: flex; justify-content: flex-end; margin-right: 25px;">
@@ -206,16 +172,16 @@ function formatDateTime(dateTimeStr, includeDate = true) {
                             </div>
                         </div>
                     </div>
-                    <div class="container" style="width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 8px; display: flex; justify-content: center;">
+                    <div class="container" style="width:auto; max-width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 8px; display: flex; justify-content: center;">
                         <div>
-                            <div class="container center" style="width: 1045px; min-height: 596px; height: auto; background: #FFF4D2; border-radius: 20px; margin-top: 120px; flex-direction: row;">
+                            <div class="container center" style="; width: 1045px; min-height: 596px; height: auto; background: #EFF7FF; border-radius: 20px; margin-top: 120px; flex-direction: row;">
                                 <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px; max-height: 500px; max-width: 500px; width: auto; height: auto; object-fit: contain;">
                                 <div class="container col" style="margin-left: 45px; height: auto; width: 0px;">
                                     <span class="name-p">Name : <span class="name-p2">${product.product_name}</span></span>
                                     <span class="name-p">Price : <span class="name-p2">${product.product_price}</span></span>
                                     ${sizeHTML}
-                                    <span class="name-p">Description :<div class="name-p2">${product.product_detail}</div></span>
-                                    <button id="cfButton" class="center" style="width: 276px; height: 66px; background: #F3F3E3; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
+                                    <span class="name-p">Defects :<div class="name-p2">${product.product_detail}</div></span>
+                                    <button id="cfButton" class="center" style="width: 276px; height: 66px; background: #F292B6; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
                                         CF
                                     </button>
                                 </div>
@@ -224,61 +190,128 @@ function formatDateTime(dateTimeStr, includeDate = true) {
                                 <span style="font-weight: 700; font-size: 42px;">Queue</span>
                                 <div id="queueSection">${queueHTML}</div>
                             </div>
-                            <div id="paymentSection" style="display: none; background: #F3F3E3; width: 1115px ; height: 100px; margin-top: 10px;">
-                                <div style="display: flex; align-items: center; justify-content: space-between;">
-                                    <span style="font-weight: 700; font-size: 38px; margin-left: 20px;">คุณอยู่คิวที่ ${queue.queue_num}</span>
-                                    <button onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">ชำระเงิน</button>
+                            <div id="paymentSection" style="display: none;">
+                                <div style=" background: #F3F3E3; width: 1115px ; height: 100px; margin-top: 10px;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span id="shqnum" style="font-weight: 700; font-size: 38px; margin-left: 20px;"></span>
+                                        <button id="paybtn" onclick="location.href = '/payment?productId=${productId}'" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">ชำระเงิน</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>`;
-
-            CFproduct.innerHTML = productHTML;
+                </div> `;
 
             const cfButton = document.getElementById('cfButton');
-            const paymentSection = document.getElementById('paymentSection');
-
-            await checkIfInQueue(productId);
-
-            cfButton.addEventListener('click', async function () {
-                const loggedInUserId = localStorage.getItem('cus_id');
-                const queueData = { product_id: productId, cus_id: loggedInUserId, queue_status: 0 };
-
-                try {
-                    const response = await fetch('/queue', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(queueData) });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        const queueNumber = result.queue_num;
-
-                        cfButton.disabled = true;
-                        cfButton.innerText = 'CF';
-                        cfButton.style.backgroundColor = '#cccccc';
-                        await updateQueue(productId);
-
-                        const paymentSection = document.getElementById('paymentSection');
-                        paymentSection.style.display = 'block';
-                        paymentSection.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 700; font-size: 42px; margin-left: 20px;">
-                        คุณอยู่คิวที่ ${queueNumber}
-                    </span>
-                    <button onclick="location.href='/payment?productId=' + productId" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">
-                        ชำระเงิน
-                    </button>
-                </div>`;
-                    }
-                } catch (error) {
-                    console.error('Error posting queue data:', error);
-                }
-            });
+            cfButton.disabled = new Date() < new Date(product.product_time);
+            cfButton.title = cfButton.disabled ? "ยังไม่ถึงเวลาที่สามารถ CF ได้" : '';
+            cfButton.addEventListener('click', () => handleCFButtonClick(productId));
         } catch (error) {
             console.error('Error fetching product or queue:', error);
         }
-    }
+    };
 
+    // Handle CF button click event
+    const handleCFButtonClick = async (productId) => {
+        const cfButton = document.getElementById('cfButton');
+        cfButton.disabled = true;
+        const userId = localStorage.getItem('cus_id');
+        try {
+            const response = await fetch('/queue', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id: productId, cus_id: userId, queue_status: 0, })
+            });
+
+            if (!response.ok) throw new Error('Failed to join queue');
+            const result = await response.json();
+            await updateQueue(productId);
+            paymentSection.style.display = 'block';
+            document.getElementById('shqnum').innerHTML = `คุณอยู่คิวที่ ${result.queue_num}`;
+        } catch (error) {
+            alert('Unable to process your request. Please try again later.');
+            cfButton.disabled = false;
+        }
+    };
+
+    // disable 'ชำระเงิน' button if current time>deadline
+    const handlePaymentButtonState = (queue) => {
+        const paybtn = document.querySelector('#paybtn');
+        const userId = localStorage.getItem('cus_id'); // Get the logged-in user ID
+        const currentTime = new Date(); // Current system time
+
+        console.log("Queue Data:", queue);
+        console.log("User ID:", userId);
+
+        // Sort queue by estimated time
+        const sortedQueue = queue.sort((a, b) =>
+            new Date(a.queue_estimated_time) - new Date(b.queue_estimated_time)
+        );
+        console.log("Sorted Queue:", sortedQueue);
+
+        // Find the current user's queue entry
+        const currentQueue = sortedQueue.find(q => q.cus_id == userId);
+        console.log("Current Queue Entry:", currentQueue);
+
+        if (!currentQueue) {
+            // User is not in the queue
+            paybtn.disabled = true;
+            paybtn.title = "คุณไม่ได้อยู่ในคิว";
+            console.log("Payment Button Disabled: User not in queue");
+            return;
+        }
+
+        // Calculate the user's time window
+        const userIndex = sortedQueue.findIndex(q => q.cus_id == userId);
+        const userStartTime =
+            userIndex === 0
+                ? new Date(sortedQueue[userIndex].queue_time) // First user's time window starts at queue_time
+                : new Date(sortedQueue[userIndex - 1].queue_estimated_time); // Starts after the previous user's estimated time
+        const userEndTime = new Date(currentQueue.queue_estimated_time);
+
+        console.log("Start Time:", userStartTime, "End Time:", userEndTime, "Current Time:", currentTime);
+
+        if (currentTime >= userStartTime && currentTime < userEndTime) {
+            // User's turn and within the allowed time window
+            paybtn.disabled = false;
+            paybtn.title = "";
+            console.log("Payment Button Enabled: It's user's turn");
+        } else if (currentTime >= userEndTime) {
+            // Payment window expired
+            paybtn.disabled = true;
+            paybtn.title = "เวลาชำระเงินของคุณหมดแล้ว";
+            console.log("Payment Button Disabled: Payment window expired");
+        } else {
+            // Not user's turn yet
+            paybtn.disabled = true;
+            paybtn.title = "ยังไม่ถึงคิวของคุณ";
+            console.log("Payment Button Disabled: Not user turn");
+        }
+
+        console.log("Payment Button Disabled State:", paybtn.disabled);
+    };
+
+
+    const initializePage = async () => {
+        await getLoggedInUserId();
+        const productId = new URLSearchParams(window.location.search).get('productId');
+        const userId = localStorage.getItem('cus_id');
+
+        if (productId && userId) {
+            await getCFProduct(productId);
+            await checkUserInQueue(productId, userId); // Check if user is in the queue
+            const response = await fetch(`/queue/${productId}`);
+            const queue = await response.json();
+            handlePaymentButtonState(queue); // Update button state on page load
+            // Check if user is in the queue
+        } else {
+            console.error('No productId or userId found');
+        }
+    };
+
+    initializePage();
 </script>
+
 
 <style>
     .center {
@@ -325,6 +358,13 @@ function formatDateTime(dateTimeStr, includeDate = true) {
         cursor: not-allowed;
         pointer-events: none;
         opacity: 0.5;
+    }
+
+    .avatar {
+        vertical-align: middle;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
     }
 </style>
 
