@@ -760,6 +760,10 @@ app.get('/getSellerAvgScore/:sellerId', (req, res) => {
     });
 });
 
+
+
+
+
 //================== sellers =====================
 
 app.get('/sellerinfo', (req, res) => {
