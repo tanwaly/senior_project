@@ -76,7 +76,7 @@
                         <div>
                             <span id="sellerName" style="font-size: 40px; font-weight: bold; color: #161E52;"></span>
                             <div>
-                                <div id="contectStore"
+                                <div id="sContect"
                                     style="font-size: 20px; font-weight: 400; color:darkgery; word-wrap: break-word; max-width: 500px;">
                                 </div>
                                 <div class="reviewStar"></div>
@@ -183,9 +183,8 @@
             } else {
                 document.getElementById('profileImg').src = `/public/img/${sellerData.profile_img || 'default.jpg'}`;
                 document.getElementById('sellerName').textContent = `${sellerData.first_name || 'Unknown'} ${sellerData.last_name || ''}`;
-                document.getElementById('contectStore').innerText = `${sellerData.sacc_contact || ' '}`;
+                document.getElementById('sContect').innerText = `${sellerData.sacc_contact || ' '}`;
             }
-
 
             // Fetch and display seller's products
             const productsResponse = await fetch(`/sellerProducts/${sellerId}`);

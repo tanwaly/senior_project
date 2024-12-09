@@ -93,7 +93,7 @@
         productContainer.innerHTML = ''; // Clear existing content
         orders.forEach(order => {
             const orderHTML = `
-            <div class="row" style="margin: 10px 50px 10px 50px;">
+            <div class="row" style="margin: 10px 50px 10px 50px; align-items: center;">
                 <img src="/public/img/${order.product_img}" alt="" style="width: 120px; object-fit: contain;">
                 <div class="col">
                     <span class="name-p">Order Date: <span class="name-p2">${formatDateTime(order.order_date)}</span></span>
@@ -103,10 +103,9 @@
                     <span class="name-p">Tracking number: <span class="name-p2">${order.order_tracknum}</span></span>
                     <span class="name-p">Customer: <span class="name-p2">${order.customer_name}</span></span>
                 </div>
-                <div class="col center">
-                    <span style="font-weight: 600; word-wrap: break-word; margin-left: 450px;">
+                <div class="status-container" style="margin-center: 20px;">
                         ${getStatus(order.order_status)}
-                    </span>
+
                 </div>
             </div>
             <hr color="white">
@@ -150,11 +149,15 @@
     .row {
         display: flex;
         flex-direction: row;
+       
+ 
+    
     }
 
     .col {
         display: flex;
         flex-direction: column;
+        
     }
 
     .name-p {
@@ -169,6 +172,16 @@
         font-weight: 400;
         word-wrap: break-word;
     }
+
+    .status-container {
+    display: flex;
+    align-items: center; /* จัดข้อความให้อยู่ตรงกลางแนวตั้ง */
+    justify-content: flex-end; /* จัดให้อยู่ขวามือ */
+    flex: 1; /* ใช้พื้นที่ที่เหลือทั้งหมดเพื่อดันข้อความไปขวา */
+    font-size: 18px;
+    text-align: right;
+}
+
 </style>
 
 </html>

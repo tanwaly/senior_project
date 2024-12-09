@@ -602,7 +602,7 @@ app.get('/seller-profile/:sellerId', (req, res) => {
 
 app.get('/sellerInfo/:sellerId', (req, res) => {
     const sellerId = req.params.sellerId;
-    const sql = `SELECT first_name, last_name, profile_img FROM users WHERE users_id = ? AND role = 2;`;
+    const sql = `SELECT first_name, last_name, profile_img, sacc_contact FROM users WHERE users_id = ? AND role = 2;`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
@@ -759,6 +759,10 @@ app.get('/getSellerAvgScore/:sellerId', (req, res) => {
         res.json({ avg_score: avgScore });
     });
 });
+
+
+
+
 
 //================== sellers =====================
 
