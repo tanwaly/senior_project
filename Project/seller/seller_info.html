@@ -18,6 +18,23 @@
     input::placeholder {
       font-size: 25px;
     }
+
+    .form-control[type="text"] {
+            background-color: #DCE8F5; /* สีเทา */
+            color: #000; /* สีข้อความ */
+            border: 1px solid #ccc; /* ขอบ */
+            padding: 5px;
+        }
+
+    .form-control[type="text"]:focus {
+            background-color: #DCE8F5; /* สีเทาอ่อนเมื่อคลิก */
+            outline: none; /* เอาเส้นขอบ focus ออก */
+        }
+        
+      select#userBankName {
+  background-color: #DCE8F5 !important;
+  border-radius: 15px !important;
+}
   </style>
 </head>
 
@@ -81,29 +98,29 @@
         onclick="document.getElementById('profileImageUpload').click();">Edit profile picture</button>
 
       <!-- Hidden file input -->
-      <input id="profileImageUpload" type="file" style="display: none;">
+      <input id="profileImageUpload" type="file" style="display: none; ">
 
     </div>
-    <div style="margin-left: 400px;">
+    <div style="margin-left: 400px; ">
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">ชื่อ:</span>
-        <input class="form-control" id="userName" style="padding:10px; width: 500px; border-radius: 25px; border:none;"
+        <input type="text" class="form-control" id="userName" style="padding:10px; width: 500px; border-radius: 25px; border:none;"
           disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">เบอร์โทรศัพท์:</span>
-        <input class="form-control" id="userPhonenum"
+        <input type="text" class="form-control" id="userPhonenum"
           style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">Email:</span>
-        <input class="form-control" id="userEmail" style="padding:10px; width:500px; border-radius: 25px; border:none;"
+        <input type="text" class="form-control" id="userEmail" style="padding:10px; width:500px; border-radius: 25px; border:none;"
           disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">ชื่อบัญชีธนาคาร:</span>
-        <select class="form-control" id="userBankName" disabled
-          style="border-radius: 15px; border:none; padding:5px; width:500px;">
+        <select  class="form-control" id="userBankName" disabled
+          style="border-radius: 15px; border:none; padding:5px; width:500px; ">
           <option value="กรุงเทพ">กรุงเทพ</option>
           <option value="กสิกรไทย">กสิกรไทย</option>
           <option value="กรุงไทย">กรุงไทย</option>
@@ -136,12 +153,12 @@
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">เลขบัญชีธนาคาร:</span>
-        <input class="form-control" id="userBankNum"
+        <input type="text" class="form-control" id="userBankNum"
           style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">ช่องทางการติดต่ออื่น ๆ:</span>
-        <input class="form-control" id="userContact"
+        <input type="text" class="form-control" id="userContact"
           style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
     </div>
