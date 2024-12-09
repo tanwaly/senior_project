@@ -77,7 +77,7 @@
         src="/public/img/fprofile.jpg">
       <!-- New button to upload profile image -->
       <button id="profileImageUploadButton"
-        style="width: 200px; height: 40px; color:white; background-color: gray; border: none    ; border-radius: 25px; margin: 20px; display: none;"
+        style="width: 200px; height: 40px; color:white; background-color: gray; border: none ; border-radius: 25px; margin: 20px; display: none;"
         onclick="document.getElementById('profileImageUpload').click();">Edit profile picture</button>
 
       <!-- Hidden file input -->
@@ -216,7 +216,7 @@
       });
 
       if (!response.ok) throw new Error('Failed to save changes');
-      alert('Changes saved successfully');
+      showAlert('Changes saved successfully');
 
       // After saving, reload the user data and disable the fields
       loadUserData();
@@ -246,6 +246,27 @@
 
   // Initialize page with user data
   loadUserData();
+  function showAlert(message, type = 'info') {
+    const alertDiv = document.createElement('div');
+    alertDiv.textContent = message;
+    alertDiv.style.cssText = `
+        position: fixed; 
+        top: 20px; 
+        right: 20px; 
+        padding: 15px; 
+        border-radius: 8px; 
+        background-color: ${type === 'success' ? '#FFB3B3' : '#BDE3A7'};
+        color: ${type === 'success' ? '#D32F2F' : '#2E7D32'};
+        font-weight: bold;
+        z-index: 1000;
+    `;
+
+    document.body.appendChild(alertDiv);
+
+    setTimeout(() => {
+      alertDiv.remove();
+    }, 3000);
+  }
 </script>
 
 <style>
@@ -270,5 +291,34 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+  }
+
+  input {
+    background-color: #ffffff; 
+    color: #000000; 
+    padding: 10px;
+    width: 500px;
+    border-radius: 25px;
+    /* border: none; */
+    font-size: 16px;
+  }
+
+  input:disabled {
+    background-color: #f3f3f3;
+    color: #7d7d7d; 
+  }
+
+  select {
+    background-color: #ffffff; 
+    color: #000000;
+    border-radius: 15px;
+    /* border: none; */
+    padding: 5px;
+    width: 500px;
+  }
+
+  select:disabled {
+    background-color: #f3f3f3; 
+    color: #7d7d7d;
   }
 </style>
