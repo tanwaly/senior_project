@@ -204,12 +204,13 @@
                         style="border-radius: 15px; margin-left: 25px; width: auto; max-height: 150px;">
                     <div class="col" style="margin-left: 50px;">
                         <span style="font-size: 26px;">${item.product_name}</span>
+                        <span style="font-weight: 700; font-size:18px">ชื่อผู้รับ: <span style="font-weight: 400;">${item.order_addname}</span></span>
+                            <span style="font-weight: 700; font-size:18px; width:600px ;  word-wrap: break-word;">ที่อยู่: <span style="font-weight: 400;">${item.order_address}</span></span>
                         <div id="trackingSection${index}">
                             <span style="font-weight: 700; font-size:18px">เลขพัสดุ: <span style="font-weight: 400;">${orderTracknum}</span></span><br>
                             <span style="font-weight: 700; font-size:18px">จัดส่งโดย: <span style="font-weight: 400;">${orderShipname}</span></span>
                             </div>
-                            <span style="font-weight: 700; font-size:18px">ชื่อผู้รับ: <span style="font-weight: 400;">${item.order_addname}</span></span>
-                            <span style="font-weight: 700; font-size:18px; width:600px ;  word-wrap: break-word;">ที่อยู่: <span style="font-weight: 400;">${item.order_address}</span></span>
+                            
                     </div>
                     <div class="col center" style="margin-left: 700px;">
                         <button id="editBtn${index}" class="edit-button" style="background: #FFE48C; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color:black;" onclick="editTracking(${index}, ${item.order_id})">
