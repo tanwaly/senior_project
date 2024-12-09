@@ -14,7 +14,7 @@
 
 <body style="background: #D46F95">
     <div class="container">
-        <h1>Register</h1>
+        <h2 style="font-weight: 700; color: #161E52;">Register</h2>
         <center>
             <div class="toggle-switch">
                 <input type="radio" id="customer" name="role" checked onclick="toggleForm()">
@@ -23,39 +23,39 @@
                 <label for="seller" class="toggle-label">Seller</label>
                 <div class="toggle-switch-button"></div>
             </div>
+
             <form id="registerForm" action="/register" method="POST">
-                <!-- <input type="hidden" id="selectedRole" name="role" value="1"> -->
                 <!-- Customer Form -->
-                <div id="customerForm" style="display: block; width: 500px; margin-top: 20px;">
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ชื่อ</p>
+                <div id="customerForm" style="display: block; width: 500px; margin-top: 10px;">
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px; ">ชื่อ</p>
                     <input type="text" class="form-control" name="first_name"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
                     <!--  -->
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">นามสกุล</p>
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px; ">นามสกุล</p>
                     <input type="text" class="form-control" name="last_name"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
                     <!--  -->
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">เบอร์โทร</p>
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">เบอร์โทร</p>
                     <input type="tel" class="form-control" name="phonenum"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
                     <!--  -->
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">Email</p>
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">Email</p>
                     <input type="text" class="form-control" name="email"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">password</p>
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">password</p>
                     <input type="password" class="form-control" name="password"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">confirm password</p>
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">confirm password</p>
                     <input type="password" class="form-control" name="confirm-pass"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
 
                 </div>
 
                 <!-- Seller Form -->
-                <div id="sellerForm" style="display: none; width: 500px; margin-top: 20px;">
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ธนาคาร</p>
+                <div id="sellerForm" style="display: none; width: 500px; margin-top: 10px;">
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">ธนาคาร</p>
                     <select id="bank" name="bank_ac_type"
-                        style="padding-left: 10px; width: 500px; height: 50px; background-color: #E9E9E9; font-size: 15px; border-radius: 8px; border: none; color: #515050; margin-bottom: 15px;">
+                        style="padding-left: 10px; width: 500px; height: 34px; background-color: #E9E9E9; font-size: 15px; border-radius: 8px; border: none; color: #515050; margin-bottom: 5px;">
                         <option option value="" disabled selected>กรุณาเลือกธนาคาร</option>
                         <option value="1">กรุงเทพ</option>
                         <option value="2">กสิกรไทย</option>
@@ -84,14 +84,14 @@
                         <option value="25">Promptpay</option>
                         <option value="26">TrueMoney Wallet</option>
                     </select>
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">ชื่อบัญชีธนาคาร</p>
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">ชื่อบัญชีธนาคาร</p>
                     <input type="text" class="form-control" name="bank_ac_name"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">เลขบัญชีธนาคาร</p>
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">เลขบัญชีธนาคาร</p>
                     <input type="text" class="form-control" name="bank_ac_num"
-                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 50px; margin-bottom: 15px;">
+                        style="background-color: #E9E9E9; border-radius: 10px; border: none; height: 34px; margin-bottom: 5px;">
                     <!--  -->
-                    <p style="text-align: start; color: #6E6E6E; margin-bottom: -1px;">บัตรประชาชน</p>
+                    <p style="text-align: start; color: #6E6E6E; margin-bottom: 2px;">บัตรประชาชน</p>
                     <!--  -->
                     <div class="file-upload-container">
                         <label for="file-upload" class="file-upload-label">
@@ -103,13 +103,12 @@
                     </div>
                 </div>
 
-                <button class="btn mt-3" type="submit"
-                    style="background-color: #FFEEB5; color: black; width: 500px; height: 50px; 
-                    font-size: 18px; font-weight: bold; border-radius: 30px;">Register</button>
+                <button class="btn mt-3" type="submit" style="background-color: #FFEEB5; color: black; width: 335px; height: 34px; 
+                    font-size: 16px; font-weight: 700; border-radius: 30px;">Register</button>
             </form>
             <hr style="width: 600px;">
-            <p class="account" style="color: #AAAAAA; font-weight: bold;">Already have an account? <a href="/login"
-                    style="color: #4873E2;">Login</a></p>
+            <p class="account" style="color: #AAAAAA; ">Already have an account? <a href="/login"
+                    style="color: #F896BB;font-weight: 700;">Login</a></p>
         </center>
 
     </div>
@@ -210,12 +209,12 @@
             if (res.ok) {
                 const data = await res.text();
                 Swal.fire({
-                title: "Register success!",
-                text: "You have successfully registered!",
-                icon: "success"
-            }).then(() => {
-                location.replace('/login');
-            });
+                    title: "Register success!",
+                    text: "You have successfully registered!",
+                    icon: "success"
+                }).then(() => {
+                    location.replace('/login');
+                });
             } else if (res.status === 401) {
                 const message = await res.text();
                 alert(message);
@@ -236,7 +235,7 @@
             const previewContainer = document.getElementById('preview-container');
             previewContainer.style.textAlign = 'center'; // จัดกึ่งกลางเนื้อหาทั้งหมดในคอนเทนเนอร์
             previewContainer.innerHTML = `
-            <img src="${e.target.result}" alt="Image Preview" style="width: 300px; height: auto; border-radius: 8px; margin-bottom: 10px; " />
+            <img src="${e.target.result}" alt="Image Preview" style="width: 200px; height: auto; border-radius: 8px; margin-bottom: 10px; " />
             <button type="button" class="btn btn-danger" style="display: block; margin: 10px auto 0 auto;" onclick="removeImage()">Remove Image</button>
         `;
         };
@@ -259,39 +258,39 @@
     }
 
     .container {
-        margin: 50px;
+        margin: 30px 50px 30px 50px;
         text-align: center;
         background-color: #fff;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-        margin-bottom: 20px;
-        font-weight: bold;
+        max-width: 670px;
+        /* max-height: 603px; */
     }
 
     .toggle-switch {
         position: relative;
-        width: 160px;
-        height: 40px;
-        background-color: #C1C3C4;
-        border-radius: 20px;
+        width: 140px;
+        height: 36px;
+        background-color: #4b4b4b;
+        border-radius: 18px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 5px;
+        padding: 3px;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
     .toggle-label {
         position: relative;
-        width: 50%;
+        flex: 1;
         text-align: center;
+        font-size: 13px;
+        font-weight: 500;
+        color: #ffffff;
         cursor: pointer;
         z-index: 2;
-        font-weight: bold;
-        color: #000000;
+        transition: color 0.3s ease;
         user-select: none;
     }
 
@@ -299,28 +298,35 @@
         display: none;
     }
 
+    /* Highlight the selected label */
     .toggle-switch input[type="radio"]:checked+.toggle-label {
-        color: #000000;
+        color: #070707;
+        font-weight: 600;
     }
 
     .toggle-switch-button {
         position: absolute;
         width: 50%;
-        height: 100%;
-        background-color: #D1E6FF;
-        border-radius: 20px;
+        height: calc(100% - 6px);
+        /* background-color: #4285f4; */
+        border-radius: 18px;
         z-index: 1;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
     }
 
     #customer:checked~.toggle-switch-button {
         transform: translateX(0);
-        background-color: #D1E6FF;
+        background-color: #FFEEB5;
     }
 
     #seller:checked~.toggle-switch-button {
-        transform: translateX(100%);
+        transform: translateX(90%);
         background-color: #D1E6FF;
+    }
+
+    .toggle-label:hover {
+        color: #D46F95;
     }
 
     .photo {
