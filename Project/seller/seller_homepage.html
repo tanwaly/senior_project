@@ -90,6 +90,13 @@
             color: #000000;
             border: none;
         }
+
+        .avatar {
+            vertical-align: middle;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+        }
     </style>
 </head>
 
@@ -147,8 +154,7 @@
     <div>
         <div class="flex center" style="margin-top: 40px;">
             <!-- Profile Image -->
-            <img id="profileImg" src="/public/img/fprofile.jpg" alt="Profile Picture" class="rounded-circle m-4"
-                style="height: 120px;">
+            <img id="profileImg" src="/public/img/fprofile.jpg" alt="Profile Picture" class="avatar">
             <div class="flex" style="gap: 720px;">
                 <!-- contect. review -->
                 <div class="column" style="margin-left: 50px;">
@@ -156,9 +162,9 @@
                     <div style="word-wrap: break-word; max-width: 500px;" id="sContect"></div>
                     <div class="reviewStar" style="margin-top: -20px;"></div>
                     <button id="viewReviews" onclick="location.href='/veiwOwnReview'"
-                    style="border: none; background-color: #e2e2e2; width: 100px; height: 25px; text-align: center; border-radius: 15px;">
-                    ดูรีวิว
-                </button>
+                        style="border: none; background-color: #e2e2e2; width: 100px; height: 25px; text-align: center; border-radius: 15px;">
+                        ดูรีวิว
+                    </button>
                     <!-- <div id="shrbtn"></div> -->
                 </div>
                 <div style="display: flex; flex-direction: column; margin-top: 15px;">
@@ -462,7 +468,7 @@
                                 <div style="min-height: 147px; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 25px;">
                                     <div style="display: flex; align-items: center;">
                                         <button style="background-color: transparent; border: none;">
-                                            <img src="/public/img/${product.profile_img}" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                                            <img src="/public/img/${product.profile_img}" class="avatar" alt="Product Image" width="120px" style="border-radius: 50%; margin: 10px;">
                                         </button>
                                         <div class="row">
                                             <span style="font-size: 25px; font-weight: 700; margin-left: 20px;">${product.first_name} ${product.last_name}</span>

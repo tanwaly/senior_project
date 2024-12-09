@@ -69,10 +69,10 @@
     </div>
     <div class="flex center">
         <div class="flex center" style="margin-top: 20px;">
-            <img id="profileImg" alt="pfp" class="rounded-circle m-4" style="height: 120px;">
+            <img id="profileImg" alt="pfp" class="avatar">
             <div class="flex" style="gap: 400px;">
                 <div class="column">
-                    <div class="flex mt-4">
+                    <div class="flex mt-4" style="margin-left: 20px;">
                         <div>
                             <span id="sellerName" style="font-size: 40px; font-weight: bold; color: #161E52;"></span>
                             <div>
@@ -134,7 +134,7 @@
                 console.error('Fetch error:', error);
             });
     }
- 
+
     document.addEventListener('DOMContentLoaded', async () => {
         const sellerId = window.location.pathname.split('/').pop();
 
@@ -199,7 +199,7 @@
                     <div style="display: flex; align-items: center;">
                         <button style="background-color: transparent; border: none;">
                             <a href="/seller-profile/${product.seller_id}">
-                                <img src="/public/img/${product.profile_img}" alt="Profile Image" width="120px" style="border-radius: 50%; margin: 10px;">
+                                <img src="/public/img/${product.profile_img}"class ="avatar" alt="Profile Image" width="120px" style="border-radius: 50%; margin: 10px;">
                             </a>
                         </button>
                         <div>
@@ -317,5 +317,12 @@
         margin-top: 5px;
         width: 100px;
         margin-left: 10px;
+    }
+
+    .avatar {
+        vertical-align: middle;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
     }
 </style>

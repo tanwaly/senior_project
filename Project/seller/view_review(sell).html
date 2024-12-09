@@ -99,6 +99,14 @@
             display: flex;
             flex-direction: column;
         }
+
+        .avatar {
+            vertical-align: middle;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin-right: 20px;
+        }
     </style>
 
 </head>
@@ -175,7 +183,7 @@
                 <div style ="margin:50px;">
                         <div class="row">
                             <div class="flex">
-                                <img src="/public/img/${review.customer_profile_img}" alt="Customer Profile Picture"
+                                <img src="/public/img/${review.customer_profile_img}" alt="Customer Profile Picture" class ="avatar"
                                     class="rounded-circle m-4" style="height: 80px;">
                                     <div class="col">
                                     <span style="color: #6e6e6e;">

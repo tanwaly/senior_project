@@ -137,7 +137,7 @@ app.post('/login', (req, res) => {
                     } else if (user.role == 3) {
                         return res.send('dashboard');
                     } else {
-                        return res.send('login');
+                        res.redirect('login');
                     }
 
                 } else {
