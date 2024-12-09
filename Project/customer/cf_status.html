@@ -163,7 +163,7 @@
                                     <span>คิวที่: ${item.queue_num} เวลา: ${formatDateTime(item.queue_time)}</span>
                                     ${trackingHTML}
                                 </div>
-                                <div class="col center" style="margin-left: 700px;">
+                                <div class="status-container" style="margin-center: 20px;">
                                     <span style="font-size: 30px; font-weight: bold; font-size: 20px;">
                                         ${changeStatus(item.order_status)}
                                     </span>
@@ -242,6 +242,15 @@
         display: flex;
         flex-direction: column;
     }
+
+    .status-container {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end; 
+    flex: 1; 
+    font-size: 18px;
+    text-align: right;
+}
 </style>
 
 </html>
