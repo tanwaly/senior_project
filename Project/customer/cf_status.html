@@ -15,16 +15,16 @@
 <body style="background-color: white;">
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 870px; height: 80px; padding: 13px;">
+            <img src="/public/img/logo-w.png" width="66px" alt="Logo">
+            <div class="d-flex justify-content-between" style="margin-left: 43px;">
+                <a href="/homepage" style="color:white; text-decoration:none; font-size: 15px; padding-left: 43px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
-                <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/cf-status" style="color:white; text-decoration:none; font-size: 15px; padding-left: 45px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; padding-right: 265px;"
+                <a style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px; padding-right: 110px; "
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -39,43 +39,32 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p style="font-size: 18px;"><i class="bi bi-line"
-                                    style="font-size: 25px; color: #06c755"></i><strong> Line
+                            <p style="font-size: 14px;"><i class="bi bi-line"
+                                    style="font-size: 20px; color: #06c755"></i><strong>
+                                    Line
                                     :</strong> surety_offical</p>
-                            <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
-                                -webkit-background-clip: text;
-                                -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
-                            <p style="font-size: 18px;"><i class="bi bi-facebook"
-                                    style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
+                            <p style="font-size: 14px;"><i class="bi bi-instagram" style="font-size: 20px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 14px;"><i class="bi bi-facebook"
+                                    style="font-size: 20px; color: 	#1877F2"></i><strong> Facebook
                                     :</strong> Surety</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                 Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
             </button>
         </div>
     </div>
     <div style="padding: 35px 80px 0px 80px;">
         <div class="row">
             <div id="product-container"></div>
-            <!-- <img src="https://f.ptcdn.info/434/082/000/s4mdfbl0ziqTf8KkBkq2-o.jpg" alt="กางเกงช้าง"
-                style="border-radius: 15px; margin-left: 25px; width: 150px; height: 150px;">
-            <div class="col" style="margin-left: 50PX;">
-                <span style="font-size: 20px;">ชื่อร้าน: AAAA</span>
-                <span>ชื่อสินค้า: กางเกง</span>
-                <span>ราคา: 190 บาท</span>
-                <span>คิวที่: 4  เวลา: 17:30 </span>
-
-            </div>
-            <div class="col center" style="margin-left: 700px;">
-                <span style="font-size: 30px; color: #FFD447;font-weight: bold;">กำลังรอคิว</span>
-            </div> -->
         </div>
 </body>
 
@@ -101,9 +90,9 @@
                 let trackingHTML = '';
                 function changeStatus(sta) {
                     const status = {
-                        0: '<span style="background:#f2f9fc ; padding:5px 10px 5px 10px; border-radius: 50px; color: #4ECCF5">กำลังเตรียมสินค้า</span>',
+                        0: '<span style="background:#f2f9fc ; padding:5px 10px 5px 10px; border-radius: 50px; color: #4ECCF5; font-size:16px;">กำลังเตรียมสินค้า</span>',
                         1: `<div class="col center">
-                            <span style="background:#fcf7e3; padding:0px 10px 0px 10px; border-radius: 50px; color: #edb015; margin-bottom:10px;">กำลังจัดส่งสินค้า</span>
+                            <span style="background:#fcf7e3; padding:0px 10px 0px 10px; border-radius: 50px; color: #edb015; margin-bottom:10px; font-size:16px;">กำลังจัดส่งสินค้า</span>
                             <button id="btnaccept" data-order-id="${item.order_id}" style="margin-bottom: 10px; color:white; font-size: 18px; font-weight: bold; background: #BDE3A7; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">
                                 ยืนยัน
                             </button>
@@ -111,22 +100,22 @@
                                 ยกเลิก
                             </button>
                         </div>`,
-                        2: '<span style="background:#fbedf1 ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ถูกยกเลิก</span>',
+                        2: '<span style="background:#fbedf1 ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565; font-size:16px;">ถูกยกเลิก</span>',
                         3: `<div class="col center">
-                         <span style="background:#e2fee2 ; padding:5px 10px 5px 10px; border-radius: 50px; color:green; margin-bottom:10px;">การจัดส่งสำเร็จ</span> 
-                            <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 18px; font - weight: bold; background:#EFF7FF ; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;">ติดต่อร้านค้า
+                         <span style="background:#e2fee2 ; padding:5px 10px 5px 10px; border-radius: 50px; color:green; margin-bottom:10px; font-size:16px;">การจัดส่งสำเร็จ</span> 
+                            <button id="btncontect" style=" margin-bottom: 10px; color:white; font-size: 14px; font - weight: bold; background:#EFF7FF ; border-radius: 15px; border-color: transparent; width: 100px; height: 30px; color: black;">ติดต่อร้านค้า
                                 </button>
                                 <button 
-                                    style="margin-bottom: 10px; font-size: 18px; font-weight: bold; background:#FAD2E1; border-radius: 15px; border-color: transparent; width: 150px; height: 46px; color: black;"
+                                    style="margin-bottom: 10px; font-size: 14px; font-weight: bold; background:#FAD2E1; border-radius: 15px; border-color: transparent; width: 100px; height: 30px; color: black;"
                                     ${item.has_review ? 'disabled' : `onclick="location.href='/give_review/${item.order_id}'"`}>
                                     รีวิว
                                 </button>
                         </div>`,
-                        4: '<span style="background:#F7F6F6 ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">การจัดส่งไม่สำเร็จ</span>',
-                        5: '<span style="background:#F7F6F6; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">รอตรวจสอบการโอนเงิน</span>',
-                        6: '<span style="background:#FFEBEE ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ชำระเงินไม่สำเร็จ</span>',
+                        4: '<span style="background:#F7F6F6 ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey; font-size:16px;">การจัดส่งไม่สำเร็จ</span>',
+                        5: '<span style="background:#F7F6F6; padding:5px 10px 5px 10px; border-radius: 50px; color: grey; font-size:16px;">รอตรวจสอบการโอนเงิน</span>',
+                        6: '<span style="background:#FFEBEE ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565; font-size:16px;">ชำระเงินไม่สำเร็จ</span>',
                     };
-                    return status[sta] || '<span style="color: black;">สถานะไม่ทราบ</span>';
+                    return status[sta] || '<span style="color: black; font-size:16px;">สถานะไม่ทราบ</span>';
                 }
 
                 // Only show tracking number and shipping provider for statuses 1 to 4
@@ -244,13 +233,13 @@
     }
 
     .status-container {
-    display: flex;
-    align-items: center; 
-    justify-content: flex-end; 
-    flex: 1; 
-    font-size: 18px;
-    text-align: right;
-}
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex: 1;
+        font-size: 18px;
+        text-align: right;
+    }
 </style>
 
 </html>

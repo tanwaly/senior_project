@@ -16,16 +16,16 @@
 <body style="background-color: white;">
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 870px; height: 80px; padding: 13px;">
+            <img src="/public/img/logo-w.png" width="66px" alt="Logo">
+            <div class="d-flex justify-content-between" style="margin-left: 43px;">
+                <a href="/homepage" style="color:white; text-decoration:none; font-size: 15px; padding-left: 43px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
-                <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/cf-status" style="color:white; text-decoration:none; font-size: 15px; padding-left: 45px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; padding-right: 165px;"
+                <a style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px; padding-right: 110px; "
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -40,63 +40,55 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p style="font-size: 18px;"><i class="bi bi-line"
-                                    style="font-size: 25px; color: #06c755"></i><strong> Line
+                            <p style="font-size: 14px;"><i class="bi bi-line"
+                                    style="font-size: 20px; color: #06c755"></i><strong>
+                                    Line
                                     :</strong> surety_offical</p>
-                            <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
-                                -webkit-background-clip: text;
-                                -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
-                            <p style="font-size: 18px;"><i class="bi bi-facebook"
-                                    style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
+                            <p style="font-size: 14px;"><i class="bi bi-instagram" style="font-size: 20px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 14px;"><i class="bi bi-facebook"
+                                    style="font-size: 20px; color: 	#1877F2"></i><strong> Facebook
                                     :</strong> Surety</p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-        <!-- <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout"
-                style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: white;"
-                onclick="location.replace('/login');">
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                 Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
             </button>
-        </div> -->
+        </div>
     </div>
 
-    <div style="padding: 80px;">
+    <div style="padding: 10px 180px 0px 180px;">
         <div class="col">
-            <p style="font-weight: bold">ชื่อผู้รับ</p>
+            <p style="font-weight: bold; font-size: 14px;">ชื่อผู้รับ</p>
             <form class="form-name">
                 <input type="text" id="orderAddName" class="form-control"
-                    style="border-color: #C1C3C4; background-color: #E9E9E9; border-radius: 15px" />
+                    style="border-color: #C1C3C4; background-color: #E9E9E9; border-radius: 7px;" />
             </form>
 
-            <div class="mt-3 mb-3" style="font-weight: bold">ที่อยู่</div>
-            <textarea id="orderAddress" class="form-control mb-2 mr-sm-2" rows="3"
-                style="border-color: #C1C3C4; background-color: #E9E9E9; border-radius: 15px"></textarea>
+            <div class="mt-2 mb-2" style="font-weight: bold; font-size: 14px;">ที่อยู่</div>
+            <textarea id="orderAddress" class="form-control mb-1 mr-sm-1" rows="1"
+                style="border-color: #C1C3C4; background-color: #E9E9E9; border-radius: 7px;"></textarea>
         </div>
 
-        <hr>
+        <hr style="margin-top: 9px; margin-bottom: 9px;">
 
         <div class="row">
             <div id="showProduct"></div>
         </div>
-        <hr>
+        <hr style="margin-top: 9px;">
 
-        <p style="font-weight: bold; font-size: 20px;">QR code</p>
+        <p style="font-weight: bold; font-size:14px;">QR code</p>
         <div class="text-center">
-            <!-- <div class="col d-flex justify-content-center align-items-center"
-                style="background:white; width: 300px; height: 250px; margin: 0 auto;">
-                <img src="/public/img/My_Gallery.png" alt="QR code" style="width: 200px; height: 180px;">
-                <p style="font-weight: bold;">15:00</p>
-            </div> -->
             <div id="qrCodeContainer"></div>
         </div>
-        <div id="confirmbtn" style="margin-top: 20px">
-
-        </div>
+        <div id="confirmbtn" style="margin-top: 9px;"></div>
     </div>
 
     <script>
@@ -116,16 +108,16 @@
 
                     // Display product details
                     const productHTML = `
-                <div class="row">
-                    <img src="/public/img/${product.product_img}" alt="Product Image" style="width:200px; height:180px; border-radius:20px; object-fit: contain;">
-                    <div class="col">
-                        <p><strong>ชื่อ:</strong> ${product.product_name}</p>
-                        <p><strong>คำอธิบาย:</strong> ${product.product_caption}</p>
-                        <p><strong>ราคา:</strong> ${price} THB</p>
-                    </div>
-                </div>
-            `;
-                    confirmbtn.innerHTML = `<div class="text-center" style="margin-top: 20px">
+                            <div class="row">
+                                <img src="/public/img/${product.product_img}" alt="Product Image" style="width:150px; height:150px; border-radius:20px; object-fit: contain;">
+                                <div class="col">
+                                    <p><strong>ชื่อ:</strong> ${product.product_name}</p>
+                                    <p><strong>คำอธิบาย:</strong> ${product.product_caption}</p>
+                                    <p><strong>ราคา:</strong> ${price} THB</p>
+                                </div>
+                            </div>
+                            `;
+                    confirmbtn.innerHTML = `<div class="text-center" style="margin-top: 10px">
                             <button id="payButton" onclick="confirmPayment()" data-queue-id="${product.queue_id}"
                              style="background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
                                 ยืนยัน
@@ -144,7 +136,7 @@
                     if (qrResponse.ok) {
                         const { Result: qrCodeUrl } = await qrResponse.json();
                         document.getElementById('qrCodeContainer').innerHTML = `
-                    <img src="${qrCodeUrl}" alt="PromptPay QR Code" style="width:300px;">
+                    <img src="${qrCodeUrl}" alt="PromptPay QR Code" style="width:160px;">
                 `;
                     } else {
                         console.error('Failed to generate QR code');
@@ -256,7 +248,6 @@
             text-align: center;
         }
 
-        /* Popup background overlay */
         .popup-overlay {
             position: fixed;
             top: 0;
@@ -269,58 +260,53 @@
             align-items: center;
         }
 
-        /* Popup box */
         .popup-box {
             background-color: #F3F3E3;
-            width: 350px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 157px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.2);
             text-align: center;
             position: relative;
         }
 
-        /* Popup header */
         .contact-header {
             background-color: #a0af7f;
             color: #333;
-            padding: 10px;
+            padding: 5px;
             font-weight: bold;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
         }
 
-        /* Popup content */
         .contact-info {
-            padding: 15px;
+            padding: 7px;
             color: #333;
         }
 
         .contact-info p {
-            margin: 8px 0;
+            margin: 3px 0;
             font-weight: bold;
         }
 
-        /* Close button */
         .close-button {
             position: absolute;
-            top: 5px;
-            right: 10px;
+            top: 2px;
+            right: 5px;
             background: none;
             border: none;
             color: #333;
-            font-size: 16px;
+            font-size: 8px;
             cursor: pointer;
         }
 
-        /* Trigger button */
         .open-popup-button {
-            padding: 10px 20px;
+            padding: 5px 9px;
             background-color: #a0af7f;
             color: #333;
             border: none;
-            border-radius: 5px;
+            border-radius: 2px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 8px;
         }
     </style>
 

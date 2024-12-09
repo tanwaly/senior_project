@@ -110,12 +110,9 @@
         .avatar {
             vertical-align: middle;
             width: 60px;
-            /* Reduced width */
             height: 60px;
-            /* Reduced height */
             border-radius: 50%;
             margin-right: 15px;
-            /* Reduced margin */
         }
     </style>
 
@@ -190,33 +187,40 @@
             const reviewsContainer = document.getElementById('reviewsList');
             reviewsContainer.innerHTML = reviews
                 .map(review => ` 
-                <div style ="margin:30px;">
-                        <div class="row">
-                            <div class="flex">
-                                <img src="/public/img/${review.customer_profile_img}" alt="Customer Profile Picture" class ="avatar"
-                                    class="rounded-circle m-4" style="height: 60px;">
-                                    <div class="col">
-                                    <span style="color: #6e6e6e;">
-                                        ${new Date(review.review_date).toLocaleString()}
-                                    </span>
-                                    <span style="font-weight: 600; font-size:18px;">${review.customer_first_name} ${review.customer_last_name}</span>
-                                    <p>Rating: ${'⭐'.repeat(review.score)}</p>
-                                    <div class="flex col">
-                                    <span style="font-weight: 600; font-size:16px;">ความคิดเห็น:</span>
-                                    <span style="font-size: 18px; font-weight: 400; word-wrap: break-word; width:250px;">
-                                        ${review.comment || 'No comment provided.'}
-                                    </span>
-                                    </div>
-                                </div>
-                                <div style="width: 100%; display: flex; justify-content: flex-end; padding-right:35px;">
-                                  <img src="/public/img/${review.review_img}"
-                                     style="max-width: 120px; object-fit: contain;">
-                                </div>
-                            </div>
-                            
-                        </div>
-                    <hr style="margin: 18px;">
-                </div>
+               <div>
+                 <div class="row" style="margin:30px 80px 30px 80px;">
+                     <div class="flex">
+                         ${review.customer_profile_img
+                             ? `<img src="/public/img/${review.customer_profile_img}" 
+                                     alt="Customer Profile Picture" 
+                                     class="avatar rounded-circle m-4" 
+                                     style="height: 60px;">`
+                             : ''
+                         }
+                         <div class="col">
+                             <span style="color: #6e6e6e; font-size: 12px;">
+                                 ${new Date(review.review_date).toLocaleString()}
+                             </span>
+                             <span style="font-weight: 600; font-size:18px;">${review.customer_first_name} ${review.customer_last_name}</span>
+                             <p>Rating: ${'⭐'.repeat(review.score)}</p>
+                             <div class="flex col">
+                                 <span style="font-weight: 600; font-size:16px;">ความคิดเห็น:</span>
+                                 <span style="font-size: 18px; font-weight: 400; word-wrap: break-word; width:250px;">
+                                     ${review.comment || 'No comment provided.'}
+                                 </span>
+                             </div>
+                         </div>
+                         <div style="width: 100%; display: flex; justify-content: flex-end; padding-right:35px;">
+                             ${review.review_img
+                             ? `<img src="/public/img/${review.review_img}" 
+                                             style="max-width: 120px; object-fit: contain;">`
+                             : ''
+                         }
+                         </div>
+                     </div>
+                 </div>
+                 <hr style="margin: 18px;">
+             </div>  
             `)
                 .join('');
 

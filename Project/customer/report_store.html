@@ -15,124 +15,94 @@
   <title>Report Store</title>
 </head>
 
-<body style="background-color: white;">
+<body style="background-color:#DCE8F5;">
   <div style="background-color:#FEF3D0;" class="d-flex">
     <div class="d-flex align-items-center"
-      style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
-      <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-      <div class="d-flex justify-content-between" style="margin-left: 65px;">
-        <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-          <i class="bi bi-house-door"></i> Homepage
-        </a>
-        <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
-          <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
-        </a>
-        <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; padding-right: 165px;"
-          data-bs-toggle="modal" data-bs-target="#helpModal">
-          <i class="bi bi-chat-dots"></i> Help
-        </a>
-      </div>
-      <!-- pop up contect store -->
-      <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content" style="background-color: #F3F3E3;">
-            <div class="modal-header" style="background-color:#D46F95;">
-              <h5 class="modal-title" id="helpModalLabel" style="font-weight: 600; color: white;">
-                ช่องทางการติดต่อ</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <p style="font-size: 18px;"><i class="bi bi-line" style="font-size: 25px; color: #06c755"></i><strong>
-                  Line
-                  :</strong> surety_offical</p>
-              <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
-                        -webkit-background-clip: text;
-                        -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
-              <p style="font-size: 18px;"><i class="bi bi-facebook"
-                  style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
-                  :</strong> Surety</p>
-            </div>
-          </div>
+        style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 870px; height: 80px; padding: 13px;">
+        <img src="/public/img/logo-w.png" width="66px" alt="Logo">
+        <div class="d-flex justify-content-between" style="margin-left: 43px;">
+            <a href="/homepage" style="color:white; text-decoration:none; font-size: 15px; padding-left: 43px;">
+                <i class="bi bi-house-door"></i> Homepage
+            </a>
+            <a href="/cf-status" style="color:white; text-decoration:none; font-size: 15px; padding-left: 45px;">
+                <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
+            </a>
+            <a style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px; padding-right: 110px; "
+                data-bs-toggle="modal" data-bs-target="#helpModal">
+                <i class="bi bi-chat-dots"></i> Help
+            </a>
         </div>
-      </div>
+        <!-- pop up contect store -->
+        <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="background-color: #F3F3E3;">
+                    <div class="modal-header" style="background-color:#D46F95;">
+                        <h5 class="modal-title" id="helpModalLabel" style="font-weight: 600; color: white;">
+                            ช่องทางการติดต่อ</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="font-size: 14px;"><i class="bi bi-line"
+                                style="font-size: 20px; color: #06c755"></i><strong>
+                                Line
+                                :</strong> surety_offical</p>
+                        <p style="font-size: 14px;"><i class="bi bi-instagram" style="font-size: 20px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                        <p style="font-size: 14px;"><i class="bi bi-facebook"
+                                style="font-size: 20px; color: 	#1877F2"></i><strong> Facebook
+                                :</strong> Surety</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-      <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-    height: 46px; color: white;" onclick="location.replace('/login');">
-        Log out
-        <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
-      </button>
+    <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+        <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+            height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
+            Log out
+            <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
+        </button>
     </div>
-  </div>
-  <div class="container mt-5">
-    <div class="white-border">
-      <h2 class="text-black d-flex justify-content-center align-items-center" style="font-weight: bold">
+</div>
+
+  <div class="container mt-3 center" >
+    <div style="background-color: #ffffff; padding: 20px 50px 20px 50px; border-radius: 30px;">
+      <h2 class="text-black d-flex justify-content-center align-items-center"
+        style="font-weight: bold; font-size: 18px;">
         เหตุผลในการรายงาน
       </h2>
-      <!-- ข้อความสีขาว -->
-      <div class="mt-3" style="margin-bottom: 10px; font-size: 22px;">เหตุผลหลัก</div>
+      <div class="mt-2" style="margin-bottom: 7px; font-size: 15px;">เหตุผลหลัก</div>
       <form id="reportForm" action="/reportstore" method="POST" enctype="multipart/form-data">
-        <!-- Hidden input to pass seller_id -->
         <input type="hidden" id="seller_id" name="seller_id" value="">
-        <select name="report_reason" id="report_reason" required style="
-              width: 600px;
-              height: 50px;
-              margin-left: 25px;
-              background-color: #d9d9d9;
-              font-size: 15px;
-              border-radius: 15px;
-              border: none;
-              color: #515050;
-              padding: 15px;">
+        <select name="report_reason" id="report_reason" required
+          style="width: 1200px; height: 43px; margin-left: 17px; background-color: #d9d9d9; font-size: 14px; border-radius: 10px; border: none; color: #515050; padding: 10px;">
           <option value="สินค้าไม่ตรงปก/ชำรุด">สินค้าไม่ตรงปก/ชำรุด</option>
           <option value="ผู้ขายพูดไม่สุภาพ">ผู้ขายพูดไม่สุภาพ</option>
           <option value="อื่นๆ">อื่นๆ</option>
         </select>
-
-        <div class="mt-3" style="margin-bottom: 10px; font-size: 22px;">คำอธิบาย</div>
-        <textarea class="form-control mb-2 mr-sm-2" rows="3" id="report_detail" name="report_detail" required style="
-              max-width: 1000px;
-              border-color: #d9d9d9;
-              background-color: #d9d9d9;
-              margin-left: 25px;
-              border-radius: 15px;"></textarea>
-
-        <u style="font-size: 23px">หลักฐาน</u>
-        <div class="row" style="max-width: 1000px; margin: 0 auto; justify-content: center;">
-          <!-- Image input centered -->
-          <div class="photo" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+        <div class="mt-2" style="margin-bottom: 7px; font-size: 15px;">คำอธิบาย</div>
+        <textarea class="form-control mb-2 mr-sm-2" rows="2" id="report_detail" name="report_detail" required
+          style="max-width: 1200px; border-color: #d9d9d9; background-color: #d9d9d9; margin-left: 17px; border-radius: 10px;"></textarea>
+        <u style="font-size: 15px">หลักฐาน</u>
+        <div class="row" style="max-width: 670px; margin: 0 auto; justify-content: center;">
+          <div class="photo"
+            style="display: flex; justify-content: center; align-items: center; text-align: center; width: 267px; height: 234px;">
             <label for="upload1"
               style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer;">
-              <i id="icon1" class="bi bi-plus-lg" style="font-size: 50px;"></i>
+              <i id="icon1" class="bi bi-plus-lg" style="font-size: 33px;"></i>
               <img id="preview1" src="#" alt="Preview"
-                style="display: none; width: 100%; height: 100%; border-radius: 15px;">
+                style="display: none; width: 100%; height: 100%; border-radius: 10px;">
             </label>
             <input id="upload1" type="file" accept="image/*" name="report_img" style="display: none;"
               onchange="previewImage(event, 'preview1', 'icon1')">
           </div>
         </div>
-
-        <div class="center mt-4">
-          <button type="submit" id="btnConfirm" style="
-              background: #bde3a7;
-              border-radius: 15px;
-              border-color: transparent;
-              width: 120px;
-              height: 50px;
-              color: black;
-              font-weight: bold;
-              font-size: 20px;
-              margin-right: 200px;">ยืนยัน</button>
-          <button id="btnCancel" style="
-              background: #b72323;
-              border-radius: 15px;
-              border-color: transparent;
-              width: 120px;
-              height: 50px;
-              color: white;
-              font-weight: bold;
-              font-size: 20px;
-            ">
+        <div class="center mt-3">
+          <button type="submit" id="btnConfirm"
+            style="background: #bde3a7; border-radius: 10px; border-color: transparent; width: 80px; height: 33px; color: black; font-weight: bold; font-size: 13px; margin-right: 133px;">ยืนยัน</button>
+          <button id="btnCancel"
+            style="background: #b72323; border-radius: 10px; border-color: transparent; width: 80px; height: 33px; color: white; font-weight: bold; font-size: 13px;">
             ยกเลิก<i class="bi"></i>
           </button>
         </div>
@@ -140,9 +110,6 @@
     </div>
   </div>
 
-  </div>
-  </div>
-  </div>
   <script>
     // Populate hidden input with seller_id dynamically
     const sellerId = window.location.pathname.split('/').pop();
@@ -238,15 +205,13 @@
 
   .white-border {
     border: 0px solid white;
-    padding: 50px;
+    padding: 33px;
     background-color: white;
   }
 
   .photo {
     background-color: #d9d9d9;
-    width: 400px;
-    height: 350px;
-    border-radius: 15px;
+    border-radius: 10px;
   }
 </style>
 

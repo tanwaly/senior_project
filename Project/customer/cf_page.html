@@ -16,16 +16,16 @@
 <body style="background-color:white;">
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
-                <a href="/homepage" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 870px; height: 80px; padding: 13px;">
+            <img src="/public/img/logo-w.png" width="66px" alt="Logo">
+            <div class="d-flex justify-content-between" style="margin-left: 43px;">
+                <a href="/homepage" style="color:white; text-decoration:none; font-size: 15px; padding-left: 43px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
-                <a href="/cf-status" style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                <a href="/cf-status" style="color:white; text-decoration:none; font-size: 15px; padding-left: 45px;">
                     <i class="bi bi-check2-square"></i> สถานะการสั่งซื้อ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; padding-right: 265px;"
+                <a style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px; padding-right: 110px; "
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -40,25 +40,26 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p style="font-size: 18px;"><i class="bi bi-line"
-                                    style="font-size: 25px; color: #06c755"></i><strong> Line
+                            <p style="font-size: 14px;"><i class="bi bi-line"
+                                    style="font-size: 20px; color: #06c755"></i><strong>
+                                    Line
                                     :</strong> surety_offical</p>
-                            <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
-                                -webkit-background-clip: text;
-                                -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
-                            <p style="font-size: 18px;"><i class="bi bi-facebook"
-                                    style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
+                            <p style="font-size: 14px;"><i class="bi bi-instagram" style="font-size: 20px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 14px;"><i class="bi bi-facebook"
+                                    style="font-size: 20px; color: 	#1877F2"></i><strong> Facebook
                                     :</strong> Surety</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                 Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
             </button>
         </div>
     </div>
@@ -84,20 +85,20 @@
 
     // Generate HTML for queue
     const generateQueueHTML = (queue) => {
-        if (!queue.length) return '<p style="font-size: 34px; font-weight: 600;">ยังไม่มีคิว</p>';
+        if (!queue.length) return '<p style="font-size: 23px; font-weight: 600;">ยังไม่มีคิว</p>';
         return queue.map(q => `
-             <div class="row" style="display: flex; align-items: center; justify-content: space-between; width: 1000px;">
-            <div style="display: flex; font-weight: 600; font-size: 34px;">
-                คิวที่ ${q.queue_num}
-            </div>
-            <span style="display: flex; font-weight: 400; font-size: 34px; margin-bottom: -45px;">
-                ${q.first_name} ${q.last_name}
-            </span>
-            <div style="display: flex; justify-content: flex-end;">
-                <div class="time" style="font-size: 30px;">Pay Before: ${formatDateTime(q.queue_estimated_time, false)}</div>
-            </div>
+              <div class="row" style="display: flex; align-items: center; justify-content: space-between; width: 670px;">
+        <div style="display: flex; font-weight: 600; font-size: 23px;">
+            คิวที่ ${q.queue_num}
         </div>
-        <hr style="border: 2px solid black; margin-top: 20px; width: auto;">
+        <span style="display: flex; font-weight: 400; font-size: 23px; margin-bottom: -30px;">
+            ${q.first_name} ${q.last_name}
+        </span>
+        <div style="display: flex; justify-content: flex-end;">
+            <div class="time" style="font-size: 20px;">Pay Before: ${formatDateTime(q.queue_estimated_time, false)}</div>
+        </div>
+    </div>
+    <hr style="border: 2px solid black; margin-top: 13px; width: auto;">
         `).join('')
     };
 
@@ -159,48 +160,49 @@
             const queueHTML = generateQueueHTML(queue);
 
             document.getElementById('CFproduct').innerHTML = `
-                 <div style="width: 1370px; min-height: 1520px; height: auto; background: #E1E1E1; border-radius: 5px; padding-bottom: 75px;">
-                    <div style="width:auto; max-width: 1370px; height: 135px; background:#FFEEB5; border-radius: 5px 5px 0px 0px;">
+                <div style="width: 919px; min-height: 1018px; height: auto; background: #E1E1E1; border-radius: 5px; padding-bottom: 50px;">
+                    <div style="width: auto; max-width: 919px; height: 90px; background: #FFEEB5; border-radius: 5px 5px 0px 0px;">
                         <div style="display: flex; align-items: center;">
-                            <img src="/public/img/${product.profile_img}" alt="Avatar" width="120px" style="border-radius: 50%; margin: 10px;" class ="avatar">
-                            <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.first_name}</span>
-                            <span style="font-size: 30px; font-weight: 700; margin-left: 20px;">${product.last_name}</span>
-                            <div style="width: 100%; display: flex; justify-content: flex-end; margin-right: 25px;">
-                                <div style="width: 177px; height: 70px; background: lightgrey; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
-                                    <span style="font-size: 20px; font-weight: 700;">${formatDateTime(product.product_time)}</span>
+                            <img src="/public/img/${product.profile_img}" alt="Avatar" width="80px" style="border-radius: 50%; margin: 7px;" class="avatar">
+                            <span style="font-size: 20px; font-weight: 700; margin-left: 13px;">${product.first_name}</span>
+                            <span style="font-size: 20px; font-weight: 700; margin-left: 13px;">${product.last_name}</span>
+                            <div style="width: 100%; display: flex; justify-content: flex-end; margin-right: 17px;">
+                                <div style="width: 118px; height: 47px; background: lightgrey; display: flex; align-items: center; justify-content: center; border-radius: 14px;">
+                                    <span style="font-size: 13px; font-weight: 700;">${formatDateTime(product.product_time)}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="container" style="width:auto; max-width: 1115px; min-height: 1300; height: auto; background: #FFFFFF; margin-top: 8px; display: flex; justify-content: center;">
+                    <div class="container" style="width: auto; max-width: 747px; min-height: 583px; height: auto; background: #FFFFFF; margin-top: 5px; display: flex; justify-content: center;">
                         <div>
-                            <div class="container center" style="; width: 1045px; min-height: 596px; height: auto; background: #EFF7FF; border-radius: 20px; margin-top: 120px; flex-direction: row;">
-                                <img src="/public/img/${product.product_img}" alt="" width="500px" height="500px" style="margin-left: 50px; max-height: 500px; max-width: 500px; width: auto; height: auto; object-fit: contain;">
-                                <div class="container col" style="margin-left: 45px; height: auto; width: 0px;">
+                            <div class="container center" style="width: 700px; min-height: 399px; height: auto; background: #EFF7FF; border-radius: 20px; margin-top: 80px; flex-direction: row;">
+                                <img src="/public/img/${product.product_img}" alt="" width="335px" height="335px" style="margin-left: 34px; max-height: 335px; max-width: 335px; width: auto; height: auto; object-fit: contain;">
+                                <div class="container col" style="margin-left: 30px; height: auto; width: 0px;">
                                     <span class="name-p">Name : <span class="name-p2">${product.product_name}</span></span>
                                     <span class="name-p">Price : <span class="name-p2">${product.product_price}</span></span>
                                     ${sizeHTML}
                                     <span class="name-p">Defects :<div class="name-p2">${product.product_detail}</div></span>
-                                    <button id="cfButton" class="center" style="width: 276px; height: 66px; background: #F292B6; border-radius: 30px; border: none; font-weight: 600; font-size: 32px;">
+                                    <button id="cfButton" class="center" style="width: 185px; height: 44px; background: #F292B6; border-radius: 30px; border: none; font-weight: 600; font-size: 21px;">
                                         CF
                                     </button>
                                 </div>
                             </div>
                             <div class="center" style="flex-direction: column;">
-                                <span style="font-weight: 700; font-size: 42px;">Queue</span>
+                                <span style="font-weight: 700; font-size: 28px;">Queue</span>
                                 <div id="queueSection">${queueHTML}</div>
                             </div>
                             <div id="paymentSection" style="display: none;">
-                                <div style=" background: #F3F3E3; width: 1115px ; height: 100px; margin-top: 10px;">
+                                <div style="background: #F3F3E3; width: 747px; height: 67px; margin-top: 7px;">
                                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                                        <span id="shqnum" style="font-weight: 700; font-size: 38px; margin-left: 20px;"></span>
-                                        <button id="paybtn" onclick="location.href = '/payment?productId=${productId}'" style="font-size: 30px; background: #BDE3A7; border-radius: 18px; width: 200px; height: 65px; margin: 10px 20px 20px 0px; border:none;">ชำระเงิน</button>
+                                        <span id="shqnum" style="font-weight: 700; font-size: 25px; margin-left: 13px;"></span>
+                                        <button id="paybtn" onclick="location.href = '/payment?productId=${productId}'" style="font-size: 20px; background: #BDE3A7; border-radius: 18px; width: 134px; height: 44px; margin: 7px 13px 13px 0px; border:none;">ชำระเงิน</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div> `;
+                </div>
+ `;
 
             const cfButton = document.getElementById('cfButton');
             cfButton.disabled = new Date() < new Date(product.product_time);
@@ -333,13 +335,13 @@
     .name-p {
         font-style: normal;
         font-weight: 700;
-        font-size: 30px;
+        font-size: 20px;
     }
 
     .name-p2 {
         font-style: normal;
         font-weight: 500;
-        font-size: 28px;
+        font-size: 18px;
         word-wrap: break-word;
     }
 
@@ -362,8 +364,8 @@
 
     .avatar {
         vertical-align: middle;
-        width: 120px;
-        height: 120px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
     }
 </style>
