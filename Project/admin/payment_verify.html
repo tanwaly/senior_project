@@ -26,8 +26,8 @@
             </div>
             <hr style="color: white;">
         </div>
-     
-        
+
+
         <div id="showPaymentList" class="center">
             <table>
                 <thead>
@@ -115,7 +115,7 @@
                 const modalBody = document.querySelector('.modal-body');
                 modalBody.innerHTML = `
                     <div class="center">
-                        <img style="min-height: 500px;" src="/public/img/${payment.payment_img}" alt="Payment Slip">
+                        <img style="min-height: 500px; max-width:900px;" src="/public/img/${payment.payment_img}" alt="Payment Slip">
                     </div>
                     <div class="center" style="justify-content: space-between; margin-top:30px;">
                           <button class="approve-btn" onclick="updatePaymentStatus(${payment.order_id}, 0)">อนุมัติ</button>
@@ -149,16 +149,38 @@
                     throw new Error(errorText);
                 }
 
-                alert(await response.text());
+                showAlert(await response.text());
 
                 // Remove row after successful update
                 const row = document.querySelector(`[data-order-id="${orderId}"]`).closest('tr');
                 if (row) row.remove();
             } catch (error) {
                 console.error('Error:', error);
-                alert(error.message);
+                showAlert(error.message);
             }
         }
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.textContent = message;
+            alertDiv.style.cssText = `
+        position: fixed; 
+        top: 20px; 
+        right: 20px; 
+        padding: 15px; 
+        border-radius: 8px; 
+        background-color: ${type === 'success' ? '#BDE3A7' : '#FFB3B3'};
+        color: ${type === 'success' ? '#2E7D32' : '#D32F2F'};
+        font-weight: bold;
+        z-index: 1000;
+    `;
+
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+
     </script>
 </body>
 <style>
@@ -200,7 +222,7 @@
     }
 
     th {
-        background-color:rgb(157, 158, 138);
+        background-color: rgb(157, 158, 138);
         color: white;
         font-weight: bold;
     }

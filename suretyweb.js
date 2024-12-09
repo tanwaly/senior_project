@@ -11,11 +11,11 @@ const bodyParser = require('body-parser')
 const _ = require('lodash')
 const cors = require('cors')
 const app = express();
+
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
 app.use(cors())
 
 const storage = multer.diskStorage({
@@ -39,6 +39,7 @@ app.use(session({
         maxAge: 2 * 60 * 60 * 1000
     }
 }));
+app.use(express.static('public'));
 
 //--------- register ---------
 app.get('/register', (req, res) => {
@@ -123,6 +124,7 @@ app.post('/login', (req, res) => {
                 if (same) {
                     req.session.users_id = user.users_id;  // Set users_id in session
                     req.session.role = user.role;          // Save the role in session too
+                    console.log("After login session:", req.session);
 
                     // Set session to expire in 2 hours
                     req.session.cookie.maxAge = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
@@ -563,15 +565,36 @@ app.get('/customerinfo', (req, res) => {
 
 
 
-
-app.get('/reportstore', (req, res) => {
+// --- report ---
+app.get('/reportstore/:id', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
 });
+app.post('/reportstore', upload.single('report_img'), (req, res) => {
+    const { report_reason, report_detail } = req.body;
+    const customerId = req.session.users_id; // Ensure the user is logged in
+    const sellerId = req.body.seller_id; // Pass seller_id from the form or URL
+    const reportImg = req.file ? req.file.filename : null; // Handle uploaded image
 
+    if (!customerId) {
+        console.warn('User not logged in');
+        return res.status(401).json({ success: false, message: 'Not logged in' });
+    }
 
+    const sql = `
+      INSERT INTO reports (seller_id, cus_id, report_reason, report_detail, report_img, report_status) 
+      VALUES (?, ?, ?, ?, ?, 0);
+    `;
 
+    con.query(sql, [sellerId, customerId, report_reason, report_detail, reportImg], (err) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ success: false, message: 'Database error' });
+        }
 
-//================== sellers =====================
+        res.json({ success: true, message: 'Report submitted successfully' });
+    });
+});
+
 // click on seller; store info
 app.get('/seller-profile/:sellerId', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/customer/store_profile.html'));
@@ -737,14 +760,6 @@ app.get('/getSellerAvgScore/:sellerId', (req, res) => {
     });
 });
 
-
-
-
-// --- report store ---
-app.get('/reportstore', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Project/customer/report_store.html'));
-});
-
 //================== sellers =====================
 
 app.get('/sellerinfo', (req, res) => {
@@ -779,6 +794,7 @@ app.get('/sellerhomepage', (req, res) => {
     });
 });
 
+// seller information page
 
 app.get('/getSellerData', (req, res) => {
     const sellerId = req.session.users_id;
@@ -787,7 +803,7 @@ app.get('/getSellerData', (req, res) => {
         return res.status(401).json({ error: 'Not logged in or session expired' });
     }
 
-    const sql = `SELECT first_name, last_name,profile_img FROM users WHERE users_id = ?;`;
+    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img FROM users WHERE users_id = ?;`;
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
@@ -795,36 +811,118 @@ app.get('/getSellerData', (req, res) => {
         } else if (results.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         } else {
-            res.json(results[0]);  // Return the first_name and profile_img as JSON
+            res.json(results[0]);  // Return the user's information as JSON
         }
     });
 });
 
-// seller information
+app.get('/getSellerOwnAvgScore', (req, res) => {
+    console.log('Session Data:', req.session); // Log the session object
+    const userId = req.session.users_id; // Retrieve user ID from the session
+
+    if (!userId) {
+        console.error('User not logged in or session expired');
+        return res.status(401).json({ error: 'User not logged in' });
+    }
+
+    const sql = `
+      SELECT AVG(review.score) AS avg_score FROM review JOIN orders ON review.order_id = orders.order_id JOIN queue ON orders.queue_id = queue.queue_id JOIN products ON queue.product_id = products.product_id JOIN users ON products.seller_id = users.users_id WHERE users.users_id = ?;
+    `;
+
+    con.query(sql, [userId], (err, results) => {
+        if (err) {
+            console.error("Error fetching average score:", err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (results.length === 0 || results[0].avg_score === null) {
+            return res.json({ avg_score: 0 }); // Default to 0 if no reviews found
+        }
+
+        res.json({ avg_score: results[0].avg_score });
+    });
+});
+app.get('/veiwOwnReview', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Project/seller/view_review(sell).html'));
+});
+app.get('/viewOwnReview', (req, res) => {
+    const userId = req.session.users_id; // Retrieve the logged-in user's ID from the session
+
+    if (!userId) {
+        return res.status(401).json({ error: 'User not logged in' });
+    }
+
+    const sql = `
+        SELECT 
+            r.score, 
+            r.comment, 
+            r.review_date, 
+            r.review_img, 
+            u.first_name AS customer_first_name, 
+            u.last_name AS customer_last_name, 
+            u.profile_img AS customer_profile_img
+        FROM review r
+        JOIN orders o ON r.order_id = o.order_id
+        JOIN queue q ON o.queue_id = q.queue_id
+        JOIN products p ON q.product_id = p.product_id
+        JOIN users u ON q.cus_id = u.users_id
+        WHERE p.seller_id = ?
+        ORDER BY r.review_date DESC;
+    `;
+
+    con.query(sql, [userId], (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+
+        // Send results as JSON
+        res.json(results);
+    });
+});
+
+
+
+
 app.get('/sellerprofile', (req, res) => {
     res.sendFile(path.join(__dirname, 'Project/seller/seller_info.html'));
 });
 
-app.get('/sellerinfo/:sellerId', (req, res) => {
-    const sellerId = req.session.users_id;
+app.get('/sellerprofile', (req, res) => {
+    // ดึง userId จาก session
+    const userId = req.session.users_id;
 
-    if (!sellerId) {
-        return res.status(401).json({ error: 'Not logged in or session expired' });
+    if (!userId) {
+        return res.redirect('/login'); // ถ้าไม่มี session ให้ redirect ไปที่หน้า login
     }
 
-    const sql = `SELECT *
-                 FROM users WHERE users_id = ?;`;
+    // ส่งค่า userId ไปยังหน้า HTML
+    res.render('seller_info', { userId: userId });
+});
+
+
+
+app.get('/sellerinfo/:sellerId', (req, res) => {
+    const sellerId = req.params.sellerId;
+    const sql = `SELECT * FROM users WHERE users_id = ?`;
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
-        } else if (results.length === 0) {
-            return res.status(404).json({ error: 'Seller not found' });
-        } else {
-            res.json(results[0]);  // Send seller info as JSON
+            console.error("Error fetching data:", err);
+            return res.status(500).send('Internal Server Error');
         }
+
+        console.log("Full Results Object:", results); // Log the entire results array
+
+        if (results.length === 0) {
+            return res.status(404).send('Seller not found');
+        }
+
+        console.log("Sending Data:", results[0]); // Log the specific object you're sending
+        res.json(results[0]);
     });
 });
+
 
 app.post('/updateSellerInfo/:sellerId', upload.single('profile_img'), (req, res) => {
     const sellerId = req.session.users_id; // Securely fetch seller ID from session

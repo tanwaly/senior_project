@@ -96,7 +96,7 @@
 <body style="background-color: white;">
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width: 1300px; height: 120px; padding: 20px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
             <img src="/public/img/logo-w.png" width="100px" alt="Logo">
             <div class="d-flex justify-content-between" style="margin-left: 65px;">
                 <a href="/sellerhomepage"
@@ -107,7 +107,7 @@
                     style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;"
+                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px; padding-right: 165px;"
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -117,13 +117,20 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content" style="background-color: #F3F3E3;">
                         <div class="modal-header" style="background-color:#D46F95;">
-                            <h5 class="modal-title" id="helpModalLabel">ช่องทางการติดต่อ</h5>
+                            <h5 class="modal-title" id="helpModalLabel" style="font-weight: 600; color: white;">
+                                ช่องทางการติดต่อ</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>ID LINE:</strong> qwqwefs</p>
-                            <p><strong>IG:</strong> surety_sp</p>
-                            <p><strong>Facebook:</strong> klsdadj</p>
+                            <p style="font-size: 18px;"><i class="bi bi-line"
+                                    style="font-size: 25px; color: #06c755"></i><strong> Line
+                                    :</strong> surety_offical</p>
+                            <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 18px;"><i class="bi bi-facebook"
+                                    style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
+                                    :</strong> Surety</p>
                         </div>
                     </div>
                 </div>
@@ -138,39 +145,21 @@
         </div>
     </div>
     <div>
-        <div class="flex center">
+        <div class="flex center" style="margin-top: 40px;">
             <!-- Profile Image -->
-            <img src="/public/img/fprofile.jpg" alt="Profile Picture" class="rounded-circle m-4" style="height: 120px;">
+            <img id="profileImg" src="/public/img/fprofile.jpg" alt="Profile Picture" class="rounded-circle m-4"
+                style="height: 120px;">
             <div class="flex" style="gap: 720px;">
+                <!-- contect. review -->
                 <div class="column" style="margin-left: 50px;">
-                    <div class="flex mt-4">
-                        <span style="font-size: 40px; font-weight: bold;">Eiei</span>
-                    </div>
-
-                    <!-- <div class="flex mt-4">
-                        <p style="font-size: 14px; font-weight: bold; color: #8D8D8D;"><span
-                                id="line-id-display">กรุณากรอกช่องทางการติดต่อเพิ่มเติม</span>
-                        </p>
-                    </div>
-                    <div class="button">
-                        <button
-                            style="border: none;color: white; background-color: #F896BB; width: 150px; height: 30px; text-align: center; 
-                        border-radius: 5px; font-weight: bold; font-size: 13px; margin-left: -20px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);"
-                            onclick="openModal()">แก้ไขโปรไฟล์</button>
-                    </div> -->
-                    <!-- โมดอลสำหรับแก้ไขโปรไฟล์ -->
-                    <!-- Hidden field for userId -->
-                    <!-- <div id="editProfileModal" class="modal">
-                        <div style="border-radius: 15px;" class="modal-content">
-                            <h3>แก้ไขโปรไฟล์</h3>
-                            <input style="border-radius: 5px; border: none;" type="text" id="line-id-input" placeholder="   กรุณากรอกช่องทางการติดต่อ">
-                            <input type="hidden" id="user-id" value="12345">
-                            <br>
-                            <button style="border-radius: 5px;" class="button save-button" onclick="saveLineID()">บันทึก</button>
-                            <br>
-                            <button style="border-radius: 5px;" class="button close-button" onclick="closeModal()">ยกเลิก</button>
-                        </div>
-                    </div> -->
+                    <div id="sellerName"></div>
+                    <div style="word-wrap: break-word; max-width: 500px;" id="sContect"></div>
+                    <div class="reviewStar" style="margin-top: -20px;"></div>
+                    <button id="viewReviews" onclick="location.href='/veiwOwnReview'"
+                    style="border: none; background-color: #e2e2e2; width: 100px; height: 25px; text-align: center; border-radius: 15px;">
+                    ดูรีวิว
+                </button>
+                    <!-- <div id="shrbtn"></div> -->
                 </div>
                 <div style="display: flex; flex-direction: column; margin-top: 15px;">
                     <button
@@ -328,6 +317,7 @@
                 </div>
             </div>
         </div>
+        <hr style="margin: 50px 250px 30px 250px;border: 2px solid #ce94a9;">
         <div class="center" style="margin-top: 50px;">
             <div id="showSellerProduct"
                 style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 20px; justify-content: center;">
@@ -352,6 +342,41 @@
     </div>
 
     <script>
+        //show star part
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Fetch average score of the logged-in seller
+                const avgScoreResponse = await fetch(`/getSellerOwnAvgScore`);
+                const avgScoreData = await avgScoreResponse.json();
+
+                if (avgScoreData.error) {
+                    console.error(avgScoreData.error);
+                } else {
+                    // Ensure avg_score is a valid number
+                    const avgScore = Number(avgScoreData.avg_score) || 0;
+                    const reviewStarDiv = document.querySelector('.reviewStar');
+                    reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+                }
+            } catch (error) {
+                console.error('Error fetching average score:', error);
+            }
+        });
+
+        function generateStarHTML(avgScore) {
+            const fullStars = Math.floor(avgScore);
+            const halfStar = avgScore % 1 >= 0.5 ? 1 : 0;
+            const emptyStars = 5 - fullStars - halfStar;
+
+            return `
+        ${'<i class="bi bi-star-fill" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>'.repeat(fullStars)}
+        ${'<i class="bi bi-star-half" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>'.repeat(halfStar)}
+        ${'<i class="bi bi-star" style="color: darkorange; font-size: 35px; margin-right: 5px;"></i>'.repeat(emptyStars)}
+        <span style="font-size: 25px; font-weight: 500; margin-left: 5px;">${avgScore.toFixed(1)}</span>
+    `;
+        }
+
+
+
         // Add post part
         document.addEventListener('DOMContentLoaded', function () {
             const sizeRadios = document.querySelectorAll('input[name="product_type"]');
@@ -404,8 +429,10 @@
                     if (data.error) {
                         console.error(data.error);
                     } else {
-                        document.querySelector('span[style*="font-size: 40px;"]').textContent = `${data.first_name} ${data.last_name}`;
-                        document.querySelector('img.rounded-circle').src = `/public/img/${data.profile_img}`;
+                        document.querySelector('#sellerName').innerHTML = ` <span style="font-size: 40px; font-weight: bold; color: #161E52;"> ${data.first_name} ${data.last_name}  </span>`;
+                        document.querySelector('#profileImg').src = `/public/img/${data.profile_img}`;
+                        document.querySelector('#sContect').innerHTML = `<p style="font-size: 20px; font-weight: 400; color:darkgery; word-wrap: break-word; max-width: 500px;">
+                        ${data.sacc_contact}</p>`;
                     }
                 } catch (error) {
                     console.error('Error fetching user data:', error);
