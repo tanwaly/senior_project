@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/public/css/icon-cat.css">
     <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     <script src="/public/js/bootstrap.bundle.min.js"></script>
     <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
     <meta charset="UTF-8">
@@ -82,6 +83,26 @@
 
         return includeDate ? `${time}<br>${dateStr}` : time;
     };
+    function formatMin(duration) {
+    if (!duration || typeof duration !== 'string') {
+        console.error('Invalid duration format:', duration);
+        return 'Invalid duration';
+    }
+
+    const [hours, minutes] = duration.split(':').map(Number);
+
+    if (isNaN(hours) || isNaN(minutes)) {
+        console.error('Duration contains invalid numbers:', duration);
+        return 'Invalid duration';
+    }
+
+    if (hours > 0) {
+        return `${hours} ชั่วโมง${hours > 1 ? 's' : ''}`;
+    }
+
+    return `${minutes} นาที`;
+}
+
 
     // Generate HTML for queue
     const generateQueueHTML = (queue) => {
@@ -182,6 +203,7 @@
                                     <span class="name-p">Price : <span class="name-p2">${product.product_price}</span></span>
                                     ${sizeHTML}
                                     <span class="name-p">Defects :<div class="name-p2">${product.product_detail}</div></span>
+                                    <span class="name-p">ระยะเวลาในการชำระสินค้า :<div class="name-p2">${formatMin(product.product_time_duration)}/คิว</div></span>
                                     <button id="cfButton" class="center" style="width: 185px; height: 44px; background: #F292B6; border-radius: 30px; border: none; font-weight: 600; font-size: 21px;">
                                         CF
                                     </button>
@@ -292,6 +314,26 @@
 
         console.log("Payment Button Disabled State:", paybtn.disabled);
     };
+    const monitorProductStatus = async (productId) => {
+        try {
+            const response = await fetch(`/cfproduct/status/${productId}`);
+            if (!response.ok) throw new Error('Error fetching product status');
+            const productStatus = await response.json();
+
+            if (productStatus.product_sold) {
+                // If the product is sold, redirect to the homepage
+                Swal.fire({
+                    title: "สินค้าหมดแล้ว",
+                    text: "สินค้าถูกชำระเงินแล้ว คุณจะถูกเปลี่ยนหน้าไปยังหน้าหลัก",
+                    icon: "error"
+                });
+                // alert('สินค้าถูกชำระเงินแล้ว คุณจะถูกเปลี่ยนหน้าไปยังหน้าหลัก');
+                location.replace('homepage');
+            }
+        } catch (error) {
+            console.error('Error monitoring product status:', error);
+        }
+    };
 
 
     const initializePage = async () => {
@@ -301,11 +343,12 @@
 
         if (productId && userId) {
             await getCFProduct(productId);
-            await checkUserInQueue(productId, userId); // Check if user is in the queue
+            await checkUserInQueue(productId, userId);
             const response = await fetch(`/queue/${productId}`);
             const queue = await response.json();
-            handlePaymentButtonState(queue); // Update button state on page load
-            // Check if user is in the queue
+
+            handlePaymentButtonState(queue);
+            setInterval(() => monitorProductStatus(productId), 5000);
         } else {
             console.error('No productId or userId found');
         }

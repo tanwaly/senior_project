@@ -149,6 +149,8 @@
                                     <span style="font-size: 20px;">ผู้ขาย: ${item.seller_first_name} ${item.seller_last_name}</span>
                                     <span>ชื่อสินค้า: ${item.product_name}</span>
                                     <span>ราคา: ${item.product_price} บาท</span>
+                                    <span>ชื่อผู้รับ: ${item.order_addname} </span>
+                                    <span style="word-wrap: break-word; width:300px;">ที่อยู่: ${item.order_address}</span>
                                     <span>คิวที่: ${item.queue_num} เวลา: ${formatDateTime(item.queue_time)}</span>
                                     ${trackingHTML}
                                 </div>

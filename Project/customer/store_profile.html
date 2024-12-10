@@ -122,6 +122,25 @@
 </body>
 
 <script>
+    function formatMin(duration) {
+        if (!duration || typeof duration !== 'string') {
+            console.error('Invalid duration format:', duration);
+            return 'Invalid duration';
+        }
+
+        const [hours, minutes] = duration.split(':').map(Number);
+
+        if (isNaN(hours) || isNaN(minutes)) {
+            console.error('Duration contains invalid numbers:', duration);
+            return 'Invalid duration';
+        }
+
+        if (hours > 0) {
+            return `${hours} ชั่วโมง${hours > 1 ? 's' : ''}`;
+        }
+
+        return `${minutes} นาที`;
+    }
 
     function cfproduct(productId) {
         fetch(`/cfproduct/${productId}`)
@@ -145,15 +164,20 @@
             const avgScoreData = await avgScoreResponse.json();
 
             if (avgScoreData.error) {
-                console.error(avgScoreData.error);
+                reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey;">ยังไม่มีรีวิว</span>';
             } else {
                 // Ensure avg_score is a valid number
                 const avgScore = Number(avgScoreData.avg_score) || 0;
-                const reviewStarDiv = document.querySelector('.reviewStar');
-                reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+                if (avgScore === 0) {
+                    reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey;">ยังไม่มีรีวิว</span>';
+                } else {
+                    reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+                }
             }
         } catch (error) {
             console.error('Error fetching average score:', error);
+            const reviewStarDiv = document.querySelector('.reviewStar');
+            reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey; ">ยังไม่มีรีวิว</span>';
         }
     });
 
@@ -226,9 +250,10 @@
                         </button>
                     </div>
                     <div class="col" style="margin-top: 20.1px;">
-                        <span style="width: 201px; font-size: 17.42px; font-weight: 600; margin-left: 13.4px; word-wrap: break-word;">${product.product_name}</span>
+                        <span style="width: 201px; font-size: 17.42px; font-weight: 600; margin-left: 13.4px; word-wrap: break-word; color:#161E52;">${product.product_name}</span>
                         <span style="font-size: 12.06px; font-weight: 500; margin-left: 13.4px; color:#E7417F;">฿<span style="font-size: 18.76px; font-weight: 800;">${product.product_price}</span></span>
-                        <span style="width: 201px; font-size: 13.4px; font-weight: 400; margin-left: 13.4px; word-wrap: break-word;">${product.product_caption}</span>
+                        <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 13.4px; width:300px; color:grey;">ระยะเวลาในการชำระเงิน : ${formatMin(product.product_time_duration)}/คิว</span>
+                        <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 16px; word-wrap: break-word;">${product.product_caption}</span>
                     </div>
                 </div>
             </div>

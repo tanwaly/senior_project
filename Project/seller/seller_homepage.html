@@ -275,7 +275,7 @@
 
                                 <div id="clothSizeSelect" class="select-container" style="display: none;">
                                     <select name="product_clothsize"
-                                        style="width: 535px; height: 40px; border-radius: 7px; padding: 14px; border: none;">
+                                        style="width: 530px; height: 60px; border-radius: 7px; padding: 14px; border: none;">
                                         <option option value="" disabled selected>Select Cloth size</option>
                                         <option value="Freesize">Free size</option>
                                         <option value="XS">XS</option>
@@ -352,16 +352,25 @@
                 const avgScoreResponse = await fetch(`/getSellerOwnAvgScore`);
                 const avgScoreData = await avgScoreResponse.json();
 
+                const reviewStarDiv = document.querySelector('.reviewStar');
+
                 if (avgScoreData.error) {
                     console.error(avgScoreData.error);
+                    reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey;">ยังไม่มีรีวิว</span>';
                 } else {
                     // Ensure avg_score is a valid number
                     const avgScore = Number(avgScoreData.avg_score) || 0;
-                    const reviewStarDiv = document.querySelector('.reviewStar');
-                    reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+
+                    if (avgScore === 0) {
+                        reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey;">ยังไม่มีรีวิว</span>';
+                    } else {
+                        reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching average score:', error);
+                const reviewStarDiv = document.querySelector('.reviewStar');
+                reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey; ">ยังไม่มีรีวิว</span>';
             }
         });
 
@@ -487,9 +496,10 @@
                                         </button>
                                     </div>
                                     <div class="col">
-                                        <span style="font-size: 16px; font-weight: 700; margin-left: 13px; word-wrap: break-word;">${product.product_name}</span>
-                                        <span style="font-size: 12px; font-weight: 500; margin-left: 13px; color:#E7417F;">฿<span style =" font-size: 19px; font-weight: 800;">${product.product_price}</span></span>
-                                        <span style="font-size: 14px; font-weight: 400; margin-left: 13px; word-wrap: break-word;">${product.product_caption}</span>
+                                         <span style="width: 201px; font-size: 17.42px; font-weight: 600; margin-left: 13.4px; word-wrap: break-word; color:#161E52;">${product.product_name}</span>
+                                         <span style="font-size: 12.06px; font-weight: 500; margin-left: 13.4px; color:#E7417F;">฿<span style="font-size: 18.76px; font-weight: 800;">${product.product_price}</span></span>
+                                         <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 13.4px; width:300px; color:grey;">ระยะเวลาในการชำระเงิน : ${formatMin(product.product_time_duration)}/คิว</span>
+                                         <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 16px; word-wrap: break-word;">${product.product_caption}</span>
                                     </div>
                                 </div>
                             </div>
@@ -529,6 +539,26 @@
                 const date = new Date(dateTimeStr);
                 return `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}<br>${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
             }
+            function formatMin(duration) {
+                if (!duration || typeof duration !== 'string') {
+                    console.error('Invalid duration format:', duration);
+                    return 'Invalid duration';
+                }
+
+                const [hours, minutes] = duration.split(':').map(Number);
+
+                if (isNaN(hours) || isNaN(minutes)) {
+                    console.error('Duration contains invalid numbers:', duration);
+                    return 'Invalid duration';
+                }
+
+                if (hours > 0) {
+                    return `${hours} ชั่วโมง${hours > 1 ? 's' : ''}`;
+                }
+
+                return `${minutes} นาที`;
+            }
+
 
             // Function to get icon class based on category
             function changeIcon(cata) {

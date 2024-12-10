@@ -462,6 +462,33 @@ app.post('/addorder', (req, res) => {
     });
 });
 
+// API endpoint to check product status in cf page
+app.get('/cfproduct/status/:productId', async (req, res) => {
+    const { productId } = req.params;
+
+    const sql = `
+        SELECT product_status
+        FROM products
+        WHERE product_id = ?
+    `;
+
+    try {
+        const [results] = await con.promise().query(sql, [productId]);
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        const productStatus = results[0].product_status;
+        res.json({
+            product_sold: productStatus === 0, // Assuming '0' means sold
+        });
+    } catch (error) {
+        console.error('Error fetching product status:', error);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
 
 
 //-------- cf status
@@ -476,6 +503,8 @@ app.get('/orderStatus', (req, res) => {
         orders.order_status, 
         orders.order_tracknum, 
         orders.order_shipname,
+        orders.order_address,
+        orders.order_addname,
         products.product_name, 
         products.product_price, 
         products.product_img,        
@@ -524,19 +553,6 @@ app.put('/updateOrderStatus/:orderId', (req, res) => {
         res.json({ success: true, message: 'Order status updated successfully' });
     });
 });
-// check is this order got review already?
-// app.get('/getReviewedOrders', (req, res) => {
-//     const { orderId } = req.params;
-//     const query = 'SELECT order_id FROM review WHERE';
-//     db.query(query, (err, results) => {
-//         if (err) {
-//             console.error('Error fetching reviewed orders:', err);
-//             return res.status(500).json({ error: 'Internal Server Error' });
-//         }
-//         res.json(results);
-//     });
-// });
-
 
 // customer information & edit
 app.get('/customerprofile', (req, res) => {
@@ -1095,6 +1111,7 @@ app.get('/trackingnum', (req, res) => {
             products.product_img,        
             users.first_name, 
             users.last_name, 
+            users.phonenum, 
             users.profile_img 
         FROM 
             queue 

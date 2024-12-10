@@ -136,7 +136,7 @@
                     if (qrResponse.ok) {
                         const { Result: qrCodeUrl } = await qrResponse.json();
                         document.getElementById('qrCodeContainer').innerHTML = `
-                    <img src="${qrCodeUrl}" alt="PromptPay QR Code" style="width:160px;">
+                    <img src="${qrCodeUrl}" alt="PromptPay QR Code" style="width:250px;">
                 `;
                     } else {
                         console.error('Failed to generate QR code');

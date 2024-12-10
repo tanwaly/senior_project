@@ -190,12 +190,12 @@
                           <div class="row" style="margin:30px 80px 30px 80px;">
                               <div class="flex">
                                   ${review.customer_profile_img
-                                      ? `<img src="/public/img/${review.customer_profile_img}" 
+                        ? `<img src="/public/img/${review.customer_profile_img}" 
                                               alt="Customer Profile Picture" 
                                               class="avatar rounded-circle m-4" 
                                               style="height: 60px;">`
-                                      : ''
-                                  }
+                        : ''
+                    }
                                   <div class="col">
                                       <span style="color: #6e6e6e; font-size: 12px;">
                                           ${new Date(review.review_date).toLocaleString()}
@@ -211,10 +211,10 @@
                                   </div>
                                   <div style="width: 100%; display: flex; justify-content: flex-end; padding-right:35px;">
                                       ${review.review_img
-                                      ? `<img src="/public/img/${review.review_img}" 
+                        ? `<img src="/public/img/${review.review_img}" 
                                                       style="max-width: 120px; object-fit: contain;">`
-                                      : ''
-                                  }
+                        : ''
+                    }
                                   </div>
                               </div>
                           </div>
@@ -224,7 +224,9 @@
 
         } catch (error) {
             console.error('Error fetching reviews:', error);
-            alert('Failed to load reviews.');
+            document.getElementById('reviewsList').innerHTML = ` 
+                <p style="color: grey; text-align: center;">ยังไม่มีรีวิวในขณะนี้</p>
+            `;
         }
     });
 
