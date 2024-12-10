@@ -149,6 +149,11 @@ app.post('/login', (req, res) => {
         }
     });
 });
+app.get('/logout', (req, res) => {
+    req.session.destroy();
+    res.redirect('/login');
+});
+
 
 
 app.get('/getRoles', (req, res) => {
@@ -358,7 +363,8 @@ app.get('/payment/:productId', (req, res) => {
                users.first_name, 
                users.last_name, 
                users.profile_img, 
-               queue.queue_id
+               queue.queue_id,
+               queue.queue_estimated_time
         FROM products
         JOIN users ON products.seller_id = users.users_id
         JOIN queue ON queue.product_id = products.product_id
@@ -808,7 +814,6 @@ app.get('/sellerhomepage', (req, res) => {
         } else if (results.length === 0) {
             res.status(404).json({ error: 'User not found' });
         } else {
-            // Send the HTML page and then let the frontend fetch the user data
             res.sendFile(path.join(__dirname, 'Project/seller/seller_homepage.html'));
         }
     });
@@ -1107,6 +1112,7 @@ app.get('/trackingnum', (req, res) => {
             orders.order_shipname, 
             orders.order_addname, 
             orders.order_address, 
+            orders.order_status, 
             products.product_name, 
             products.product_img,        
             users.first_name, 
@@ -1118,7 +1124,8 @@ app.get('/trackingnum', (req, res) => {
         JOIN orders ON queue.queue_id = orders.queue_id
         JOIN products ON queue.product_id = products.product_id  
         JOIN users ON products.seller_id = users.users_id  
-        WHERE users.users_id = ?;      
+        WHERE orders.order_status BETWEEN 0 AND 4  AND users.users_id = ? 
+        ORDER BY orders.order_status ASC;;      
     `;
 
     con.query(sql, [loggedInUserId], (err, results) => {

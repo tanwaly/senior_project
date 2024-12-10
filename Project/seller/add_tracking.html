@@ -119,18 +119,18 @@
 <body>
     <div style="background-color:#FEF3D0;" class="d-flex">
         <div class="d-flex align-items-center"
-            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 1300px; height: 120px; padding: 20px;">
-            <img src="/public/img/logo-w.png" width="100px" alt="Logo">
-            <div class="d-flex justify-content-between" style="margin-left: 65px;">
+            style="background:#D46F95; border-radius: 0px 300px 300px 0px; width:auto; max-width: 870px; height: 80px; padding: 13px;">
+            <img src="/public/img/logo-w.png" width="66px" alt="Logo">
+            <div class="d-flex justify-content-between" style="margin-left: 43px;">
                 <a href="/sellerhomepage"
-                    style="color:white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    style="color:white; text-decoration:none; font-size: 15px; padding-left: 43px;">
                     <i class="bi bi-house-door"></i> Homepage
                 </a>
                 <a href="/add-trackingnum"
-                    style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;">
+                    style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px;">
                     <i class="bi bi-truck"></i> เลขพัสดุ
                 </a>
-                <a style="color: white; text-decoration:none; font-size: 20px; padding-left: 65px;padding-right: 165px;" 
+                <a style="color: white; text-decoration:none; font-size: 15px; padding-left: 43px; padding-right: 110px; "
                     data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-chat-dots"></i> Help
                 </a>
@@ -145,29 +145,29 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p style="font-size: 18px;"><i class="bi bi-line"
-                                    style="font-size: 25px; color: #06c755"></i><strong> Line
+                            <p style="font-size: 14px;"><i class="bi bi-line"
+                                    style="font-size: 20px; color: #06c755"></i><strong>
+                                    Line
                                     :</strong> surety_offical</p>
-                            <p style="font-size: 18px;"><i class="bi bi-instagram" style="font-size: 25px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
-                                -webkit-background-clip: text;
-                                -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
-                            <p style="font-size: 18px;"><i class="bi bi-facebook"
-                                    style="font-size: 25px; color: 	#1877F2"></i><strong> Facebook
+                            <p style="font-size: 14px;"><i class="bi bi-instagram" style="font-size: 20px; background: -webkit-linear-gradient(#f9ce34,#ee2a7b,#6228d7);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;"></i><strong> Instagram :</strong> surety_sp</p>
+                            <p style="font-size: 14px;"><i class="bi bi-facebook"
+                                    style="font-size: 20px; color: 	#1877F2"></i><strong> Facebook
                                     :</strong> Surety</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                 Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
             </button>
         </div>
     </div>
-
     <div style="margin-top: 50px;" class="parent-container"></div>
 
     <!-- Help Modal -->
@@ -195,26 +195,26 @@
         .then(response => response.json())
         .then(data => {
             const container = document.querySelector('.parent-container');
-            container.innerHTML = '';  // Clear any existing content
+            container.innerHTML = ''; // Clear any existing content
 
             data.forEach((item, index) => {
-                const orderTracknum = item.tracking_number ? item.tracking_number : 'กรุณากรอกข้อมูล';  // Use item.tracking_number
-                const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';  // Use item.first_name (or the appropriate field)
+                const orderTracknum = item.tracking_number ? item.tracking_number : 'กรุณากรอกข้อมูล';
+                const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';
+                const backgroundColor = item.order_status === 0 ? '#E9F4FF' : ' ';
 
                 const rowHTML = `
-                <div class="row">
+                <div class="row"style="background-color: ${backgroundColor}; border-radius: 10px; padding: 10px; margin-bottom: 15px;">
                     <img src="/public/img/${item.product_img}" alt="${item.product_name}" 
                         style="border-radius: 15px; margin-left: 25px; width: auto; max-height: 100px;">
                     <div class="col" style="margin-left: 50px;">
                         <span style="font-size: 17px;font-weight: 700; margin-bottom:5px;">${item.product_name}</span>
                         <span style="font-weight: 700; font-size:14px">ชื่อผู้รับ: <span style="font-weight: 400;">${item.order_addname}</span></span>
                         <span style="font-weight: 700; font-size:14px">เบอร์โทร: <span style="font-weight: 400;">${item.phonenum}</span></span>
-                            <span style="font-weight: 700; font-size:14px; width:600px ;  word-wrap: break-word;">ที่อยู่: <span style="font-weight: 400;margin-bottom:2px;">${item.order_address}</span></span>
+                        <span style="font-weight: 700; font-size:14px; width:600px; word-wrap: break-word;">ที่อยู่: <span style="font-weight: 400;margin-bottom:2px;">${item.order_address}</span></span>
                         <div id="trackingSection${index}">
                             <span style="font-weight: 700; font-size:14px">เลขพัสดุ: <span style="font-weight: 400;">${orderTracknum}</span></span><br>
                             <span style="font-weight: 700; font-size:14px">จัดส่งโดย: <span style="font-weight: 400;">${orderShipname}</span></span>
-                            </div>
-                            
+                        </div>
                     </div>
                     <div class="col center" style="margin-left: 700px;">
                         <button id="editBtn${index}" class="edit-button" style="background: #FFE48C; border-radius: 15px; border-color: transparent;" onclick="editTracking(${index}, ${item.order_id})">
@@ -231,6 +231,7 @@
         .catch(error => {
             console.error('Error fetching tracking data:', error);
         });
+
 
 
     // Function to replace the display with input fields
@@ -290,7 +291,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update the UI with the new tracking information
                     const trackingSection = document.getElementById(`trackingSection${index}`);
                     const editButton = document.getElementById(`editBtn${index}`);
 
@@ -298,15 +298,38 @@
                 <span style="font-weight: 700; font-size:12px">เลขพัสดุ: <span style="font-weight: 300;">${trackingCode}</span></span><br>
                 <span style="font-weight: 700; font-size:12px">จัดส่งโดย: <span style="font-weight: 300;">${transport}</span></span>
             `;
+                    showAlert('Tracking information updated successfully!');
+                    location.reload();
 
                     editButton.style.display = 'block';
                 } else {
-                    alert('Error updating tracking information');
+                    showAlert('Error updating tracking information');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+    }
+    function showAlert(message, type = 'info') {
+        const alertDiv = document.createElement('div');
+        alertDiv.textContent = message;
+        alertDiv.style.cssText = `
+        position: fixed; 
+        top: 20px; 
+        right: 20px; 
+        padding: 15px; 
+        border-radius: 8px; 
+        background-color: ${type === 'success' ? '#FFB3B3' : '#BDE3A7'};
+        color: ${type === 'success' ? '#D32F2F' : '#2E7D32'};
+        font-weight: bold;
+        z-index: 1000;
+    `;
+
+        document.body.appendChild(alertDiv);
+
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 3000);
     }
 
 </script>

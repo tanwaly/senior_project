@@ -70,7 +70,7 @@
     </div>
     <div class="flex center">
         <div class="flex center" style="margin-top: 20px;">
-            <img id="profileImg" alt="pfp" class="avatar">
+            <img id="profileImg" alt="pfp" class="avatar" style=" width: 120px; height:120px;">
             <div class="flex" style="gap: 400px;">
                 <div class="column">
                     <div class="flex mt-4" style="margin-left: 20px;">
@@ -155,6 +155,7 @@
             });
     }
 
+    //show star part
     document.addEventListener('DOMContentLoaded', async () => {
         const sellerId = window.location.pathname.split('/').pop();
 
@@ -164,19 +165,22 @@
             const avgScoreData = await avgScoreResponse.json();
 
             if (avgScoreData.error) {
-                reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey;">ยังไม่มีรีวิว</span>';
+                console.error(avgScoreData.error);
+                reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey; ">ยังไม่มีรีวิว</span>';
             } else {
                 // Ensure avg_score is a valid number
                 const avgScore = Number(avgScoreData.avg_score) || 0;
+                const reviewStarDiv = document.querySelector('.reviewStar');
                 if (avgScore === 0) {
                     reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey;">ยังไม่มีรีวิว</span>';
                 } else {
                     reviewStarDiv.innerHTML = generateStarHTML(avgScore);
+                   
                 }
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Error fetching average score:', error);
-            const reviewStarDiv = document.querySelector('.reviewStar');
             reviewStarDiv.innerHTML = '<span style="font-size: 16px; font-weight: 500; color:lightgrey; ">ยังไม่มีรีวิว</span>';
         }
     });
@@ -193,7 +197,6 @@
         <span style="font-size: 16px; font-weight: 500; margin-left: 5px;">${avgScore.toFixed(1)}</span>
     `;
     }
-
 
     document.addEventListener('DOMContentLoaded', async () => {
         const sellerId = window.location.pathname.split('/').pop();

@@ -145,7 +145,8 @@
     <div>
         <div class="flex center" style="margin-top: 40px;">
             <!-- Profile Image -->
-            <img id="profileImg" src="/public/img/fprofile.jpg" alt="Profile Picture" class="avatar">
+            <img id="profileImg" src="/public/img/fprofile.jpg" alt="Profile Picture" class="avatar"
+                style=" width: 120px; height:120px;">
             <div class="flex" style="gap: 720px;">
                 <!-- contect. review -->
                 <div class="column" style="margin-left: 50px;">
@@ -463,9 +464,8 @@
             async function getSellerProduct() {
                 try {
                     const response = await fetch('/sellerproduct');
-                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    if (!response.ok) throw new Error('Error fetching products');
                     const data = await response.json();
-                    if (data.error) console.error(data.error);
 
                     let html = '';
                     data.forEach(product => {
@@ -513,7 +513,6 @@
                 }
             }
 
-            // Function to change background color of product time div based on product's time
             function checkAndUpdateProductTimes(products) {
                 products.forEach(product => {
                     const productTimeDiv = document.getElementById(`productTimeDisplay_${product.product_id}`);

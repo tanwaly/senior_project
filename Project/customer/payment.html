@@ -100,30 +100,46 @@
             }
 
             try {
-                // Fetch product details
-                const productResponse = await fetch(`/payment/${productId}`);
-                if (productResponse.ok) {
-                    const product = await productResponse.json();
-                    const price = product.product_price; // Extract price from response
+                // Fetch product and queue details
+                const response = await fetch(`/payment/${productId}`);
+                if (response.ok) {
+                    const product = await response.json();
+                    const { product_price: price, queue_estimated_time } = product;
+
+                    // Function to check if the current time exceeds queue_estimated_time
+                    const checkQueueTime = () => {
+                        const currentTime = new Date().getTime(); // Current timestamp
+                        const queueTime = new Date(queue_estimated_time).getTime(); // Queue estimated timestamp
+
+                        if (currentTime > queueTime) {
+                            Swal.fire({
+                                title: "หมดระยะเวลาในการชำระเงิน",
+                                text: "หมดระยะเวลาในการชำระเงินแล้ว คุณจะถูกเปลี่ยนหน้าไปยังหน้าหลัก",
+                                icon: "error",
+                            }).then(() => {
+                                location.replace('/homepage');
+                            });
+                        }
+                    };
+
+                    // Perform the check immediately
+                    checkQueueTime();
+
+                    // Set interval to check every 1 minute (60,000 milliseconds)
+                    setInterval(checkQueueTime, 60000);
 
                     // Display product details
                     const productHTML = `
-                            <div class="row">
-                                <img src="/public/img/${product.product_img}" alt="Product Image" style="width:150px; height:150px; border-radius:20px; object-fit: contain;">
-                                <div class="col">
-                                    <p><strong>ชื่อ:</strong> ${product.product_name}</p>
-                                    <p><strong>คำอธิบาย:</strong> ${product.product_caption}</p>
-                                    <p><strong>ราคา:</strong> ${price} THB</p>
-                                </div>
-                            </div>
-                            `;
-                    confirmbtn.innerHTML = `<div class="text-center" style="margin-top: 10px">
-                            <button id="payButton" onclick="confirmPayment()" data-queue-id="${product.queue_id}"
-                             style="background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
-                                ยืนยัน
-                            </button>
-                        </div>
-                        `;
+                <div class="row">
+                    <img src="/public/img/${product.product_img}" alt="Product Image" 
+                         style="width:150px; height:150px; border-radius:20px; object-fit: contain;">
+                    <div class="col">
+                        <p><strong>ชื่อ:</strong> ${product.product_name}</p>
+                        <p><strong>คำอธิบาย:</strong> ${product.product_caption}</p>
+                        <p><strong>ราคา:</strong> ${price} THB</p>
+                    </div>
+                </div>
+            `;
                     document.getElementById('showProduct').innerHTML = productHTML;
 
                     // Generate QR code
@@ -136,18 +152,29 @@
                     if (qrResponse.ok) {
                         const { Result: qrCodeUrl } = await qrResponse.json();
                         document.getElementById('qrCodeContainer').innerHTML = `
-                    <img src="${qrCodeUrl}" alt="PromptPay QR Code" style="width:250px;">
+                    <img src="${qrCodeUrl}" alt="PromptPay QR Code" style="width:160px;">
                 `;
                     } else {
                         console.error('Failed to generate QR code');
                     }
+
+                    // Confirm button
+                    document.getElementById('confirmbtn').innerHTML = `
+                <div class="text-center" style="margin-top: 10px">
+                    <button id="payButton" onclick="confirmPayment()" data-queue-id="${product.queue_id}"
+                     style="background: #bde3a7; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: black; font-weight: bold;">
+                        ยืนยัน
+                    </button>
+                </div>
+            `;
                 } else {
-                    console.error('Failed to fetch product details:', productResponse.statusText);
+                    console.error('Failed to fetch product details:', response.statusText);
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         });
+
 
         async function confirmPayment() {
             const orderAddress = document.getElementById("orderAddress").value.trim();
