@@ -19,6 +19,12 @@
             align-items: center;
         }
 
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .controls {
             display: flex;
             justify-content: space-between;
@@ -27,40 +33,36 @@
 
         .search-bar {
             flex: 1;
-            margin-right: 10px;
+            margin-right: 7.5px;
             position: relative;
         }
 
         .search-bar input {
             width: 100%;
-            padding: 10px;
-            border-radius: 30px;
+            padding: 7.5px;
+            border-radius: 22.5px;
             border: 1px solid #FFF;
-            font-size: 16px;
+            font-size: 12px;
             box-sizing: border-box;
         }
 
         .search-bar i {
             position: absolute;
-            right: 15px;
+            right: 11.25px;
             top: 50%;
             transform: translateY(-50%);
             color: #aaa;
-            font-size: 20px;
-        }
-
-        .select_role {
-            flex: 0 0 auto;
+            font-size: 15px;
         }
 
         .select_role select {
-            border-radius: 30px;
+            border-radius: 22.5px;
             border: none;
             color: #8D8D8D;
-            font-size: 15px;
+            font-size: 11.25px;
             text-align: center;
-            height: 45px;
-            width: 200px;
+            height: 33.75px;
+            width: 150px;
         }
 
         table {
@@ -76,14 +78,15 @@
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
-            color: #000;
+            color: black;
+            font-size: 14px;
         }
 
         th {
-        background-color:rgb(157, 158, 138);
-        color: white;
-        font-weight: bold;
-    }
+            background-color: rgb(157, 158, 138);
+            color: white;
+            font-weight: bold;
+        }
 
         .btn-details {
             background-color: #B2B2B2;
@@ -109,15 +112,16 @@
 
     <div style="margin: 20px;">
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;  margin-bottom: 10px;">
-            <h2 style="text-align: center; color: white; margin-bottom: 20px;">ฐานข้อมูลผู้ใช้</h2>
+            <h4 style="text-align: center; color: white; margin-bottom: 20px;">ฐานข้อมูลผู้ใช้</h4>
             <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-                height: 46px; color: white;" onclick="location.replace('/login');">
+                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                     Log out
-                    <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                    <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
                 </button>
             </div>
         </div>
+
         <div class="controls">
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="ค้นหา..." style="padding-left: 25px;">
@@ -154,11 +158,11 @@
                 <div class="modal-dialog center" role="document">
                     <div class="modal-content"
                         style="background-color:  #F3F3E3; min-width: 800px; min-height: 400px; height: auto;">
-                        <div class="modal-header" style="background-color:  #8472AC;">
-                            <h5 class="modal-title" id="dataDetailTitle" style="color: white; font-size: 22px;">
+                        <div class="modal-header" style="background-color:  #000000; height: 50px;">
+                            <h5 class="modal-title" id="dataDetailTitle" style="color: white; font-size: 18px;">
                                 Detail</h5>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
-                                style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                                style="background-color: transparent; border: none; color: white; font-size: 20px;">
                                 <span aria-hidden="true">&times;</span>
                             </button>
 
@@ -169,7 +173,7 @@
                             <!-- <button type="button" class="btn btn-danger">ระงับบัญชีผู้ใช้</button> -->
                             <div>
                                 <button id="toggleUserStatus"
-                                    style="border-radius: 8px; border: none; background-color: #FFA4A4; height: 50px; width: 200px; font-size: 20px;">ระงับบัญชีผู้ใช้</button>
+                                    style="border-radius: 8px; border: none; background-color: #FFA4A4; height: 50px; width: 200px; font-size: 18px;">ระงับบัญชีผู้ใช้</button>
                             </div>
                         </div>
                     </div>
@@ -260,11 +264,11 @@
                 <p><span>เลขบัญชีธนาคาร: ${user.bank_ac_num || 'N/A'}</span></p>
                 <p><span style="text-decoration: underline;">บัตรประชาชน</span></p>
                 <div class="center">
-                    <img style="height: 250px;" src="/public/img/${user.id_img}" alt="บัตรประชาชน">
+                    <img style="height: 250px; object-fit: cover;" src="/public/img/${user.id_img}" alt="บัตรประชาชน">
                 </div>` : '';
 
                     modalBody.innerHTML = `
-                <div style="font-size: 25px; margin-left: 50px; margin-top: 50px; color: #000;">
+                <div style="font-size: 18px; margin-left: 50px; margin-top: 50px; color: #000;">
                     <p><span>ชื่อ - นามสกุล: ${user.first_name} ${user.last_name}</span></p>
                     <p><span>เบอร์โทร: ${user.phonenum || 'N/A'}</span></p>
                     <p><span>Email: ${user.email || 'N/A'}</span></p>

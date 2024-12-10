@@ -14,12 +14,12 @@
 </head>
 
 <body style="background-color: #2C2C2C">
-
-    <div style="color: white; padding: 25px; margin-top: 30px; margin: 10px 50px 10px 50px;">
+    <div style="color: white; padding: 18.75px; margin-top: 22.5px; margin: 7.5px 37.5px 7.5px 37.5px;">
         <div class="d-flex align-items-center">
-            <h5 style="font-weight: bold; margin-right: 10px;">สถานะสินค้า</h5>
+            <h5 style="font-weight: bold; margin-right: 7.5px; font-size: 75%;">สถานะสินค้า</h5>
             <div>
-                <select name="orderStatus" id="orderStatus" style="border: none; border-radius: 15px; height: 40px; padding: 5px;">
+                <select name="orderStatus" id="orderStatus"
+                    style="border: none; border-radius: 11.25px; height: 30px; padding: 3.75px; font-size: 75%;">
                     <option value="">All</option>
                     <option value="0">กำลังเตรียมสินค้า</option>
                     <option value="1">กำลังจัดส่ง</option>
@@ -28,25 +28,25 @@
                     <option value="4">จัดส่งไม่สำเร็จ</option>
                 </select>
             </div>
-            <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
+            <div class="d-flex align-items-center ms-auto" style="padding-right: 15px;">
                 <button
-                    style="margin-right: 20px; border-radius: 10px; height: 46px; width: 250px; border: none; font-weight: bold; font-size: 18px; background-color: #ffc02c; color: rgb(0, 0, 0);"
+                    style="margin-right: 15px; border-radius: 7.5px; height: 34.5px; width: 187.5px; border: none; font-weight: bold; font-size: 13.5px; background-color: #ffc02c; color: rgb(0, 0, 0);"
                     onclick="location.href = '/payment-verify-list'">ตรวจสอบการโอนเงิน</button>
                 <button id="btnlogout"
-                    style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px; height: 46px; color: white;"
+                    style="background: #B72323; border-radius: 9.75px; border-color: transparent; width: 112.5px; height: 34.5px; color: white; font-size: 13.5px; font-weight: 500;"
                     onclick="location.replace('/login');">
                     Log out
-                    <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                    <i class="bi bi-box-arrow-right" style="padding-left: 11.25px;"></i>
                 </button>
             </div>
-
         </div>
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 7.5px;">
             <input type="search" name="" id="" placeholder="search tracking number" class="form-control"
-                style="border-radius: 25px; margin: 15px 0px 35px 0px;">
+                style="border-radius: 18.75px; margin: 11.25px 0px 26.25px 0px; font-size: 75%;">
             <div class="shAllProduct">
             </div>
         </div>
+    </div>
 
 </body>
 <script>
@@ -65,14 +65,14 @@
 
     function getStatus(status) {
         switch (status) {
-            case 0: return '<span style="font-size: 18px; font-weight: bold; background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: skyblue;">กำลังเตรียมสินค้า</span>';
-            case 1: return '<span style="font-size: 18px; font-weight: bold; background:#f6f5f2 ; padding:5px 10px 5px 10px; border-radius: 50px; color: #FFB025;">กำลังจัดส่ง</span>';
-            case 2: return '<span style="font-size: 18px; font-weight: bold; background:#fbedf1 ; padding:5px 10px 5px 10px; border-radius: 50px; color: red;">ยกเลิกการสั่งซื้อ</span>';
-            case 3: return '<span style="font-size: 18px; font-weight: bold; background:#e2fee2 ; padding:5px 10px 5px 10px; border-radius: 50px; color: green;">จัดส่งสำเร็จ</span>';
-            case 4: return '<span style="font-size: 18px; font-weight: bold; background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">จัดส่งไม่สำเร็จ</span>';
-            case 5: return '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #A49A89;">รอตรวจสอบการโอนเงิน</span>';
-            case 6: return '<span style="font-size: 18px; font-weight: bold; background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: grey;">จัดส่งไม่สำเร็จ</span>';
-            default: return '<span style="background:white ; padding:5px 10px 5px 10px; border-radius: 50px; color: #e06565;">ชำระเงินไม่สำเร็จ</span>';
+            case 0: return '<span style="font-size: 18px; font-weight: bold; background: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 50px; color: skyblue;">กำลังเตรียมสินค้า</span>';
+            case 1: return '<span style="font-size: 18px; font-weight: bold; background: rgba(246, 245, 242, 0.2); padding: 5px 10px; border-radius: 50px; color: #FFB025;">กำลังจัดส่ง</span>';
+            case 2: return '<span style="font-size: 18px; font-weight: bold; background: rgba(251, 237, 241, 0.2); padding: 5px 10px; border-radius: 50px; color: red;">ยกเลิกการสั่งซื้อ</span>';
+            case 3: return '<span style="font-size: 18px; font-weight: bold; background: rgba(226, 254, 226, 0.2); padding: 5px 10px; border-radius: 50px; color: lightgreen;">จัดส่งสำเร็จ</span>';
+            case 4: return '<span style="font-size: 18px; font-weight: bold; background: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 50px; color: lightgrey;">จัดส่งไม่สำเร็จ</span>';
+            case 5: return '<span style="font-size: 18px; font-weight: bold; background: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 50px; color: #D9D2A6;">รอตรวจสอบการโอนเงิน</span>';
+            case 6: return '<span style="font-size: 18px; font-weight: bold; background: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 50px; color: #F87C7C;">ชำระเงินไม่สำเร็จ</span>';
+            default: return '<span style="font-size: 18px; font-weight: bold; background: rgba(255, 255, 255, 0.2); padding: 5px 10px; border-radius: 50px; color: #e06565;"></span>';
         }
     }
     function formatDateTime(dateTimeStr) {
@@ -148,39 +148,35 @@
     .row {
         display: flex;
         flex-direction: row;
-       
- 
-    
     }
 
     .col {
         display: flex;
         flex-direction: column;
-        
     }
 
     .name-p {
-        font-size: 20px;
+        font-size: 15px;
         font-style: normal;
         font-weight: 700;
     }
 
     .name-p2 {
-        font-size: 20px;
+        font-size: 15px;
         font-style: normal;
         font-weight: 400;
         word-wrap: break-word;
     }
 
     .status-container {
-    display: flex;
-    align-items: center; 
-    justify-content: flex-end; 
-    flex: 1; 
-    font-size: 18px;
-    text-align: right;
-}
-
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex: 1;
+        font-size: 15px;
+        font-weight: 600;
+        text-align: right;
+    }
 </style>
 
 </html>

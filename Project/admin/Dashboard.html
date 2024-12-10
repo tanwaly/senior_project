@@ -10,24 +10,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" type="image/x-icon" href="/public/img/logo-w.png">
-    <style>
-        /* #pie-chart {
-            background: radial-gradient(circle closest-side, transparent 100%, #D6D0E4 0),
-                conic-gradient(from 180deg, #7BB4B7 0, #7BB4B7 55%, #FF6B6B 0, #FF6B6B 64%, #FFEA7D 0, #FFEA7D 100%);
-            min-width: 230px;
-            min-height: 230px;
-        } */
-    </style>
 </head>
 
-<body style="background-color: #8472AC;">
-    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px; background-color: #584d70;">
-        <h1 style="text-align: center; color: white;" class="m-3">Dashboard</h1>
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-            height: 46px; color: white;" onclick="location.replace('/login');">
+<body style="background-color:#F3F3E3;">
+    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px; background-color: #D46F95;">
+        <h3 style="text-align: center; color: white;" class="m-3">Dashboard</h3>
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                 Log out
-                <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
             </button>
         </div>
         <hr style="color: white;">
@@ -35,51 +27,45 @@
 
     <div class="center">
         <div style="flex-direction: column;">
-            <div style="background-color: #fffff7; height: 350px; width: 520px; border-radius: 15px;" class="m-5">
-                <h3 class="m-4" style="font-weight: bold; padding: 10px;">รายได้สุทธิ</h3>
-                <canvas id="incomeChart" style="width:100%;max-width:700px"></canvas>
+            <div style="background-color: #ffffff; height: 262.5px; width: 390px; border-radius: 11.25px; margin: 10px 10px 20px 35px;">
+                <h3 class="m-3" style="font-weight: bold; padding: 7.5px; font-size: 75%; ">รายได้สุทธิ</h3>
+                <canvas id="incomeChart" style="width:100%;max-width:525px"></canvas>
             </div>
             <div class="col">
-                <select id="yearSelector" class="form-select" style=" width: 520px; margin-left: 50px; background-color:
-                    #d9d9d9; font-weight: bold; border-radius: 8px; padding: 15px;">
+                <select id="yearSelector" class="form-select"
+                    style=" width: 390px; margin-left: 37.5px; background-color: #d9d9d9; font-weight: bold; border-radius: 6px; padding: 11.25px; font-size: 75%;">
                     <!-- Years will be populated dynamically -->
                 </select>
                 <button
-                    style="font-weight: bold; font-size: 20px; border: none; background-color: #EFF7FF; width: 200px; height: 50px; text-align: center; margin-left: 50px; border-radius: 10px; margin-top: 30px;"
+                    style="font-weight: bold; font-size: 15px; border: none; background-color: #F292B6; width: 150px; height: 37.5px; text-align: center; margin-left: 37.5px; border-radius: 7.5px; margin-top: 22.5px;"
                     onclick="location.href = '/orders-status'">สถานะสินค้า</button>
-                <div class="row" style=" justify-content: space-evenly; margin: 50px 0px 50px 0px;">
+                <div class="row" style="justify-content: space-evenly; margin: 37.5px 0px 37.5px 0px;">
                     <button class="animated-button" onclick="location.href = '/sellerVerify-list'">
-                        <img src="/public/img/image 2.png" alt="dashboard" style="width: 50px; height: 50px;">
+                        <img src="/public/img/image 2.png" alt="dashboard" style="width: 37.5px; height: 37.5px;">
                         <p>ยืนยันผู้ใช้</p>
                     </button>
                     <button class="animated-button" onclick="location.href = '/sellerReport-list'">
-                        <img src="/public/img/image 3.png" alt="dashboard" style="width: 80px; height: 80px;">
+                        <img src="/public/img/image 3.png" alt="dashboard" style="width: 60px; height: 60px;">
                         <p>รายงานผู้ใช้</p>
                     </button>
                     <button class="animated-button" onclick="location.href = '/userslist'">
-                        <img src="/public/img/image 4.png" alt="dashboard" style="width: 60px; height: 60px;">
+                        <img src="/public/img/image 4.png" alt="dashboard" style="width: 45px; height: 45px; margin-top: 10px;">
                         <p>ฐานข้อมูลผู้ใช้</p>
                     </button>
                 </div>
             </div>
         </div>
-        <div style="background-color: #D6D0E4; min-height: 550px; height: auto; width: 600px; border-radius: 15px; padding-bottom: 25px;"
-            class="m-5">
-            <h3 class="m-4" style="text-align: end; font-weight: bold;">สรุปรายการการส่งสินค้า</h3>
-            <h1 class="m-4" style="text-align: end; font-weight: bold; font-size: 70px;" id="totalOrder"></h1>
+        <div style="background-color: #B5C0E4; min-height: 412.5px; height: auto; width: 450px; border-radius: 11.25px; padding-bottom: 18.75px;"
+            class="m-3">
+            <h5 class="m-3" style="text-align: end; font-weight: bold;">สรุปรายการการส่งสินค้า</h5>
+            <h2 class="m-3" style="text-align: end; font-weight: bold; " id="totalOrder"></h2>
             <div class="row">
                 <div id="statusSummary"
-                    style="display: flex; justify-content: space-around; flex-wrap: wrap; padding: 10px;"></div>
-                <!-- <div id="chart-warp d-flex justify-content-around"> -->
+                    style="display: flex; justify-content: space-around; flex-wrap: wrap; padding: 7.5px;"></div>
                 <div class="center">
-                    <canvas id="orderPieChart" style="max-width: 500px; padding-top: 20px;"></canvas>
+                    <canvas id="orderPieChart" style="max-width: 500px; padding-top: 20px;  color: white;"></canvas>
                 </div>
             </div>
-            <!-- <div class="d-flex align-items-center ms-auto" style="margin-right: 50px;">
-                <div id="statusSummary" class="col" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-                </div>
-            </div> -->
-
         </div>
     </div>
 
@@ -120,10 +106,11 @@
 
                     const summaryDiv = document.getElementById('statusSummary');
                     summaryDiv.innerHTML = statusMap.map(status => `
-                        <div style="background-color: ${status.bgColor}; height: 60px; width: 200px; border-radius: 10px; margin: 5px; text-align: center; padding-top: 10px;">
-                            <strong style="color: ${status.textColor};">${status.label}</strong>
-                            <h4 style="font-size: 18px; color: ${status.textColor};">${status.count}</h4>
+                         <div style="background-color: ${status.bgColor}; height: 50px; width: 150px; border-radius: 10px; margin: 5px; text-align: center; padding-top: 7.5px;">
+                            <strong style="color: ${status.textColor}; font-size: 75%;">${status.label}</strong>
+                            <h4 style="font-size: 13.5px; color: ${status.textColor};">${status.count}</h4>
                         </div>
+
                     `).join('');
 
                     const chartData = statusMap.map(status => status.count);
@@ -159,6 +146,7 @@
                                 },
                             },
                         },
+                        
                     });
                 }
             }
@@ -245,23 +233,22 @@
     .col {
         display: flex;
         flex-direction: column;
-
     }
 
     .animated-button {
-        background-color: #e8e3d5;
-        font-size: 20px;
+        background-color: #F0B659;
+        font-size: 15px;
         font-weight: bold;
-        border-radius: 10px;
+        border-radius: 7.5px;
         border: none;
-        width: 150px;
-        height: 150px;
+        width: 112.5px;
+        height: 112.5px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .animated-button:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transform: translateY(-3.75px);
+        box-shadow: 0 7.5px 15px rgba(0, 0, 0, 0.2);
     }
 </style>
 

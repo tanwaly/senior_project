@@ -15,12 +15,12 @@
 
     <div style="margin: 20px;">
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;  margin-bottom: 10px;">
-            <h2 style="text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ต้องการการตรวจสอบ</h2>
+            <h4 style="text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ต้องการการตรวจสอบ</h4>
             <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-                height: 46px; color: white;" onclick="location.replace('/login');">
+                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                     Log out
-                    <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                    <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
                 </button>
             </div>
         </div>
@@ -47,24 +47,24 @@
                 </tbody>
             </table>
         </div>
-            <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered center" role="document">
-                    <div class="modal-content"
-                        style="background-color: #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
-                        <div class="modal-header" style="background-color: #272727;">
-                            <h5 class="modal-title" id="svdModalLabel" style="color: white; font-size: 22px;">รายละเอียด
-                            </h5>
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
-                                style="background-color: transparent; border: none; color: white; font-size: 40px;">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="sellerdetail">
-                            <!-- Dynamic details content will go here -->
-                        </div>
+        <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered center" role="document">
+                <div class="modal-content"
+                    style="background-color: #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
+                    <div class="modal-header" style="background-color: #272727; height: 60px;">
+                        <h5 class="modal-title" id="svdModalLabel" style="color: white; font-size: 20px ; ">รายละเอียด
+                        </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                            style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="sellerdetail">
+                        <!-- Dynamic details content will go here -->
                     </div>
                 </div>
             </div>
+        </div>
 
     </div>
 
@@ -118,7 +118,7 @@
                 const sellerDetail = document.querySelector('.sellerdetail');
                 sellerDetail.innerHTML = `
                     <div class="modal-body">
-                        <div style="font-size: 25px; color: #000;">
+                        <div style="font-size: 20px; color: #000;">
                             <p><strong>ชื่อ - นามสกุล:</strong> ${user.first_name} ${user.last_name}</p>
                             <p><strong>เบอร์โทร:</strong> ${user.phonenum || 'N/A'}</p>
                             <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
@@ -173,7 +173,7 @@
 </html>
 
 <style>
-    .search-bar {
+     .search-bar {
         flex: 1;
         margin-right: 10px;
         position: relative;
@@ -181,20 +181,20 @@
 
     .search-bar input {
         width: 100%;
-        padding: 10px;
-        border-radius: 30px;
+        padding: 8px;
+        border-radius: 24px;
         border: 1px solid #FFF;
-        font-size: 16px;
+        font-size: 12.8px;
         box-sizing: border-box;
     }
 
     .search-bar i {
         position: absolute;
-        right: 15px;
+        right: 12px;
         top: 50%;
         transform: translateY(-50%);
         color: #aaa;
-        font-size: 20px;
+        font-size: 16px;
     }
 
     table {
@@ -208,6 +208,7 @@
         border: 1px solid #ddd;
         padding: 10px;
         text-align: center;
+        font-size: 90%;
     }
 
     th {
@@ -228,6 +229,7 @@
         cursor: pointer;
         font-weight: bold;
         width: 60%;
+        height: 35px;
     }
 
     .btn-details:hover {
@@ -239,6 +241,8 @@
         border-radius: 8px;
         padding: 10px 20px;
         border: none;
+        height: 35px;
+        font-weight: 500;
     }
 
     .approve-btn {

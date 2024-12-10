@@ -16,12 +16,12 @@
 
     <div style="margin: 20px;">
         <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;  margin-bottom: 10px;">
-            <h2 style=" text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ถูกรายงาน</h2>
+            <h4 style="text-align: center; color: white; margin-bottom: 20px;">ผู้ขายที่ถูกรายงาน</h4>
             <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;
-                height: 46px; color: white;" onclick="location.replace('/login');">
+                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
                     Log out
-                    <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
+                    <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
                 </button>
             </div>
         </div>
@@ -53,8 +53,8 @@
             aria-hidden="true">
             <div class="modal-dialog center" role="document">
                 <div class="modal-content"
-                    style="background-color:  #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
-                    <div class="modal-header" style="background-color:  #272727;">
+                    style="background-color:  #F3F3E3; min-width: 800px; min-height: 400px; height: auto;">
+                    <div class="modal-header" style="background-color:  #272727; height: 60px;">
                         <h5 class="modal-title" id="reportDetailTitle" style="color: white; font-size: 22px;">
                             รายละเอียดการรายงาน
                         </h5>
@@ -155,33 +155,35 @@
 
                 function populateReportDetails(report) {
                     reportDetailsContainer.innerHTML = `
-                    <div class="modal-body">
-                <div class="container" style="font-size: 20px; margin-top: 30px;">
-                    <div class="col">
-                        <div class="col" style="color:black; background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px; margin-bottom: 20px;">
-                            <span class="name-p">ชื่อ: <span class="name-p2">${report.first_name} ${report.last_name}</span></span>
-                            <span class="name-p">เบอร์โทร: <span class="name-p2">${report.phonenum}</span></span>
-                            <span class="name-p">ชื่อบัญชีธนาคาร: <span class="name-p2">${report.bank_ac_name}</span></span>
-                            <span class="name-p">เลขบัญชีธนาคาร: <span class="name-p2">${report.bank_ac_num}</span></span>
+                   <div class="modal-body">
+                        <div class="container" style="font-size: 10px; margin-top: 13px;">
+                            <div class="col">
+                                <div class="col" style="color: black; background-color: rgb(255, 255, 255); border-radius: 10px; padding: 10px; height: auto; min-height: 50px; margin-bottom: 10px;">
+                                    <span class="name-p">ชื่อ: <span class="name-p2">${report.first_name} ${report.last_name}</span></span>
+                                    <span class="name-p">เบอร์โทร: <span class="name-p2">${report.phonenum}</span></span>
+                                    <span class="name-p">ชื่อบัญชีธนาคาร: <span class="name-p2">${report.bank_ac_name}</span></span>
+                                    <span class="name-p">เลขบัญชีธนาคาร: <span class="name-p2">${report.bank_ac_num}</span></span>
+                                </div>
+                                <u class="name-p" style="color: black; margin-bottom: 10px;">เหตุผลในการรายงานผู้ใช้</u>
+                                <div class="col" style="color: black; background-color: rgb(255, 255, 255); border-radius: 10px; padding: 10px; height: auto; min-height: 50px;">
+                                    <span class="name-p">เหตุผล: <span class="name-p2">${report.report_reason}</span></span>
+                                    <span class="name-p">รายละเอียด: <span class="name-p2">${report.report_detail}</span></span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px; border-radius: 10px;">
+                                <u class="name-p" style="color: black;">หลักฐาน</u>
+                                <div class="row center" style="margin-top: 10px; display: flex; justify-content: space-evenly;">
+                                    <img src="/public/img/${report.report_img}" alt="" style="width: 301px; object-fit: contain;">
+                                </div>
+                            </div>
                         </div>
-                        <u class="name-p" style="color: black; margin-bottom: 20px;">เหตุผลในการรายงานผู้ใช้</u>
-                        <div class="col" style="color: black; background-color: rgb(255, 255, 255); border-radius: 20px; padding: 20px; height: auto; min-height: 100px;">
-                            <span class="name-p">เหตุผล: <span class="name-p2">${report.report_reason}</span></span>
-                            <span class="name-p">รายละเอียด: <span class="name-p2">${report.report_detail}</span></span>
+                        <div class="row center" style="display: flex; justify-content: space-around; margin-top: 10px;">
+                            <button id="deny-report-btn" data-user-id="${report.seller_id}" style="background: #FFE48C; border: none; border-radius: 5px; width: 150px; height: 34px;">ปฎิเสธการรายงาน</button>
+                            <button id="ban-seller-btn" data-user-id="${report.seller_id}" style="background: #b72323; color: white; border: none; border-radius: 5px; width: 150px; height: 34px;">ระงับบัญชีผู้ใช้</button>
                         </div>
                     </div>
-                    <div style="margin-top: 20px; border-radius: 20px;">
-                        <u class="name-p" style="color: black;">หลักฐาน</u>
-                        <div class="row center" style="margin-top: 20px; display: flex; justify-content: space-evenly;">
-                            <img src="/public/img/${report.report_img}" alt="" style="width: 600px; object-fit: contain;">
-                        </div>
-                    </div>
-                </div>
-                 <div class="row center" style="display: flex; justify-content: space-around; margin-top: 20px;">
-                            <button id="deny-report-btn" data-user-id="${report.seller_id}" style="background: #FFE48C; border: none; border-radius: 10px;width: 200px; height: 65px;">ปฎิเสธการรายงาน</button>
-                            <button id="ban-seller-btn" data-user-id="${report.seller_id}"  style="background: #b72323; color: white;border: none; border-radius: 10px;width: 200px; height: 65px;">ระงับบัญชีผู้ใช้</button>
-                        </div>
-                    </div>`;
+
+`;
                     attachModalButtonListeners();
                 }
 
@@ -245,28 +247,26 @@
 
     .search-bar input {
         width: 100%;
-        padding: 10px;
-        border-radius: 30px;
+        padding: 8px;
+        border-radius: 24px;
         border: 1px solid #FFF;
-        font-size: 16px;
+        font-size: 12.8px;
         box-sizing: border-box;
     }
 
     .search-bar i {
         position: absolute;
-        right: 15px;
+        right: 12px;
         top: 50%;
         transform: translateY(-50%);
         color: #aaa;
-        font-size: 20px;
+        font-size: 16px;
     }
 
     table {
-        width: 1800px;
+        width: 100%;
         border-collapse: collapse;
         background-color: #F3F3E3;
-        flex-grow: 1;
-        overflow-y: auto;
     }
 
     th,
@@ -274,13 +274,15 @@
         border: 1px solid #ddd;
         padding: 10px;
         text-align: center;
+        font-size: 90%;
     }
 
     th {
-        background-color:rgb(157, 158, 138);
+        background-color: rgb(157, 158, 138);
         color: white;
         font-weight: bold;
     }
+
 
     .btn-details {
         background-color: #B2B2B2;
@@ -290,10 +292,11 @@
         text-decoration: none;
         display: inline-block;
         border-radius: 10px;
-        border: 1px solid #999;
+        border: none;
         cursor: pointer;
         font-weight: bold;
         width: 60%;
+        height: 35px;
     }
 
     .btn-details:hover {
@@ -317,16 +320,16 @@
     }
 
     .name-p {
-        font-size: 20px;
+        font-size: 18px;
         font-style: normal;
-        font-weight: 700;
+        font-weight: 500;
         margin-bottom: 8px;
     }
 
     .name-p2 {
-        font-size: 20px;
+        font-size: 18px;
         font-style: normal;
-        font-weight: 400;
+        font-weight: 300;
         word-wrap: break-word;
         margin-bottom: 8px;
     }

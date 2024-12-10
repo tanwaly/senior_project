@@ -14,55 +14,55 @@
 
 <body style="background-color: #2C2C2C;">
 
-    <div style="margin: 30px;">
-        <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-            <h2 style="text-align: center; color: white; margin-bottom: 30px;">รายการตรวจสอบการโอนเงิน</h2>
-            <div class="d-flex align-items-center ms-auto" style="padding-right: 20px;">
-                <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 150px;margin-bottom: 30px;
-                height: 46px; color: white;" onclick="location.replace('/login');">
-                    Log out
-                    <i class="bi bi-box-arrow-right" style="padding-left: 15px;"></i>
-                </button>
-            </div>
-            <hr style="color: white;">
+    <div class="d-flex align-items-center ms-auto" style="padding-right: 20px; margin: 10px;">
+        <h4 style="text-align: center; color: white;" class="m-3">รายการตรวจสอบการโอนเงิน</h4>
+        <div class="d-flex align-items-center ms-auto" style="padding-right: 13px;">
+            <button id="btnlogout" style="background: #B72323; border-radius: 13px; border-color: transparent; width: 100px;
+                height: 35px; color: white; font-size: 12px; font-weight: 500;" onclick="location.replace('/login');">
+                Log out
+                <i class="bi bi-box-arrow-right" style="padding-left: 10px;"></i>
+            </button>
         </div>
+        <hr style="color: white;">
+    </div>
 
 
-        <div id="showPaymentList" class="center">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>ผู้ซื้อ</th>
-                        <th>ผู้ขาย</th>
-                        <th>สินค้า</th>
-                        <th>Payment slips</th>
-                    </tr>
-                </thead>
-                <tbody id="PaymentTableBody">
-                </tbody>
-            </table>
-        </div>
 
-        <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
-            <div class="modal-dialog center" role="document">
-                <div class="modal-content"
-                    style="background-color:  #F3F3E3; min-width: 1000px; min-height: 400px; height: auto;">
-                    <div class="modal-header" style="background-color: #272727;">
-                        <h5 class="modal-title" id="svdModalLabel" style="color: white; font-size: 22px;">Payment slips
-                        </h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
-                            style="background-color: transparent; border: none; color: white; font-size: 40px;">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" style="padding: 50px;">
-                        <!-- Dynamic details content will go here -->
-                    </div>
+    <div id="showPaymentList" class="center" style="margin: 30px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ผู้ซื้อ</th>
+                    <th>ผู้ขาย</th>
+                    <th>สินค้า</th>
+                    <th>Payment slips</th>
+                </tr>
+            </thead>
+            <tbody id="PaymentTableBody">
+            </tbody>
+        </table>
+    </div>
 
+    <div class="modal fade" id="svdModal" tabindex="-1" aria-labelledby="svdModalLabel" aria-hidden="true">
+        <div class="modal-dialog center" role="document">
+            <div class="modal-content"
+                style="background-color:  #F3F3E3; min-width: 800px; min-height: 400px; height: auto;">
+                <div class="modal-header" style="background-color: #272727; height: 50px;">
+                    <h5 class="modal-title" id="svdModalLabel" style="color: white; font-size: 20px;">Payment slips
+                    </h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                        style="background-color: transparent; border: none; color: white; font-size: 40px;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
+                <div class="modal-body" style="padding: 50px;">
+                    <!-- Dynamic details content will go here -->
+                </div>
+
             </div>
         </div>
+    </div>
     </div>
 
     <script>
@@ -94,11 +94,12 @@
                     <td>${payment.seller_first_name} ${payment.seller_last_name}</td>
                     <td style ="paddind 20px;  text-align: start;">
                               <div class="row" style="margin: 10px 50px 10px 50px;">
-                                <img src="/public/img/${payment.product_img}" alt="" style="width: 180px; object-fit: contain;">
+                                <img src="/public/img/${payment.product_img}" alt="" style="max-width: 120px; object-fit: contain;">
                                 <div class="col">
                                     <span class="name-p">ชื่อสินค้า: <span class="name-p2">${payment.product_name}</span></span>
                                     <span class="name-p">Price: <span class="name-p2">${payment.product_price}</span></span>
                                     <span class="name-p">Tracking number: <span class="name-p2">${payment.order_tracknum}</span></span>
+                                    <span class="name-p">Tracking name: <span class="name-p2">${payment.order_trackname}</span></span>
                                 </div>
                             </div>
                     </td>
@@ -114,13 +115,17 @@
                 const payment = allPayments.find(p => p.order_id === orderId);
                 const modalBody = document.querySelector('.modal-body');
                 modalBody.innerHTML = `
-                    <div class="center">
-                        <img style="min-height: 500px; max-width:900px;" src="/public/img/${payment.payment_img}" alt="Payment Slip">
-                    </div>
-                    <div class="center" style="justify-content: space-between; margin-top:30px;">
-                          <button class="approve-btn" onclick="updatePaymentStatus(${payment.order_id}, 0)">อนุมัติ</button>
-                          <button class="disapprove-btn" onclick="updatePaymentStatus(${payment.order_id}, 7)">ไม่อนุมัติ</button>
-                    </div>`;
+                   <div class="center">
+                    <img style="min-height: 300px; max-width: 400px;" src="/public/img/${payment.payment_img}" alt="Payment Slip">
+                </div>
+                <div class="center" style="justify-content: space-between; margin-top: 20px;">
+                    <button class="approve-btn" onclick="updatePaymentStatus(${payment.order_id}, 0)" style="font-size: 14px; padding: 6px 12px; width: 150px; height: 36px;">
+                        อนุมัติ
+                    </button>
+                    <button class="disapprove-btn" onclick="updatePaymentStatus(${payment.order_id}, 7)" style="font-size: 14px; padding: 6px 12px; width: 150px; height: 36px;">
+                        ไม่อนุมัติ
+                    </button>
+                </div>`;
             }
 
             // Add event listeners
@@ -282,13 +287,13 @@
     }
 
     .name-p {
-        font-size: 20px;
+        font-size: 16px;
         font-style: normal;
         font-weight: 700;
     }
 
     .name-p2 {
-        font-size: 20px;
+        font-size: 16px;
         font-style: normal;
         font-weight: 400;
         word-wrap: break-word;
