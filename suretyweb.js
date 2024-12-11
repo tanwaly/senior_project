@@ -643,7 +643,8 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
     FROM products
     JOIN users ON products.seller_id = users.users_id
     WHERE products.seller_id = ?
-    ORDER BY products.product_id DESC;`;
+    ORDER BY products.product_status ASC, products.product_id DESC;
+`;
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });

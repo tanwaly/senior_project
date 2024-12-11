@@ -467,47 +467,51 @@
                     if (!response.ok) throw new Error('Error fetching products');
                     const data = await response.json();
 
+                    // Sort products: active first (status !== 0), then inactive (status = 0)
+                    const sortedData = data.sort((a, b) => b.product_status - a.product_status);
+
                     let html = '';
-                    data.forEach(product => {
+                    sortedData.forEach(product => {
+                        const isInactive = product.product_status === 0;
                         html += `
-                           <div style="margin: 13px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 455px;">
-                                <div style="min-height: 98px; background:#FFFFF7; border-radius: 5px 5px 0px 0px; padding: 17px;">
-                                    <div style="display: flex; align-items: center;">
-                                        <button style="background-color: transparent; border: none;">
-                                            <img src="/public/img/${product.profile_img}" class="avatar" alt="Product Image" width="80px" style="border-radius: 50%; margin: 7px;">
-                                        </button>
-                                        <div class="row">
-                                            <span style="font-size: 17px; font-weight: 700; margin-left: 13px;">${product.first_name} ${product.last_name}</span>
-                                            <div class="category-sh">
-                                                <span class="${changeIcon(product.product_cate)}"></span>
-                                            </div>
-                                        </div>
-                                        <div style="width: 100%; display: flex; justify-content: end;">
-                                            <div id="productTimeDisplay_${product.product_id}" style="width: 100px; height: 54px; background: #ffa4a4; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
-                                                <span style="font-size: 14px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="height: 310px; background: #FFF4D2; border-radius: 5px; padding: 17px;">
-                                    <div class="center">
-                                        <button style="background-color: transparent; border: none;" data-bs-toggle="modal" data-bs-target="#shpModal" onclick="sellerProductDetail('${product.product_id}')">
-                                            <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 160px; max-width: 167px; object-fit: contain;">
-                                        </button>
-                                    </div>
-                                    <div class="col">
-                                         <span style="width: 201px; font-size: 17.42px; font-weight: 600; margin-left: 13.4px; word-wrap: break-word; color:#161E52;">${product.product_name}</span>
-                                         <span style="font-size: 12.06px; font-weight: 500; margin-left: 13.4px; color:#E7417F;">฿<span style="font-size: 18.76px; font-weight: 800;">${product.product_price}</span></span>
-                                         <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 13.4px; width:300px; color:grey;">ระยะเวลาในการชำระเงิน : ${formatMin(product.product_time_duration)}/คิว</span>
-                                         <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 16px; word-wrap: break-word;">${product.product_caption}</span>
-                                    </div>
+                <div style="margin: 13px; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); width: 455px; opacity: ${isInactive ? '0.5' : '1'};">
+                    <div style="min-height: 98px; background: ${isInactive ? '#E0E0E0' : '#FFFFF7'}; border-radius: 5px 5px 0px 0px; padding: 17px;">
+                        <div style="display: flex; align-items: center;">
+                            <button style="background-color: transparent; border: none;">
+                                <img src="/public/img/${product.profile_img}" class="avatar" alt="Product Image" width="80px" style="border-radius: 50%; margin: 7px;">
+                            </button>
+                            <div class="row">
+                                <span style="font-size: 17px; font-weight: 700; margin-left: 13px;">${product.first_name} ${product.last_name}</span>
+                                <div class="category-sh">
+                                    <span class="${changeIcon(product.product_cate)}"></span>
                                 </div>
                             </div>
-                            `;
+                            <div style="width: 100%; display: flex; justify-content: end;">
+                                <div id="productTimeDisplay_${product.product_id}" style="width: 100px; height: 54px; background: ${isInactive ? '#C0C0C0' : '#ffa4a4'}; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+                                    <span style="font-size: 14px; font-weight: 700;">เริ่ม ${formatDateTime(product.product_time)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 310px; background: #FFF4D2; border-radius: 5px; padding: 17px;">
+                        <div class="center">
+                            <button style="background-color: transparent; border: none;" data-bs-toggle="modal" data-bs-target="#shpModal" onclick="sellerProductDetail('${product.product_id}')">
+                                <img src="/public/img/${product.product_img}" alt="Product Image" style="max-height: 160px; max-width: 167px; object-fit: contain;">
+                            </button>
+                        </div>
+                        <div class="col">
+                             <span style="width: 201px; font-size: 17.42px; font-weight: 600; margin-left: 13.4px; word-wrap: break-word; color:#161E52;">${product.product_name}</span>
+                             <span style="font-size: 12.06px; font-weight: 500; margin-left: 13.4px; color:#E7417F;">฿<span style="font-size: 18.76px; font-weight: 800;">${product.product_price}</span></span>
+                             <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 13.4px; width:300px; color:grey;">ระยะเวลาในการชำระเงิน : ${formatMin(product.product_time_duration)}/คิว</span>
+                             <span style="width: 201px; font-size: 13.4px; font-weight: 500; margin-left: 16px; word-wrap: break-word;">${product.product_caption}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
                     });
 
                     showSellerProduct.innerHTML = html;
-                    checkAndUpdateProductTimes(data);
+                    checkAndUpdateProductTimes(sortedData);
                 } catch (error) {
                     console.error('Fetch error:', error);
                 }
