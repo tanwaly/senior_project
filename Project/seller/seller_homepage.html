@@ -252,8 +252,8 @@
                                 <div style="margin-top: 7px; font-size: 14px;">
                                     <label
                                         style="display: flex; align-items: center; gap: 7px; margin-bottom: 7px;">Defects:</label>
-                                    <input type="text" name="product_detail" placeholder="Description"
-                                        class="form-control" id="productDescription"
+                                    <input type="text" name="product_detail" placeholder="Defects" class="form-control"
+                                        id="productDescription"
                                         style="padding: 14px; width: 520px; height: 53px; border-radius: 7px; border: none;">
                                 </div>
                                 <div style="margin: 13px; font-size: 16px;">
@@ -875,7 +875,7 @@
                     });
 
                     if (response.ok) {
-                        alert('Product updated successfully');
+                        showAlert('Product updated successfully');
                     } else {
                         console.error('Failed to update product');
                     }
@@ -883,6 +883,27 @@
                     console.error('Error updating product:', error);
                 }
             }
+        }
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.textContent = message;
+            alertDiv.style.cssText = `
+        position: fixed; 
+        top: 20px; 
+        right: 20px; 
+        padding: 15px; 
+        border-radius: 8px; 
+        background-color: ${type === 'success' ? '#FFB3B3' : '#BDE3A7'};
+        color: ${type === 'success' ? '#D32F2F' : '#2E7D32'};
+        font-weight: bold;
+        z-index: 1000;
+    `;
+
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
         }
     </script>
 

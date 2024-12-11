@@ -642,7 +642,7 @@ app.get('/sellerProducts/:sellerId', (req, res) => {
     const sql = `SELECT products.*, users.first_name, users.last_name, users.profile_img
     FROM products
     JOIN users ON products.seller_id = users.users_id
-    WHERE products.seller_id = ?
+    WHERE products.seller_id = ? AND products.product_status = 1
     ORDER BY products.product_status ASC, products.product_id DESC;
 `;
     con.query(sql, [sellerId], (err, results) => {
