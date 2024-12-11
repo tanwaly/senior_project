@@ -514,6 +514,7 @@ app.get('/orderStatus', (req, res) => {
         products.product_name, 
         products.product_price, 
         products.product_img,        
+        products.seller_id,        
         u_cus.first_name AS cus_first_name, 
         u_cus.last_name AS cus_last_name, 
         u_cus.profile_img AS cus_profile_img,
