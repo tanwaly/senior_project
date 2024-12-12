@@ -605,7 +605,7 @@ app.post('/reportstore', upload.single('report_img'), (req, res) => {
 
     const sql = `
       INSERT INTO reports (seller_id, cus_id, report_reason, report_detail, report_img, report_status) 
-      VALUES (?, ?, ?, ?, ?, 0);
+      VALUES (?, ?, ?, ?, ?, 1);
     `;
 
     con.query(sql, [sellerId, customerId, report_reason, report_detail, reportImg], (err) => {

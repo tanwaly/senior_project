@@ -75,33 +75,43 @@
         <div class="category d-flex justify-content-around">
             <button class="category-btn">
                 <span class="icon-shirt"></span>
+                shirt
             </button>
             <button class="category-btn">
                 <span class="icon-coat"></span>
+                coat
             </button>
             <button class="category-btn">
                 <span class="icon-dress"></span>
+                dress
             </button>
             <button class="category-btn">
                 <span class="icon-pants"></span>
+                pants
             </button>
             <button class="category-btn">
                 <span class="icon-skirt"></span>
+                skirt
             </button>
             <button class="category-btn">
                 <span class="icon-sock"></span>
+                socks
             </button>
             <button class="category-btn">
                 <span class="icon-shoe"></span>
+                shoes
             </button>
             <button class="category-btn">
                 <span class="icon-hat"></span>
+                hat
             </button>
-            <button class="category-btn">
+            <button class="category-btn" style="width: 120px;">
                 <span class="icon-necklace"></span>
+                Accessories
             </button>
             <button class="category-btn">
                 <span class="icon-chair"></span>
+                Appliance
             </button>
             <button id="sortButton" class="btn btn-primary" style="border-radius: 20px; padding: 10px 20px;">
                 Purchase Status
@@ -279,10 +289,10 @@
                     displayProducts(filteredProducts);
                 }
             });
-        });let sortState = 0;
+        }); let sortState = 0;
         document.addEventListener('DOMContentLoaded', () => {
             const sortButton = document.getElementById('sortButton');
-             // 0 = show all, 1 = green only, 2 = red only
+            // 0 = show all, 1 = green only, 2 = red only
 
             sortButton.addEventListener('click', () => {
                 sortState = (sortState + 1) % 3; // Cycle through 0, 1, 2
