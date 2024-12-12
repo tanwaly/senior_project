@@ -264,75 +264,61 @@
     // disable 'ชำระเงิน' button if current time>deadline
     const handlePaymentButtonState = (queue) => {
         const paybtn = document.querySelector('#paybtn');
+        paybtn.disabled = true; // Disable by default
         const userId = localStorage.getItem('cus_id'); // Get the logged-in user ID
         const currentTime = new Date(); // Current system time
 
-        console.log("Queue Data:", queue);
-        console.log("User ID:", userId);
-
-        // Sort queue by estimated time
         const sortedQueue = queue.sort((a, b) =>
             new Date(a.queue_estimated_time) - new Date(b.queue_estimated_time)
         );
-        console.log("Sorted Queue:", sortedQueue);
 
-        // Find the current user's queue entry
         const currentQueue = sortedQueue.find(q => q.cus_id == userId);
-        console.log("Current Queue Entry:", currentQueue);
-
         if (!currentQueue) {
-            // User is not in the queue
-            paybtn.disabled = true;
             paybtn.title = "คุณไม่ได้อยู่ในคิว";
-            console.log("Payment Button Disabled: User not in queue");
             return;
         }
 
-        // Calculate the user's time window
         const userIndex = sortedQueue.findIndex(q => q.cus_id == userId);
-        const userStartTime =
-            userIndex === 0
-                ? new Date(sortedQueue[userIndex].queue_time) // First user's time window starts at queue_time
-                : new Date(sortedQueue[userIndex - 1].queue_estimated_time); // Starts after the previous user's estimated time
+        const userStartTime = userIndex === 0
+            ? new Date(sortedQueue[userIndex].queue_time)
+            : new Date(sortedQueue[userIndex - 1].queue_estimated_time);
         const userEndTime = new Date(currentQueue.queue_estimated_time);
 
-        console.log("Start Time:", userStartTime, "End Time:", userEndTime, "Current Time:", currentTime);
-
         if (currentTime >= userStartTime && currentTime < userEndTime) {
-            // User's turn and within the allowed time window
             paybtn.disabled = false;
             paybtn.title = "";
-            console.log("Payment Button Enabled: It's user's turn");
         } else if (currentTime >= userEndTime) {
-            // Payment window expired
-            paybtn.disabled = true;
             paybtn.title = "เวลาชำระเงินของคุณหมดแล้ว";
-            console.log("Payment Button Disabled: Payment window expired");
         } else {
-            // Not user's turn yet
-            paybtn.disabled = true;
             paybtn.title = "ยังไม่ถึงคิวของคุณ";
-            console.log("Payment Button Disabled: Not user turn");
         }
-
-        console.log("Payment Button Disabled State:", paybtn.disabled);
     };
+
     const monitorProductStatus = async (productId) => {
         try {
             const response = await fetch(`/cfproduct/status/${productId}`);
             if (!response.ok) throw new Error('Error fetching product status');
             const productStatus = await response.json();
 
+            // If the product is sold, redirect to the homepage
             if (productStatus.product_sold) {
-                // If the product is sold, redirect to the homepage
                 Swal.fire({
                     title: "สินค้าหมดแล้ว",
                     text: "สินค้าถูกชำระเงินแล้ว คุณจะถูกเปลี่ยนหน้าไปยังหน้าหลัก",
-                    icon: "error"
+                    icon: "error",
                 });
-                // alert('สินค้าถูกชำระเงินแล้ว คุณจะถูกเปลี่ยนหน้าไปยังหน้าหลัก');
                 location.replace('homepage');
+                return;
             }
+
+            // Check and update queue status dynamically
+            const queueResponse = await fetch(`/queue/${productId}`);
+            if (!queueResponse.ok) throw new Error('Error fetching queue data');
+            const queue = await queueResponse.json();
+            handlePaymentButtonState(queue);
+
+            // Update the queue section dynamically
+            document.getElementById('queueSection').innerHTML = generateQueueHTML(queue);
         } catch (error) {
             console.error('Error monitoring product status:', error);
         }
