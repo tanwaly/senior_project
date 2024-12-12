@@ -198,8 +198,8 @@
             container.innerHTML = ''; // Clear any existing content
 
             data.forEach((item, index) => {
-                const orderTracknum = item.tracking_number ? item.tracking_number : 'กรุณากรอกข้อมูล';
-                const orderShipname = item.order_shipname ? item.order_shipname : 'กรุณากรอกข้อมูล';
+                const orderTracknum = item.tracking_number ? item.tracking_number : '<span style ="color:lightgrey;">กรุณากรอกข้อมูล</span>';
+                const orderShipname = item.order_shipname ? item.order_shipname : '<span style ="color:lightgrey;"> กรุณากรอกข้อมูล';
                 const backgroundColor = item.order_status === 0 ? '#E9F4FF' : ' ';
 
                 const rowHTML = `
