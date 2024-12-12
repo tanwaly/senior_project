@@ -830,7 +830,7 @@ app.get('/getSellerData', (req, res) => {
         return res.status(401).json({ error: 'Not logged in or session expired' });
     }
 
-    const sql = `SELECT first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img FROM users WHERE users_id = ?;`;
+    const sql = `SELECT * FROM users WHERE users_id = ?;`;
 
     con.query(sql, [sellerId], (err, results) => {
         if (err) {
@@ -953,7 +953,7 @@ app.get('/sellerinfo/:sellerId', (req, res) => {
 
 app.post('/updateSellerInfo/:sellerId', upload.single('profile_img'), (req, res) => {
     const sellerId = req.session.users_id; // Securely fetch seller ID from session
-    const { first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact } = req.body;
+    const { first_name, last_name, phonenum, email, bank_ac_type, bank_ac_name, bank_ac_num, sacc_contact } = req.body;
     const profile_img = req.file ? req.file.filename : null;
 
     const sql = `
@@ -963,13 +963,14 @@ app.post('/updateSellerInfo/:sellerId', upload.single('profile_img'), (req, res)
             last_name = ?, 
             phonenum = ?, 
             email = ?, 
+            bank_ac_type = ?, 
             bank_ac_name = ?, 
             bank_ac_num = ?, 
             sacc_contact = ?, 
             profile_img = COALESCE(?, profile_img) 
         WHERE users_id = ?;
     `;
-    const params = [first_name, last_name, phonenum, email, bank_ac_name, bank_ac_num, sacc_contact, profile_img, sellerId];
+    const params = [first_name, last_name, phonenum, email, bank_ac_type, bank_ac_name, bank_ac_num, sacc_contact, profile_img, sellerId];
 
     con.query(sql, params, (err, result) => {
         if (err) {

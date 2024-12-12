@@ -118,8 +118,8 @@
           disabled>
       </div>
       <div class="row" style="margin: 5px;">
-        <span style="width: 260px; font-weight: 700;">ชื่อบัญชีธนาคาร:</span>
-        <select  class="form-control" id="userBankName" disabled
+        <span style="width: 260px; font-weight: 700;">ธนาคาร:</span>
+        <select  class="form-control" id="userBankType" disabled
           style="border-radius: 15px; border:none; padding:5px; width:500px; ">
           <option value="กรุงเทพ">กรุงเทพ</option>
           <option value="กสิกรไทย">กสิกรไทย</option>
@@ -150,6 +150,11 @@
           <option value="Promptpay">Promptpay</option>
           <option value="TrueMoney Wallet">TrueMoney Wallet</option>
         </select>
+      </div>
+      <div class="row" style="margin: 5px;">
+        <span style="width: 260px; font-weight: 700;">ชื่อบัญชีธนาคาร:</span>
+        <input type="text" class="form-control" id="userBankName"
+          style="padding:10px; width:500px; border-radius: 25px; border:none;" disabled>
       </div>
       <div class="row" style="margin: 5px;">
         <span style="width: 260px; font-weight: 700;">เลขบัญชีธนาคาร:</span>
@@ -192,6 +197,7 @@
       document.getElementById('userName').value = `${user.first_name} ${user.last_name}`;
       document.getElementById('userPhonenum').value = user.phonenum;
       document.getElementById('userEmail').value = user.email;
+      document.getElementById('userBankType').value = user.bank_ac_type;
       document.getElementById('userBankName').value = user.bank_ac_name;
       document.getElementById('userBankNum').value = user.bank_ac_num;
       document.getElementById('userContact').value = user.sacc_contact;
@@ -222,6 +228,7 @@
     formData.append('last_name', document.getElementById('userName').value.split(' ')[1]);
     formData.append('phonenum', document.getElementById('userPhonenum').value);
     formData.append('email', document.getElementById('userEmail').value);
+    formData.append('bank_ac_type', document.getElementById('userBankType').value);
     formData.append('bank_ac_name', document.getElementById('userBankName').value);
     formData.append('bank_ac_num', document.getElementById('userBankNum').value);
     formData.append('sacc_contact', document.getElementById('userContact').value);
@@ -235,10 +242,8 @@
       if (!response.ok) throw new Error('Failed to save changes');
       showAlert('Changes saved successfully');
 
-      // After saving, reload the user data and disable the fields
       loadUserData();
 
-      // Disable editing mode
       disableEditing();
     } catch (error) {
       console.error("Error saving changes:", error);
